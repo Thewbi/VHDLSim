@@ -1,0 +1,791 @@
+VHDL 2000 spec on elaboration:
+
+In order to execute a model, the design hierarchy defining the model must first be elaborated. 
+Initialization of nets (see 12.6.2) in the model then occurs. 
+Finally, simulation of the model proceeds. 
+
+Simulation consists of
+the repetitive execution of the simulation cycle, during which processes are executed and nets updated.
+
+12.1 Elaboration of a design hierarchy
+
+The elaboration of a design hierarchy creates a collection of processes interconnected by nets; 
+this collection of processes and nets can then be executed to simulate the behavior of the design.
+
+
+
+
+== Simulation Algorithm according to Cadence ==
+
+https://www.youtube.com/watch?v=cqgfjdpRZ0w
+
+Everything starts with a Initialization Phase
+
+1. Initialization Phase
+
+Initialization phase followed by a cycle of the following to phases:
+
+2. Signal and Time Update
+3. Process Execution & Signal Evaluations
+4. Simulation time advances and back to 2.
+
+The cycle ends when all queues ("Signal Update Queue" and "Process Execution Queue") are empty.
+
+A process is initially suspended.
+It will only execute when a signal in it's sensitivity list changes.
+When a process either encounters a wait statement or arrives at it's bottom,
+it returns into the suspended state.
+
+
+During 1. Initialization Phase, initial values are assigned to signals and will
+trigger some of the processes. The processes are executed. When all processes
+are suspended, 1. Initialization Phase is over.
+
+"2. Signal and Time Update" will update all nets.
+
+"3. Process Execution & Signal Evaluations" will execute all processes that are activated by changes to signals on their sensitivity list
+After all Processes are suspended again, Signals are evaluated.
+Maybe for each "real" signal change (when the signal actually changes it's value to a new value that differs from it's current value)
+a transaction is inserted into the "Signal Update Queue" but the signal is not immediately changed!
+I am not sure if this is correct. I think it is correct.
+I think that to determine if a process is triggered and has to go onto the "Process Execution Queue", the simulator has to 
+check all transactions in the "Signal Update Queue" and look for changed signals that are in the processe's sensitivity list.
+After all processes have been checked, the transactions in the "Signal Update Queue" are executed and deleted.
+Source: https://surf-vhdl.com/vhdl-syntax-web-course-surf-vhdl/vhdl-process-statement/ 
+"In fact the process is evaluated any time a transaction is scheduled on the signal a,b,d,e."
+
+
+There is a "Signal Update Queue" which contains transactions. A transaction performs an update of a signal.
+A signal is not updated immediately when a process changes it! Instead a change is modeled by a transaction and a transaction
+is inserted into the "Signal Update Queue" which is only processed once Phase "2. Signal and Time Update" executes.
+
+There is a "Process Execution Queue" which contains all processes that have to be executed since a signal on their sensitiviy list has changed.
+
+
+== Example ==
+
+
+```
+architecture SIM of E is
+	signal B, C : std_logic;
+begin
+	
+	P1: process (A)
+	begin
+		B <= A;
+	end process P1;
+	
+	P2: process (A)
+	begin
+		C <= A;
+	end process P2;
+	
+	P3: process (B, C)
+	begin
+		D <= B and C;
+	end process P3;
+	
+end SIM;
+```
+
+
+1. Initialization
+
+simulation time is reset to 0ns.
+signal A, B, C are assigned the default value of std_logic which is U.
+"Signal Update Queue" is cleared.
+"Process Execution Queue" is cleared.
+
+start all processes and execute them until they are suspended
+SUSPENDED -> RUNNING, RUNNING -> SUSPENDED
+Just execute all processes without looking at the "Process Execution Queue" since the "Process Execution Queue" is empty at this point.
+During Initialization, all processes are run once until they are suspended.
+In this case there should be an execution of P1, P2 and P3 in random order. The order is not defined!
+
+After initialization, begin the simulation by entering a transaction of A = 1 into the "Signal Update Queue".
+This is done as an example stimulus so that a sample execution can be described. You could also have entered some other signal transaction into the "Signal Update Queue". 
+
+"2. Signal and Time Update" starts
+
+If the "Signal Update Queue" and the "Process Execution Queue" are empty -> go to 5. "End of Simulation"
+
+The "Signal Update Queue" contains a transaction of A = 1.
+	The transaction is executed (signal is assigned a new value) and nets are updated. (In this example, there are no nets)
+	The sensitivity list of all processes are checked. Every process that has a change in it's sensitivity list due to the transaction, is placed onto the "Process Execution Queue".
+	The transaction is removed from the "Signal Update Queue"
+
+"3. Process Execution & Signal Evaluations" starts
+
+for all processes on the "Process Execution Queue"
+	execute the process until it suspends. 
+	If a process updates a signal, enter a transaction into the "Signal Update Queue" (deduplicate transactions or just check if
+	the transaction is already contained during inserting a transaction into the "Signal Update Queue").
+	
+If the "Signal Update Queue" is not empty, go back to "2. Signal and Time Update"
+
+4. Simulation time advances (if there is a delay statement) and back to "2. Signal and Time Update"
+
+5. "End of Simulation"
+
+
+
+Detailed steps
+
+#0  PRE_INIT   A=U, B=U, C=U,   "Signal Update Queue" = {}, "Process Execution Queue" = {}    P1 [SUSPENDED], P2 [SUSPENDED], P3 [SUSPENDED]
+
+#1  INIT       A=U, B=U, C=U,   "Signal Update Queue" = {}, "Process Execution Queue" = { P1, P2, P3 }    P1 [WAITING], P2 [WAITING], P3 [WAITING]
+-- all processes have executed and are back in suspended state
+#2  INIT       A=U, B=U, C=U,   "Signal Update Queue" = {}, "Process Execution Queue" = {}    P1 [SUSPENDED], P2 [SUSPENDED], P3 [SUSPENDED]
+
+-- Initialization is over
+
+-- insert a transaction to start the simulation:
+
+#3  TRIGGER    A=U, B=U, C=U,   "Signal Update Queue" = { Transaction[A=1] }, "Process Execution Queue" = {}    P1 [SUSPENDED], P2 [SUSPENDED], P3 [SUSPENDED]
+
+#4  "2. Signal and Time Update" starts    A=1, B=U, C=U,   "Signal Update Queue" = { }, "Process Execution Queue" = { P1, P2 }    P1 [WAITING], P2 [WAITING], P3 [SUSPENDED]
+#5  "3. Process Execution & Signal Evaluations" starts   "P1 and P2 are executed in random order"    A=1, B=U, C=U,   "Signal Update Queue" = { Transaction[B=1], Transaction[C=1] }, "Process Execution Queue" = { }    P1 [SUSPENDED], P2 [SUSPENDED], P3 [SUSPENDED]
+
+Signal Update Queue is not empty so go back to "2. Signal and Time Update"
+
+#6  "2. Signal and Time Update" starts    A=1, B=1, C=1,   "Signal Update Queue" = { }, "Process Execution Queue" = { P3 }    P1 [SUSPENDED], P2 [SUSPENDED], P3 [WAITING]
+#7  "3. Process Execution & Signal Evaluations" starts   "P3 is executed"   A=1, B=1, C=1,   "Signal Update Queue" = { Transaction[D=1] }, "Process Execution Queue" = { }    P1 [SUSPENDED], P2 [SUSPENDED], P3 [SUSPENDED]
+
+Signal Update Queue is not empty so go back to "2. Signal and Time Update"
+
+#8  "2. Signal and Time Update" starts    A=1, B=1, C=1,   "Signal Update Queue" = { }, "Process Execution Queue" = { }    P1 [SUSPENDED], P2 [SUSPENDED], P3 [SUSPENDED]
+#9  "3. Process Execution & Signal Evaluations" starts    A=1, B=1, C=1,   "Signal Update Queue" = { }, "Process Execution Queue" = { }    P1 [SUSPENDED], P2 [SUSPENDED], P3 [SUSPENDED]
+
+Signal Update queue is empty so go to "4. Simulation time advances"
+
+#10 4. Simulation time advances (if there is a delay statement) and back to "2. Signal and Time Update"
+
+If the "Signal Update Queue" and the "Process Execution Queue" are empty -> go to 5. "End of Simulation"
+
+#11 "End of Simulation"
+
+
+
+
+
+
+= Transactions =
+Transactions are changes to signals.
+
+A transaction has to store the old and the new value so that rising edges and falling edges can be detected.
+
+As an example, have a look at this condition:
+
+```
+IF rising_edge(i_clock) THEN
+```
+
+Here, the simulator has to know if the signal did actually go through a rising edge and only then will it
+execute the THEN-branch. So that transaction has to store the old and the new value.
+
+= TODO =
+
+Model processes with sensitivity list and the body of statements.
+Parse processes and be able to execute processes. Maybe execute processes using a interpreter for Three-Address Code
+Model an enum ProcessState { WAITING, SUSPENDED }
+Parse signals 
+Model Transactions and their assignment
+
+Extend to https://github.com/douggilliland/Design_A_CPU/blob/main/ProgramCounter.vhd
+Extend to https://www.youtube.com/watch?v=h4ZXge1BE80&list=PLIbRYKjjYOPkhpxnkQ0fwTXnmgsiCMcVV
+
+
+
+
+https://edg.uchicago.edu/~tang/VHDLref.pdf
+12.6.4 The simulation cycle
+
+
+
+implicit signal of the form S'Stable(T) or S'Quiet(T)
+implicit signal of the form S'Delayed(T)
+The value of each implicit GUARD signal
+The initial value of any implicit signal of the form S'Transaction is not defined.
+
+implicit signal
+explicit signal
+
+
+events
+
+
+postponed process
+nonpostponed process
+process resumptions???
+ 
+ 
+ 
+ 
+ 
+From https://prof.bht-berlin.de/fileadmin/prof/svoss/DT/Datenblaetter/ModelSim_GUI_Introduction.pdf
+http://lab.antlr.org/ - https://github.com/Thewbi/vhdl/blob/master/main.cpp - design_file
+```
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+
+ENTITY majority IS
+	PORT ( x1, x2, x3 : IN STD_LOGIC;
+			f : OUT STD_LOGIC);
+END majority;
+
+ARCHITECTURE LogicFunction OF majority IS
+BEGIN
+f <= (x1 AND x2) OR (x1 AND x3) OR (x2 AND x3);
+END LogicFunction;
+```
+
+= Entities =
+
+== 1.1 Entity declarations ==
+
+from: https://edg.uchicago.edu/~tang/VHDLref.pdf
+
+An entity declaration with port declarations only:
+```
+entity Full_Adder is
+	port (X, Y, Cin: in Bit; Cout, Sum: out Bit) ;
+end Full_Adder ;
+```
+
+An entity declaration with generic declarations also:
+```
+entity AndGate is
+	generic
+	 (N: Natural := 2);
+	port
+	 (Inputs: in Bit_Vector (1 to N);
+	 Result: out Bit) ;
+end entity AndGate ;
+```
+
+An entity declaration with neither:
+```
+entity TestBench is
+end TestBench ;
+```
+
+from: https://edg.uchicago.edu/~tang/VHDLref.pdf
+
+```
+entity ROM is
+
+	port (Addr: in Word;
+	Data: out Word;
+	Sel: in Bit);
+	
+	type Instruction is array (1 to 5) of Natural;
+	type Program is array (Natural range <>) of Instruction;
+	
+	use Work.OpCodes.all, Work.RegisterNames.all;
+	constant ROM_Code: Program :=
+	(
+		(STM, R14, R12, 12, R13) ,
+		(LD, R7, 32, 0, R1 ) ,
+		(BAL, R14, 0, 0, R7 )
+	) ;
+	 
+end ROM;
+```
+
+
+from: https://www.youtube.com/watch?v=y7dpssQsOpc&list=PLn__0BqzWEWNspQ0xkG5h-oSJ21EAet8H&index=3
+https://github.com/douggilliland/Design_A_CPU/blob/main/ProgramCounter.vhd
+
+```
+-- File: ProgramCounter.vhd
+
+-- Library boilerplates
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+-- Program Counter
+ENTITY ProgramCounter IS
+  PORT 
+  (
+		-- Ins
+		i_clock		: IN std_logic;		-- Clock (50 MHz)
+		i_resetN		: IN std_logic := '1';		-- 
+		i_loadPC		: IN std_logic;		-- Load PC control
+		i_incPC		: IN std_logic;		-- Increment PC control
+		i_PCLdValr	: IN std_logic_vector(11 downto 0);
+		-- Outs
+		o_ProgCtr	: OUT std_logic_vector(11 downto 0)
+	);
+END ProgramCounter;
+
+ARCHITECTURE beh OF ProgramCounter IS
+
+	signal w_progCtr		: std_logic_vector(11 downto 0);
+	
+BEGIN
+
+		progCtr : PROCESS (i_clock)			-- Sensitivity list
+		BEGIN
+			IF rising_edge(i_clock) THEN		-- On clocks
+				if i_resetN = '0' then
+					w_progCtr <= x"000";
+				elsif i_loadPC = '1' then			-- Load new PC
+					w_progCtr <= i_PCLdValr;
+				elsif i_incPC = '1' then		-- Increment counter
+					w_progCtr <= w_progCtr+1;
+				END IF;
+			END IF;
+		END PROCESS;
+		
+		o_ProgCtr <= w_progCtr;					-- Output pins
+
+END beh;
+```
+
+
+
+from: https://edg.uchicago.edu/~tang/VHDLref.pdf
+
+— An entity declaration with statements:
+```
+entity Latch is
+
+	port (Din: in Word;
+		Dout: out Word;
+		Load: in Bit;
+		Clk: in Bit );
+		
+	constant Setup: Time := 12 ns;
+	constant PulseWidth: Time := 50 ns;
+	use Work.TimingMonitors.all;
+	
+begin
+	assert Clk='1' or Clk'Delayed'Stable (PulseWidth);
+	CheckTiming (Setup, Din, Load, Clk);
+end ;
+```
+
+http://lab.antlr.org/
+start symbol is: design_file
+
+```
+entity MUX is
+
+	port ( 	A 	: in bit;
+			B 	: in bit;
+			SEL : in bit;
+			C 	: out bit );
+end MUX;
+
+architecture BEHAVE of MUX is
+begin
+
+	process (A, B, SEL)
+	begin
+		
+		if SEL = '1' then
+			C <= A;
+		else 
+			C <= B;
+		end if;
+		
+	end process;
+	
+end BEHAVE;
+```
+
+```
+entity SEQCON is
+
+	port ( 	A 	: in bit;
+			B 	: in bit;
+			D 	: out bit );
+			
+end SEQCON;
+
+architecture BEHAVE of SEQCON is
+	signal C : bit;
+begin
+
+	-- a concurrent statement
+	-- It will execute simultaneously with the process
+	-- It will update whenever C changes
+	D <= not C;
+
+	-- a process which executes it's contents in sequential fashion
+	-- The process is executed when either A or B change
+	--
+	-- It executes simultaneously with all other processes and all concurrent statements
+	--
+	-- Process Rule 1: processes execute when any signal in sensitivity list changes
+	-- Process Rule 2: processes may only contain sequential statements
+	-- Process Rule 3: signal assignments occure at the "end process" statement
+	-- Process Rule 4: signals get the last executed assignment
+	process (A, B)
+	begin
+		
+		if A = '1' or B = '1' then
+			C <= '1';
+		else 
+			C <= '0';
+		end if;
+		
+	end process;
+	
+end BEHAVE;
+```
+
+```
+entity CONEX is
+
+	port ( 	A 	: in bit;
+			B 	: in bit;
+			C 	: out bit );
+end CONEX;
+
+architecture BEHAVE of CONEX is
+begin
+
+	-- a concurrent statement
+	C <= A or B;
+	
+end BEHAVE;
+```
+
+```
+architecture BEHAVE1 of SEQCONA is
+begin
+
+	Z <= X and Y;
+	Z <= X or Y;
+	
+end BEHAVE1;
+
+architecture BEHAVE2 of SEQCONA is
+begin
+
+	process (A, B)
+	begin
+
+		Z <= X and Y; -- first statement will be ignored and not synthesized to hardware
+		Z <= X or Y; -- only the last valid assignment to a signal will be synthesized
+		
+	end process;
+	
+end BEHAVE2;
+```
+
+
+```
+entity VECTOREX is
+	port ( 	Y_NIB 	: in 	bit_vector (3 downto 0);
+			Z_BYTE 	: out 	bit_vector (7 downto 0) );
+end VECTOREX;
+
+architecture BEHAV of VECTOREX is
+begin
+
+	process (Y_NIB)
+	begin
+	
+		if Y_NIB = "0000" then
+			Z_BYTE <= "01010101";
+		else
+			Z_BYTE <= "10101010";
+		end if;
+		
+	end process;
+	
+end BEHAV;
+```
+
+```
+entity THERMOSTAT is
+	port ( 	current_temp 	: in 	bit_vector (6 downto 0);
+			desired_temp 	: in 	bit_vector (6 downto 0);
+			display_select 	: in 	bit;
+			temp_display	: out 	bit_vector (6 downto 0));
+end THERMOSTAT;
+
+architecture BEHAV of THERMOSTAT is
+begin
+
+	process (current_temp, desired_temp, display_select)
+	begin
+	
+		if display_select = '1' then
+			temp_display <= current_temp;
+		else
+			temp_display <= desired_temp;
+		end if;
+		
+	end process;
+	
+end BEHAV;
+```
+
+
+From https://electronics.stackexchange.com/questions/51848/when-to-use-std-logic-over-bit-in-vhdl
+
+Bit is a predefined type and only can only have the value 0 or 1. The Bit type is an idealized value.
+
+std_logic is part of the std_logic_1164 package and provides more realistic modeling of signals within a digital system. It is capable of having nine different values. Typically within your code you will only use 0, 1, and Z (High-Z). But U (Uninitialized) and X (Unknown) are also very useful when modeling the system in a testbench.
+
+    -------------------------------------------------------------------    
+    -- logic state system  (unresolved)
+    -------------------------------------------------------------------    
+    TYPE std_ulogic IS ( 'U',  -- Uninitialized
+                         'X',  -- Forcing  Unknown
+                         '0',  -- Forcing  0
+                         '1',  -- Forcing  1
+                         'Z',  -- High Impedance   
+                         'W',  -- Weak     Unknown
+                         'L',  -- Weak     0       
+                         'H',  -- Weak     1       
+                         '-'   -- Don't care
+                       );
+
+--    attribute ENUM_ENCODING of std_ulogic : type is "U D 0 1 Z D 0 1 D";
+
+    -------------------------------------------------------------------    
+    -- *** industry standard logic type ***
+    -------------------------------------------------------------------    
+    SUBTYPE std_logic IS resolved std_ulogic;
+The std_logic_1164 package also provides conversion functions to convert std_logic to Bit.
+
+```
+ENTITY MyDemo IS 
+    PORT(X: IN STD_LOGIC; F: OUT STD_LOGIC );
+END MyDemo;
+
+ENTITY MyDemo IS 
+    PORT(X: IN BIT; F: OUT BIT );
+END MyDemo;
+```
+
+```
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity std_logic_tb is
+end std_logic_tb;
+
+architecture behav of std_logic_tb is
+    signal s0 : std_logic;
+begin
+    s0 <= '0';
+    s0 <= '1';
+    process
+    begin
+        wait for 1 ns;
+        assert s0 = 'X';
+        wait;
+    end process;
+end behav;
+```
+
+
+
+== 1.2 Architecture bodies ==
+
+Architecture bodies are bodies of Entities that complement the Entity interfaces (= Entity declarations)
+
+from: https://edg.uchicago.edu/~tang/VHDLref.pdf
+
+```
+architecture DataFlow of Full_Adder is
+	signal A, B: Bit;
+begin
+	A <= X xor Y;
+	B <= A and Cin;
+	Sum <= A xor Cin;
+	Cout <= B or (X and Y);
+end architecture DataFlow ;
+```
+
+
+
+— A body of entity TestBench:
+```
+library Test;
+use Test.Components.all;
+
+architecture Structure of TestBench is
+
+	component Full_Adder
+		port (X, Y, Cin: Bit; Cout, Sum: out Bit);
+	end component;
+	
+	signal A, B, C, D, E, F, G: Bit;
+	signal OK: Boolean;
+	
+begin
+
+	UUT: Full_Adder 		port map (A, B, C, D, E);
+	Generator: AdderTest 	port map (A, B, C, F, G);
+	Comparator: AdderCheck 	port map (D, E, F, G, OK);
+	
+end Structure;
+```
+
+— A body of entity AndGate:
+```
+architecture Behavior of AndGate is
+begin
+	process (Inputs)
+		variable Temp: Bit;
+	begin
+		Temp := '1';
+		for i in Inputs'Range loop
+			if Inputs(i) = '0' then
+				Temp := '0';
+				exit;
+			end if;
+		end loop;
+		Result <= Temp after 10 ns;
+	end process;
+end Behavior;
+```
+
+
+== 1.3 Configuration declarations ==
+
+from: https://edg.uchicago.edu/~tang/VHDLref.pdf
+
+— A configuration of the microprocessor:
+```
+library TTL, Work ;
+configuration V4_27_87 of Processor is
+	use Work.all ;
+	for Structure_View
+		for A1: ALU
+			use configuration TTL.SN74LS181 ;
+		end for ;
+		for M1, M2, M3: MUX
+			use entity Multiplex4 (Behavior) ;
+		end for ;
+		for all: Latch
+			-- use defaults
+		end for ;
+	end for ;
+end configuration V4_27_87 ;
+```
+
+
+= 2. Subprograms and packages =
+
+There are two forms of subprograms: procedures and functions. 
+A procedure call is a statement; a function call is an expression and returns a value.
+
+Certain functions, designated pure functions, return the same value each time they are called with the same values as actual parameters; 
+
+the remainder, impure functions, may return a different value each time they are called, even when multiple calls have the same actual parameter
+values. In addition, impure functions can update objects outside of their scope and can access a broader class of values than can pure functions.
+
+
+== Foreign Subprogram ==
+
+from: http://www.pldworld.com/_hdl/2/_ref/se_html/fli_html/fli_intro4.html
+
+```
+package pkg is
+    procedure in_params(
+        vhdl_integer : IN integer;
+        vhdl_enum    : IN severity_level;
+        vhdl_real    : IN real;
+        vhdl_array   : IN string);
+    attribute foreign of in_params : procedure is "in_params test.sl";
+
+    procedure out_params(
+        vhdl_integer : OUT integer;
+        vhdl_enum    : OUT severity_level;
+        vhdl_real    : OUT real;
+        vhdl_array   : OUT string);
+    attribute foreign of out_params : procedure is "out_params test.sl";
+end;
+ 
+package body pkg is
+
+    procedure in_params(
+        vhdl_integer : IN integer;
+        vhdl_enum    : IN severity_level;
+        vhdl_real    : IN real;
+        vhdl_array   : IN string) is
+    begin
+        report "ERROR: foreign subprogram in_params not called";
+    end;
+
+    procedure out_params(
+        vhdl_integer : OUT integer;
+        vhdl_enum    : OUT severity_level;
+        vhdl_real    : OUT real;
+        vhdl_array   : OUT string) is
+    begin
+        report "ERROR: foreign subprogram out_params not called";
+    end;
+end;
+```
+
+
+
+
+
+```
+entity AND_GATE is
+	generic (I1toO, I2toO: DELAY_LENGTH := 4 ns);
+	port (I1, I2: in BIT; O: out BIT);
+end entity AND_GATE;
+
+entity XOR_GATE is
+	generic (I1toO, I2toO : DELAY_LENGTH := 4 ns);
+	port (I1, I2: in BIT; O : out BIT);
+end entity XOR_GATE;
+
+package MY_GATES is
+	component AND_GATE is
+		generic (I1toO, I2toO: DELAY_LENGTH := 4 ns);
+		port (I1, I2: in BIT; O: out BIT);
+	end component AND_GATE;
+	
+	component XOR_GATE is
+		generic (I1toO, I2toO: DELAY_LENGTH := 4 ns);
+		port (I1, I2: in BIT; O : out BIT);
+	end component XOR_GATE;
+end package MY_GATES;
+
+entity Half_Adder is
+	port (	X, Y: in BIT;
+			Sum, Carry: out BIT);
+end entity Half_Adder;
+
+use WORK.MY_GATES.all;
+architecture Structure of Half_Adder is
+	for L1: XOR_GATE use
+	entity WORK.XOR_GATE(Behavior) -- The primary binding indication
+		generic map (3 ns, 3 ns) -- for instance L1.
+		port map (I1 => I1, I2 => I2, O => O);
+	for L2: AND_GATE use
+	entity WORK.AND_GATE(Behavior) -- The primary binding indication
+		generic map (3 ns, 4 ns) -- for instance L2.
+		port map (I1, open, O);
+begin
+	L1: XOR_GATE port map (X, Y, Sum);
+	L2: AND_GATE port map (X, Y, Carry);
+end architecture Structure;
+
+use WORK.GLOBAL_SIGNALS.all;
+configuration Different of Half_Adder is
+	for Structure
+		for L1: XOR_GATE
+			generic map (2.9 ns, 3.6 ns); 	-- The incremental binding
+		end for; -- indication of L1; rebinds its generics.
+		for L2: AND_GATE
+			generic map (2.8 ns, 3.25 ns) 	-- The incremental binding
+			port map (I2 => Tied_High); 	-- indication L2; rebinds its generics
+		end for; -- and binds its open port.
+	end for;
+end configuration Different;
+```
