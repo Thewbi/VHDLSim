@@ -1,0 +1,116 @@
+If_statementContext [if] 1027591600
+    if
+  ConditionContext [data_from_fifo] 97652294
+    ExpressionContext [data_from_fifo] 1889248251
+      RelationContext [data_from_fifo] 1027007693
+        Shift_expressionContext [data_from_fifo] 1783047508   
+          Simple_expressionContext [data_from_fifo] 2146608740
+            TermContext [data_from_fifo] 1381713434
+              FactorContext [data_from_fifo] 1489092624       
+                PrimaryContext [data_from_fifo] 192881625     
+                  LiteralContext [data_from_fifo] 1641313620
+                    Enumeration_literalContext [data_from_fifo] 1773638882
+                      IdentifierContext [data_from_fifo] 1059063940
+                          data_from_fifo
+        Relational_operatorContext [=] 1295226194
+            =
+        Shift_expressionContext ["01110010"] 252651381
+          Simple_expressionContext ["01110010"] 1514840818
+            TermContext ["01110010"] 1704064279
+              FactorContext ["01110010"] 878274034
+                PrimaryContext ["01110010"] 1117509763
+                  LiteralContext ["01110010"] 1296674576
+                      "01110010"
+    then
+  Sequence_of_statementsContext [nstate] 664457955
+    Sequential_statementContext [nstate] 1477657879
+      Signal_assignment_statementContext [nstate] 1146147158
+        TargetContext [nstate] 1147258851
+          NameContext [nstate] 891095110
+            IdentifierContext [nstate] 2011482127
+                nstate
+          <=
+        WaveformContext [Saddr] 905735620
+          Waveform_elementContext [Saddr] 2145970759
+            ExpressionContext [Saddr] 577405636
+              RelationContext [Saddr] 1931444790
+                Shift_expressionContext [Saddr] 626742236
+                  Simple_expressionContext [Saddr] 500772834
+                    TermContext [Saddr] 1800659519
+                      FactorContext [Saddr] 1691538257
+                        PrimaryContext [Saddr] 459848100
+                          LiteralContext [Saddr] 1335505684
+                            Enumeration_literalContext [Saddr] 992768706
+                              IdentifierContext [Saddr] 1226204845
+                                  Saddr
+          ;
+    elsif
+  ConditionContext [data_from_fifo] 393040818
+    ExpressionContext [data_from_fifo] 158453976
+      RelationContext [data_from_fifo] 1368594774
+        Shift_expressionContext [data_from_fifo] 726281927
+          Simple_expressionContext [data_from_fifo] 1447499999
+            TermContext [data_from_fifo] 1371006431
+              FactorContext [data_from_fifo] 413601558
+                PrimaryContext [data_from_fifo] 1658926803
+                  LiteralContext [data_from_fifo] 210652080
+                    Enumeration_literalContext [data_from_fifo] 1652149987
+                      IdentifierContext [data_from_fifo] 1107730949
+                          data_from_fifo
+        Relational_operatorContext [=] 700072760
+            =
+        Shift_expressionContext ["01110111"] 1461149300
+          Simple_expressionContext ["01110111"] 2075495587
+            TermContext ["01110111"] 206835546
+              FactorContext ["01110111"] 1997287019
+                PrimaryContext ["01110111"] 436546048
+                  LiteralContext ["01110111"] 1300393335
+                      "01110111"
+    then
+  Sequence_of_statementsContext [write_detected] 1627428162
+    Sequential_statementContext [write_detected] 2011791487
+      Signal_assignment_statementContext [write_detected] 1150284200
+        TargetContext [write_detected] 439928219
+          NameContext [write_detected] 2138564891
+            IdentifierContext [write_detected] 1151755506
+                write_detected
+          <=
+        WaveformContext ['1'] 2141179775
+          Waveform_elementContext ['1'] 592959754
+            ExpressionContext ['1'] 1663619914
+              RelationContext ['1'] 341748265
+                Shift_expressionContext ['1'] 364604394
+                  Simple_expressionContext ['1'] 146370526
+                    TermContext ['1'] 758013696
+                      FactorContext ['1'] 1279309678
+                        PrimaryContext ['1'] 48914743
+                          LiteralContext ['1'] 1106131243
+                            Enumeration_literalContext ['1'] 510109769
+                                '1'
+          ;
+    else
+  Sequence_of_statementsContext [nstate] 1473611564
+    Sequential_statementContext [nstate] 107456312
+      Signal_assignment_statementContext [nstate] 921760190
+        TargetContext [nstate] 360067785
+          NameContext [nstate] 1860250540
+            IdentifierContext [nstate] 1426329391
+                nstate
+          <=
+        WaveformContext [Sdollar] 1690859824
+          Waveform_elementContext [Sdollar] 1074593562
+            ExpressionContext [Sdollar] 660017404
+              RelationContext [Sdollar] 1381965390
+                Shift_expressionContext [Sdollar] 1979313356
+                  Simple_expressionContext [Sdollar] 1386883398
+                    TermContext [Sdollar] 1306854175
+                      FactorContext [Sdollar] 1742920067
+                        PrimaryContext [Sdollar] 1564984895
+                          LiteralContext [Sdollar] 1587819720
+                            Enumeration_literalContext [Sdollar] 1002191352
+                              IdentifierContext [Sdollar] 1256440269
+                                  Sdollar
+          ;
+    end
+    if
+    ;

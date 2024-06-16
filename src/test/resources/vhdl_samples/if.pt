@@ -1,0 +1,59 @@
+If_statementContext [if] 707610042
+    if
+  ConditionContext [Fifo_valid] 13326370
+    ExpressionContext [Fifo_valid] 1268650975
+      RelationContext [Fifo_valid] 731395981
+        Shift_expressionContext [Fifo_valid] 1196765369
+          Simple_expressionContext [Fifo_valid] 486898233
+            TermContext [Fifo_valid] 650023597
+              FactorContext [Fifo_valid] 1282473384
+                PrimaryContext [Fifo_valid] 575593575
+                  LiteralContext [Fifo_valid] 346861221
+                    Enumeration_literalContext [Fifo_valid] 1188392295
+                      IdentifierContext [Fifo_valid] 226710952
+                          Fifo_valid
+        Relational_operatorContext [=] 1509563803
+            =
+        Shift_expressionContext ['1'] 684874119
+          Simple_expressionContext ['1'] 1157740463
+            TermContext ['1'] 1379435698
+              FactorContext ['1'] 1529306539
+                PrimaryContext ['1'] 1635985705
+                  LiteralContext ['1'] 695682681
+                    Enumeration_literalContext ['1'] 1073502961
+                        '1'
+    then
+  Sequence_of_statementsContext [read_ptr] 1582797472
+    Sequential_statementContext [read_ptr] 644166178
+      Signal_assignment_statementContext [read_ptr] 892529689
+        TargetContext [read_ptr] 1757676444
+          NameContext [read_ptr] 182738614
+            IdentifierContext [read_ptr] 94345706
+                read_ptr
+          <=
+        WaveformContext [read_ptr] 670035812
+          Waveform_elementContext [read_ptr] 1870647526
+            ExpressionContext [read_ptr] 1204167249
+              RelationContext [read_ptr] 1047503754
+                Shift_expressionContext [read_ptr] 1722023916
+                  Simple_expressionContext [read_ptr] 2009787198
+                    TermContext [read_ptr] 32017212
+                      FactorContext [read_ptr] 1121454968
+                        PrimaryContext [read_ptr] 1006485584
+                          LiteralContext [read_ptr] 466505482
+                            Enumeration_literalContext [read_ptr] 1580893732
+                              IdentifierContext [read_ptr] 1547425104
+                                  read_ptr
+                    Adding_operatorContext [+] 152134087
+                        +
+                    TermContext [1] 1615780336
+                      FactorContext [1] 1783593083
+                        PrimaryContext [1] 1750905143
+                          LiteralContext [1] 1782704802
+                            Numeric_literalContext [1] 2094411587
+                              Abstract_literalContext [1] 1833638914
+                                  1
+          ;
+    end
+    if
+    ;
