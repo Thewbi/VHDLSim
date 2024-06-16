@@ -1,8 +1,8 @@
 package de.vhdlmodel;
 
-public class StringLiteral extends ModelNode {
+public class StringLiteral extends ModelNode<String> {
 
-    public String value;
+    // public String value;
 
     public String toString(int indent) {
         StringBuffer stringBuffer = new StringBuffer();

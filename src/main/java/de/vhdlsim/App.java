@@ -11,8 +11,11 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import de.vhdl.grammar.VHDLLexer;
 import de.vhdl.grammar.VHDLParser;
+import de.vhdl.grammar.VHDLParser.Case_statementContext;
 import de.vhdl.grammar.VHDLParser.Design_fileContext;
 import de.vhdl.grammar.VHDLParser.If_statementContext;
+import de.vhdl.grammar.VHDLParser.Process_statementContext;
+import de.vhdl.grammar.VHDLParser.Signal_assignment_statementContext;
 import de.vhdlmodel.ModelNode;
 
 /**
@@ -22,12 +25,20 @@ import de.vhdlmodel.ModelNode;
 public class App {
 
     public static void main(String[] args) throws IOException {
-        // String testFile = "src/test/resources/system_verilog_samples/package.sv";
-        // String testFile =
-        // "C:\\Users\\wolfg\\dev\\fpga\\Processor-UART-VHDL\\Code\\memory.vhd";
-        // String testFile = "VHDLSim\\src\\test\\resources\\vhdl_samples\\if.vhd";
-        String testFile = "VHDLSim\\src\\test\\resources\\vhdl_samples\\if_complex_expression.vhd";
-        //String testFile = "VHDLSim\\src\\test\\resources\\vhdl_samples\\elsif.vhd";
+
+        // signal assignment
+        String testFile = "src\\test\\resources\\vhdl_samples\\signal_assignment.vhd";
+
+        // if statement
+        //String testFile = "src\\test\\resources\\vhdl_samples\\if.vhd";
+        //String testFile = "src\\test\\resources\\vhdl_samples\\if_complex_expression.vhd";
+        //String testFile = "src\\test\\resources\\vhdl_samples\\elsif.vhd";
+
+        // process
+        //String testFile = "src\\test\\resources\\vhdl_samples\\process.vhd";
+
+        // case
+        //String testFile = "src\\test\\resources\\vhdl_samples\\case.vhd";
 
         System.out.println("Loading: \"" + testFile + "\"");
 
@@ -44,8 +55,17 @@ public class App {
         // entire .vhd file
         // final Design_fileContext root = parser.design_file();
 
+        // signal assignment
+        final Signal_assignment_statementContext root = parser.signal_assignment_statement();
+
         // if statement
-        final If_statementContext root = parser.if_statement();
+        //final If_statementContext root = parser.if_statement();
+
+        // process
+        //final Process_statementContext root = parser.process_statement();
+
+        // case
+        //final Case_statementContext root = parser.case_statement();
 
         boolean print = false;
         //boolean print = true;
@@ -59,7 +79,7 @@ public class App {
         }
 
         //boolean convertToAST = false;
-         boolean convertToAST = true;
+        boolean convertToAST = true;
         if (convertToAST) {
             ASTOutputListener astOutputListener = new ASTOutputListener();
 

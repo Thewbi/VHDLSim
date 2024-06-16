@@ -1,0 +1,203 @@
+Case_statementContext [case] 1629911510
+    case
+  ExpressionContext [Sel] 1136497418
+    RelationContext [Sel] 863125040
+      Shift_expressionContext [Sel] 1693847660   
+        Simple_expressionContext [Sel] 1429880200
+          TermContext [Sel] 2050019814
+            FactorContext [Sel] 1485955886
+              PrimaryContext [Sel] 212921632
+                LiteralContext [Sel] 149047107
+                  Enumeration_literalContext [Sel] 1956710488
+                    IdentifierContext [Sel] 603856241
+                        Sel
+    is
+  Case_statement_alternativeContext [when] 682376643
+      when
+    ChoicesContext ["00"] 854507466
+      ChoiceContext ["00"] 1316061703
+        Discrete_rangeContext ["00"] 490150701
+          Range_declContext ["00"] 1413246829
+            Explicit_rangeContext ["00"] 334203599
+              Simple_expressionContext ["00"] 1372082959
+                TermContext ["00"] 1946403944
+                  FactorContext ["00"] 1131645570
+                    PrimaryContext ["00"] 209833425
+                      LiteralContext ["00"] 532854629
+                          "00"
+      =>
+    Sequence_of_statementsContext [Output2] 1971851377
+      Sequential_statementContext [Output2] 712025048
+        Signal_assignment_statementContext [Output2] 681384962
+          TargetContext [Output2] 586084331
+            NameContext [Output2] 399534175
+              IdentifierContext [Output2] 949057310
+                  Output2
+            <=
+          WaveformContext [Sig1] 2024542466
+            Waveform_elementContext [Sig1] 770189387
+              ExpressionContext [Sig1] 963522361
+                RelationContext [Sig1] 175408781
+                  Shift_expressionContext [Sig1] 315138752
+                    Simple_expressionContext [Sig1] 2114874018
+                      TermContext [Sig1] 911312317
+                        FactorContext [Sig1] 415186196
+                          PrimaryContext [Sig1] 1337344609
+                            LiteralContext [Sig1] 1113619023
+                              Enumeration_literalContext [Sig1] 2015781843
+                                IdentifierContext [Sig1] 428910174
+                                    Sig1
+            ;
+  Case_statement_alternativeContext [when] 1682463303
+      when
+    ChoicesContext ["01"] 633075331
+      ChoiceContext ["01"] 1858609436
+        Discrete_rangeContext ["01"] 1920387277
+          Range_declContext ["01"] 1414147750
+            Explicit_rangeContext ["01"] 775931202
+              Simple_expressionContext ["01"] 22069592
+                TermContext ["01"] 1160003871
+                  FactorContext ["01"] 1075738627
+                    PrimaryContext ["01"] 282828951
+                      LiteralContext ["01"] 394721749
+                          "01"
+      =>
+    Sequence_of_statementsContext [Output2] 1884122755
+      Sequential_statementContext [Output2] 1134612201
+        Signal_assignment_statementContext [Output2] 246550802
+          TargetContext [Output2] 786041152
+            NameContext [Output2] 897074030
+              IdentifierContext [Output2] 1885996206
+                  Output2
+            <=
+          WaveformContext [Sig2] 1859039536
+            Waveform_elementContext [Sig2] 278934944
+              ExpressionContext [Sig2] 1739876329
+                RelationContext [Sig2] 1205555397
+                  Shift_expressionContext [Sig2] 1543974463
+                    Simple_expressionContext [Sig2] 1293618474
+                      TermContext [Sig2] 156545103
+                        FactorContext [Sig2] 345281752
+                          PrimaryContext [Sig2] 1896294051
+                            LiteralContext [Sig2] 1684015092
+                              Enumeration_literalContext [Sig2] 1209669119
+                                IdentifierContext [Sig2] 2014866032
+                                    Sig2
+            ;
+  Case_statement_alternativeContext [when] 811760110
+      when
+    ChoicesContext ["10"] 1415157681
+      ChoiceContext ["10"] 1291113768
+        Discrete_rangeContext ["10"] 2005167404
+          Range_declContext ["10"] 1418385211
+            Explicit_rangeContext ["10"] 1282811396
+              Simple_expressionContext ["10"] 641853239
+                TermContext ["10"] 1920467934
+                  FactorContext ["10"] 1883840933
+                    PrimaryContext ["10"] 233996206
+                      LiteralContext ["10"] 614685048
+                          "10"
+      =>
+    Sequence_of_statementsContext [Output2] 385337537
+      Sequential_statementContext [Output2] 789219251
+        Signal_assignment_statementContext [Output2] 832279283
+          TargetContext [Output2] 265119009
+            NameContext [Output2] 668210649
+              IdentifierContext [Output2] 1545087375
+                  Output2
+            <=
+          WaveformContext [Sig3] 838411509
+            Waveform_elementContext [Sig3] 1434041222
+              ExpressionContext [Sig3] 1375995437
+                RelationContext [Sig3] 1338841523
+                  Shift_expressionContext [Sig3] 929776179
+                    Simple_expressionContext [Sig3] 802581203
+                      TermContext [Sig3] 1561408618
+                        FactorContext [Sig3] 2050404090
+                          PrimaryContext [Sig3] 388043093
+                            LiteralContext [Sig3] 188576144
+                              Enumeration_literalContext [Sig3] 1608230649
+                                IdentifierContext [Sig3] 282432134
+                                    Sig3
+            ;
+  Case_statement_alternativeContext [when] 266437232
+      when
+    ChoicesContext ["11"] 1873859565
+      ChoiceContext ["11"] 1843289228
+        Discrete_rangeContext ["11"] 1361289747
+          Range_declContext ["11"] 1381128261
+            Explicit_rangeContext ["11"] 999609945
+              Simple_expressionContext ["11"] 615634843
+                TermContext ["11"] 1758386724
+                  FactorContext ["11"] 673068808
+                    PrimaryContext ["11"] 900008524
+                      LiteralContext ["11"] 520232556
+                          "11"
+      =>
+    Sequence_of_statementsContext [Output2] 17037394
+      Sequential_statementContext [Output2] 1484531981
+        Signal_assignment_statementContext [Output2] 1159114532
+          TargetContext [Output2] 1256728724
+            NameContext [Output2] 1412925683
+              IdentifierContext [Output2] 1832580921
+                  Output2
+            <=
+          WaveformContext [Sig4] 497359413
+            Waveform_elementContext [Sig4] 369241501
+              ExpressionContext [Sig4] 2124046270
+                RelationContext [Sig4] 1151593579
+                  Shift_expressionContext [Sig4] 1902260856
+                    Simple_expressionContext [Sig4] 1988859660
+                      TermContext [Sig4] 1514160588
+                        FactorContext [Sig4] 22756955
+                          PrimaryContext [Sig4] 1640639994
+                            LiteralContext [Sig4] 1263793464
+                              Enumeration_literalContext [Sig4] 323326911
+                                IdentifierContext [Sig4] 1270144618
+                                    Sig4
+            ;
+  Case_statement_alternativeContext [when] 2074185499
+      when
+    ChoicesContext [others] 797925218
+      ChoiceContext [others] 275310919
+          others
+      =>
+    Sequence_of_statementsContext [Output2] 2109874862
+      Sequential_statementContext [Output2] 183284570
+        Signal_assignment_statementContext [Output2] 1607305514
+          TargetContext [Output2] 146305349
+            NameContext [Output2] 1686369710
+              IdentifierContext [Output2] 194706439
+                  Output2
+            <=
+          WaveformContext [(] 942518407
+            Waveform_elementContext [(] 1943325854
+              ExpressionContext [(] 134310351
+                RelationContext [(] 1411892748
+                  Shift_expressionContext [(] 22805895
+                    Simple_expressionContext [(] 1413378318
+                      TermContext [(] 1475491159
+                        FactorContext [(] 1024429571
+                          PrimaryContext [(] 1667689440
+                            AggregateContext [(] 1157058691
+                                (
+                              Element_associationContext [others] 40472007
+                                ChoicesContext [others] 1138193439
+                                  ChoiceContext [others] 398110318
+                                      others
+                                  =>
+                                ExpressionContext ['X'] 1765250898
+                                  RelationContext ['X'] 670971910
+                                    Shift_expressionContext ['X'] 1601292138
+                                      Simple_expressionContext ['X'] 494586676
+                                        TermContext ['X'] 1218593486
+                                          FactorContext ['X'] 508198356
+                                            PrimaryContext ['X'] 1330754528
+                                              LiteralContext ['X'] 79290965
+                                                Enumeration_literalContext ['X'] 1582785598
+                                                    'X'
+                                )
+            ;
+    end
+    case
+    ;

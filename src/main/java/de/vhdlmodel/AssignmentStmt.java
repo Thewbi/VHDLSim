@@ -1,12 +1,10 @@
 package de.vhdlmodel;
 
-import java.beans.Statement;
-
 public class AssignmentStmt extends Stmt {
 
-    public ModelNode lhs;
+    public ModelNode<?> lhs;
 
-    public ModelNode rhs;
+    public ModelNode<?> rhs;
 
     public String toString(int indent) {
 

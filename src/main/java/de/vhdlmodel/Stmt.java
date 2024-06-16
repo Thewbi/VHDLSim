@@ -1,5 +1,5 @@
 package de.vhdlmodel;
 
-public class Stmt extends ModelNode {
+public class Stmt extends ModelNode<Object> {
 
 }

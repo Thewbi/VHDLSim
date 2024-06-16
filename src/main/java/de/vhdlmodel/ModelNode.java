@@ -3,7 +3,7 @@ package de.vhdlmodel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModelNode {
+public class ModelNode<T> {
 
     public ModelNode parent;
 
@@ -12,6 +12,8 @@ public class ModelNode {
     public String operator;
 
     public String name;
+
+    public T value;
 
     public ModelNode() {
         name = "Unknown";

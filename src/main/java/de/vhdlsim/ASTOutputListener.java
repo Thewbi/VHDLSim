@@ -4,17 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import javax.management.RuntimeErrorException;
-
-import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import org.stringtemplate.v4.ST;
 
 import de.vhdl.grammar.VHDLLexer;
 import de.vhdl.grammar.VHDLParser;
 import de.vhdl.grammar.VHDLParser.Relational_operatorContext;
 import de.vhdl.grammar.VHDLParserBaseListener;
 import de.vhdlmodel.AssignmentStmt;
+import de.vhdlmodel.CaseStmt;
+import de.vhdlmodel.CaseStmtBranch;
+import de.vhdlmodel.CharacterLiteral;
 import de.vhdlmodel.Expr;
 import de.vhdlmodel.Identifier;
 import de.vhdlmodel.IfStmt;
@@ -38,9 +37,23 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     public List<Stmt> stmts = new ArrayList<>();
 
-    public ModelNode expr;
+    public ModelNode<?> expr;
 
-    private Stack<ModelNode> stack = new Stack<>();
+    private Stack<ModelNode<?>> stack = new Stack<>();
+
+    private boolean case_statement_alternative_others;
+
+    // @Override
+    // public void exitExpression(VHDLParser.ExpressionContext ctx) {
+    //     System.out.println("exitExpression context!");
+
+    //     if (stmt instanceof CaseStmt) {
+    //         CaseStmt caseStmt = (CaseStmt) stmt;
+
+    //         ModelNode<?> modelNode = stack.pop();
+    //         caseStmt.expr.name = (String) modelNode.value;
+    //     }
+    // }
 
     @Override
     public void exitRelation(VHDLParser.RelationContext ctx) {
@@ -181,39 +194,19 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     }
 
-    @Override
-    public void exitIdentifier(VHDLParser.IdentifierContext ctx) {
+    @Override public void exitPrimary(VHDLParser.PrimaryContext ctx) { 
 
-        switch (ctx.start.getType()) {
-
-            case VHDLParser.BASIC_IDENTIFIER:
-                System.out.println("BASIC_IDENTIFIER: \"" + ctx.getText() + "\"");
-
-                Identifier identifier = new Identifier();
-                identifier.value = ctx.getText();
-                stack.push(identifier);
-                break;
-
-            case VHDLParser.EXTENDED_IDENTIFIER:
-                System.out.println("EXTENDED_IDENTIFIER: \"" + ctx.getText() + "\"");
-                break;
-
-            default:
-                throw new RuntimeException("Unknown type: " + ctx.start.getType());
-        }
-    }
-
-    @Override
-    public void exitLiteral(VHDLParser.LiteralContext ctx) {
+        System.out.println("exitPrimary: \"" + ctx.getText() + "\"");
 
         switch (ctx.start.getType()) {
 
             case VHDLParser.CHARACTER_LITERAL:
                 System.out.println("CHARACTER_LITERAL: \"" + ctx.getText() + "\"");
 
-                NumericLiteral numericLiteral = new NumericLiteral();
-                numericLiteral.value = Integer.parseInt(ctx.getText().substring(1, ctx.getText().length()-1));
-                stack.push(numericLiteral);
+                CharacterLiteral characterLiteral = new CharacterLiteral();
+                //characterLiteral.value = Integer.parseInt(ctx.getText().substring(1, ctx.getText().length() - 1));
+                characterLiteral.value = ctx.getText().substring(1, ctx.getText().length() - 1);
+                stack.push(characterLiteral);
                 break;
 
             case VHDLParser.NULL_:
@@ -236,9 +229,18 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
                 // System.out.println("BASIC_IDENTIFIER: \"" + ctx + "\"");
 
-                // StringLiteral basicStringLiteral = new StringLiteral();
-                // basicStringLiteral.value = ctx.getText();
-                // stack.push(basicStringLiteral);
+                StringLiteral basicStringLiteral = new StringLiteral();
+                basicStringLiteral.value = ctx.getText();
+                stack.push(basicStringLiteral);
+                break;
+
+            case VHDLParser.INTEGER:
+                NumericLiteral numericLiteral = new NumericLiteral();
+                numericLiteral.value = Integer.parseInt(ctx.getText());
+                stack.push(numericLiteral);
+                break;
+
+            case VHDLParser.LPAREN:
                 break;
 
             default:
@@ -246,12 +248,129 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         }
     }
 
-    @Override public void enterCondition(VHDLParser.ConditionContext ctx) {
+    @Override 
+    public void exitTarget(VHDLParser.TargetContext ctx) { 
+
+        System.out.println("exitPrimary: \"" + ctx.getText() + "\"");
+
+        switch (ctx.start.getType()) {
+
+            case VHDLParser.CHARACTER_LITERAL:
+                System.out.println("CHARACTER_LITERAL: \"" + ctx.getText() + "\"");
+
+                CharacterLiteral characterLiteral = new CharacterLiteral();
+                //characterLiteral.value = Integer.parseInt(ctx.getText().substring(1, ctx.getText().length() - 1));
+                characterLiteral.value = ctx.getText().substring(1, ctx.getText().length() - 1);
+                stack.push(characterLiteral);
+                break;
+
+            case VHDLParser.NULL_:
+                // System.out.println("NULL_: \"" + ctx.NULL_() + "\"");
+                break;
+
+            case VHDLParser.BIT_STRING_LITERAL:
+                // System.out.println("BIT_STRING_LITERAL: \"" + ctx.BIT_STRING_LITERAL() +
+                // "\"");
+                break;
+
+            case VHDLParser.STRING_LITERAL:
+                // System.out.println("STRING_LITERAL: \"" + ctx.STRING_LITERAL() + "\"");
+                StringLiteral stringLiteral = new StringLiteral();
+                stringLiteral.value = ctx.getText();
+                stack.push(stringLiteral);
+                break;
+
+            case VHDLParser.BASIC_IDENTIFIER:
+
+                // System.out.println("BASIC_IDENTIFIER: \"" + ctx + "\"");
+
+                StringLiteral basicStringLiteral = new StringLiteral();
+                basicStringLiteral.value = ctx.getText();
+                stack.push(basicStringLiteral);
+                break;
+
+            case VHDLParser.LPAREN:
+                break;
+
+            default:
+                throw new RuntimeException("Unknown type: " + ctx.start.getType());
+        }
+    }
+
+    // @Override
+    // public void exitIdentifier(VHDLParser.IdentifierContext ctx) {
+
+    //     switch (ctx.start.getType()) {
+
+    //         case VHDLParser.BASIC_IDENTIFIER:
+    //             System.out.println("BASIC_IDENTIFIER: \"" + ctx.getText() + "\"");
+
+    //             Identifier identifier = new Identifier();
+    //             identifier.value = ctx.getText();
+    //             stack.push(identifier);
+    //             break;
+
+    //         case VHDLParser.EXTENDED_IDENTIFIER:
+    //             System.out.println("EXTENDED_IDENTIFIER: \"" + ctx.getText() + "\"");
+    //             break;
+
+    //         default:
+    //             throw new RuntimeException("Unknown type: " + ctx.start.getType());
+    //     }
+    // }
+
+    // @Override
+    // public void exitLiteral(VHDLParser.LiteralContext ctx) {
+
+    //     System.out.println("exitLiteral: \"" + ctx.getText() + "\"");
+
+    //     switch (ctx.start.getType()) {
+
+    //         case VHDLParser.CHARACTER_LITERAL:
+    //             System.out.println("CHARACTER_LITERAL: \"" + ctx.getText() + "\"");
+
+    //             NumericLiteral numericLiteral = new NumericLiteral();
+    //             numericLiteral.value = Integer.parseInt(ctx.getText().substring(1, ctx.getText().length() - 1));
+    //             stack.push(numericLiteral);
+    //             break;
+
+    //         case VHDLParser.NULL_:
+    //             // System.out.println("NULL_: \"" + ctx.NULL_() + "\"");
+    //             break;
+
+    //         case VHDLParser.BIT_STRING_LITERAL:
+    //             // System.out.println("BIT_STRING_LITERAL: \"" + ctx.BIT_STRING_LITERAL() +
+    //             // "\"");
+    //             break;
+
+    //         case VHDLParser.STRING_LITERAL:
+    //             // System.out.println("STRING_LITERAL: \"" + ctx.STRING_LITERAL() + "\"");
+    //             StringLiteral stringLiteral = new StringLiteral();
+    //             stringLiteral.value = ctx.getText();
+    //             stack.push(stringLiteral);
+    //             break;
+
+    //         case VHDLParser.BASIC_IDENTIFIER:
+
+    //             // System.out.println("BASIC_IDENTIFIER: \"" + ctx + "\"");
+
+    //             StringLiteral basicStringLiteral = new StringLiteral();
+    //             basicStringLiteral.value = ctx.getText();
+    //             stack.push(basicStringLiteral);
+    //             break;
+
+    //         default:
+    //             throw new RuntimeException("Unknown type: " + ctx.start.getType());
+    //     }
+    // }
+
+    @Override
+    public void enterCondition(VHDLParser.ConditionContext ctx) {
 
         if (stmt instanceof IfStmtBranch) {
             stmt = (Stmt) stmt.parent;
-        } 
-        
+        }
+
         if (stmt instanceof IfStmt) {
 
             IfStmt ifStmt = (IfStmt) stmt;
@@ -262,9 +381,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
             stmt = ifStmtBranch;
 
-            ifStmtBranch.exprRoot = new ModelNode("exprRoot");
+            ifStmtBranch.exprRoot = new ModelNode<String>("exprRoot");
             expr = ifStmtBranch.exprRoot;
-        
         }
     }
 
@@ -278,6 +396,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         stmt = ifStmt;
     }
 
+    @Override
     public void exitIf_statement(VHDLParser.If_statementContext ctx) {
         System.out.println("If_statement context!");
 
@@ -287,11 +406,72 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         // assert stack empty
         // if (stack.size() != 0) {
-        //     throw new RuntimeException();
+        // throw new RuntimeException();
         // }
 
         // DEBUG
         stack.clear();
+    }
+
+    @Override
+    public void enterCase_statement(VHDLParser.Case_statementContext ctx) {
+
+        CaseStmt caseStmt = new CaseStmt();
+        stmts.add(caseStmt);
+
+        stmt = caseStmt;
+    }
+
+    @Override
+    public void exitCase_statement(VHDLParser.Case_statementContext ctx) {
+
+        // write the discriminator into the case-statement
+        stmt.value = stack.pop();
+
+        // reset on exit
+        stmt = null;
+        expr = null;
+
+        // assert stack empty
+        // if (stack.size() != 0) {
+        // throw new RuntimeException();
+        // }
+
+        // DEBUG
+        stack.clear();
+    }
+
+    @Override
+    public void enterCase_statement_alternative(VHDLParser.Case_statement_alternativeContext ctx) {
+
+        System.out.println("");
+
+        // ModelNode<?> valueModelNode = stack.pop();
+        // Object value = valueModelNode.value;
+
+        // System.out.println(value);
+
+        CaseStmtBranch caseStmtBranch = new CaseStmtBranch();
+        caseStmtBranch.parent = stmt;
+        stmt.children.add(caseStmtBranch);
+
+        stmt = caseStmtBranch;
+        // stmt.value = stack.pop().value;
+    }
+
+    @Override
+    public void exitCase_statement_alternative(VHDLParser.Case_statement_alternativeContext ctx) {
+
+        // only if this is not the others case, retrieve the expression from the stack
+        // The others case has no expression! It is like the else branch of an if-statement
+        // which also has no expression
+        if (!case_statement_alternative_others) {
+            stmt.value = stack.pop().value;
+        }
+
+        case_statement_alternative_others = false;
+
+        stmt = (Stmt) stmt.parent;
     }
 
     @Override
@@ -301,9 +481,12 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         AssignmentStmt assignmentStmt = new AssignmentStmt();
 
-        ModelNode rhs = stack.pop();
+        ModelNode<?> rhs = stack.pop();
         assignmentStmt.lhs = stack.pop();
         assignmentStmt.rhs = rhs;
+
+        // assignmentStmt.lhs = stack.pop();
+        // assignmentStmt.rhs = stack.pop();
 
         stmt.children.add(assignmentStmt);
     }
@@ -312,27 +495,33 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     public void visitTerminal(TerminalNode node) {
 
         if (node.getText().toLowerCase().equals("else")) {
+
             if (stmt instanceof IfStmtBranch) {
                 stmt = (Stmt) stmt.parent;
-            } 
-            
+            }
+
             if (stmt instanceof IfStmt) {
-    
+
                 IfStmt ifStmt = (IfStmt) stmt;
-    
+
                 IfStmtBranch ifStmtBranch = new IfStmtBranch();
                 ifStmt.branches.add(ifStmtBranch);
                 ifStmtBranch.parent = ifStmt;
-    
+
                 stmt = ifStmtBranch;
-    
+
                 ifStmtBranch.exprRoot = new ModelNode("exprRoot");
                 expr = ifStmtBranch.exprRoot;
 
                 // the else branch has a condition of type true so it is always taken
                 expr.children.add(Expr.TRUE);
-            
+
             }
+
+        } else if (node.getText().toLowerCase().equals("others")) {
+
+            case_statement_alternative_others = true;
+
         }
 
     }

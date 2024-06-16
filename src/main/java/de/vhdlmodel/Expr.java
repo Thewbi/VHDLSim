@@ -1,6 +1,6 @@
 package de.vhdlmodel;
 
-public class Expr extends ModelNode {
+public class Expr extends ModelNode<Object> {
 
     public boolean constantValue;
 
