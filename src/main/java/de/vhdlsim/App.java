@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 import de.vhdl.grammar.VHDLLexer;
 import de.vhdl.grammar.VHDLParser;
@@ -26,49 +27,77 @@ public class App {
 
     public static void main(String[] args) throws IOException {
 
-        // signal assignment
-        String testFile = "src\\test\\resources\\vhdl_samples\\signal_assignment.vhd";
-
-        // if statement
-        //String testFile = "src\\test\\resources\\vhdl_samples\\if.vhd";
-        //String testFile = "src\\test\\resources\\vhdl_samples\\if_complex_expression.vhd";
-        //String testFile = "src\\test\\resources\\vhdl_samples\\elsif.vhd";
-
-        // process
-        //String testFile = "src\\test\\resources\\vhdl_samples\\process.vhd";
-
-        // case
-        //String testFile = "src\\test\\resources\\vhdl_samples\\case.vhd";
-
-        System.out.println("Loading: \"" + testFile + "\"");
-
-        final CharStream charStream = CharStreams.fromFileName(testFile);
-
-        final VHDLLexer lexer = new VHDLLexer(charStream);
-        final CommonTokenStream tokens = new CommonTokenStream(lexer);
-
-        System.out.println("Parsing ...");
-        System.out.println("");
-
-        final VHDLParser parser = new VHDLParser(tokens);
-
-        // entire .vhd file
-        // final Design_fileContext root = parser.design_file();
-
-        // signal assignment
-        final Signal_assignment_statementContext root = parser.signal_assignment_statement();
-
-        // if statement
-        //final If_statementContext root = parser.if_statement();
-
-        // process
-        //final Process_statementContext root = parser.process_statement();
-
-        // case
-        //final Case_statementContext root = parser.case_statement();
-
         boolean print = false;
         //boolean print = true;
+
+        //boolean convertToAST = false;
+        boolean convertToAST = true;
+
+        testAssignment(print, convertToAST);
+        
+        testIf1(print, convertToAST);
+        testIf2(print, convertToAST);
+        testIf3(print, convertToAST);
+        
+        testProcess(print, convertToAST);
+        
+        testCase(print, convertToAST);
+    }
+
+    private static void testAssignment(boolean print, boolean convertToAST) throws IOException {
+
+        String testFile = "src\\test\\resources\\vhdl_samples\\signal_assignment.vhd";
+        final VHDLParser parser = processFile(testFile);
+        final Signal_assignment_statementContext root = parser.signal_assignment_statement();
+
+        traverseTree(root, print, convertToAST);
+    }
+
+    private static void testIf1(boolean print, boolean convertToAST) throws IOException {
+        
+        String testFile = "src\\test\\resources\\vhdl_samples\\if.vhd";
+        final VHDLParser parser = processFile(testFile);
+        final If_statementContext root = parser.if_statement();
+
+        traverseTree(root, print, convertToAST);
+    }
+    private static void testIf2(boolean print, boolean convertToAST) throws IOException {
+        
+        String testFile = "src\\test\\resources\\vhdl_samples\\if_complex_expression.vhd";
+        final VHDLParser parser = processFile(testFile);
+        final If_statementContext root = parser.if_statement();
+
+        traverseTree(root, print, convertToAST);
+    }
+    private static void testIf3(boolean print, boolean convertToAST) throws IOException {
+        
+        String testFile = "src\\test\\resources\\vhdl_samples\\elsif.vhd";
+        final VHDLParser parser = processFile(testFile);
+        final If_statementContext root = parser.if_statement();
+
+        traverseTree(root, print, convertToAST);
+    }
+
+    private static void testProcess(boolean print, boolean convertToAST) throws IOException {
+
+        String testFile = "src\\test\\resources\\vhdl_samples\\process.vhd";
+        final VHDLParser parser = processFile(testFile);
+        final Process_statementContext root = parser.process_statement();
+
+        traverseTree(root, print, convertToAST);
+    }
+
+    private static void testCase(boolean print, boolean convertToAST) throws IOException {
+        
+        String testFile = "src\\test\\resources\\vhdl_samples\\case.vhd";
+        final VHDLParser parser = processFile(testFile);
+        final Case_statementContext root = parser.case_statement();
+
+        traverseTree(root, print, convertToAST);
+    }
+
+    private static void traverseTree(final ParseTree root, boolean print, boolean convertToAST) {
+        
         if (print) {
 
             VHDLRawOutputListener printListener = new VHDLRawOutputListener();
@@ -77,24 +106,34 @@ public class App {
             final ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(printListener, root);
         }
-
-        //boolean convertToAST = false;
-        boolean convertToAST = true;
+        
         if (convertToAST) {
+            
             ASTOutputListener astOutputListener = new ASTOutputListener();
 
             // Create a generic parse tree walker that can trigger callbacks
             final ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(astOutputListener, root);
 
-            System.out.println(astOutputListener);
-
             int indent = 0;
-            for (ModelNode stmt : astOutputListener.stmts) {
+            for (ModelNode<?> stmt : astOutputListener.stmts) {
 
                 System.out.println(stmt.toString(indent));
                 
             }
         }
+    }
+
+    private static VHDLParser processFile(String testFile) throws IOException {
+
+        System.out.println("Loading: \"" + testFile + "\"");
+
+        final CharStream charStream = CharStreams.fromFileName(testFile);
+
+        final VHDLLexer lexer = new VHDLLexer(charStream);
+        final CommonTokenStream tokens = new CommonTokenStream(lexer);
+        final VHDLParser parser = new VHDLParser(tokens);
+
+        return parser;
     }
 }

@@ -12,17 +12,17 @@ public class AssignmentStmt extends Stmt {
         for (int i = 0; i < indent; i++) {
             stringBuffer.append("  ");
         }
-        stringBuffer.append("assignment-stmt-branch\n");
+        stringBuffer.append("assignment-stmt\n");
 
         indent++;
         for (int i = 0; i < indent; i++) {
             stringBuffer.append("  ");
         }
-        stringBuffer.append("lhs: ").append(lhs.toString(0));//.append("\n");
+        stringBuffer.append("lhs: ").append(lhs.toString(indent));//.append("\n");
         for (int i = 0; i < indent; i++) {
             stringBuffer.append("  ");
         }
-        stringBuffer.append("rhs: ").append(rhs.toString(0));//.append("\n");
+        stringBuffer.append("rhs: ").append(rhs.toString(indent));//.append("\n");
 
         return stringBuffer.toString();
     }
