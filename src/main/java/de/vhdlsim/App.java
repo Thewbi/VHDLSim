@@ -38,6 +38,7 @@ public class App {
         testIf1(print, convertToAST);
         testIf2(print, convertToAST);
         testIf3(print, convertToAST);
+        testIf4(print, convertToAST);
         
         testProcess(print, convertToAST);
         
@@ -72,6 +73,21 @@ public class App {
     private static void testIf3(boolean print, boolean convertToAST) throws IOException {
         
         String testFile = "src\\test\\resources\\vhdl_samples\\elsif.vhd";
+        final VHDLParser parser = processFile(testFile);
+        final If_statementContext root = parser.if_statement();
+
+        traverseTree(root, print, convertToAST);
+    }
+    /**
+     * https://www2.cs.sfu.ca/~ggbaker/reference/std_logic/1164/rising_edge.html
+     * 
+     * @param print
+     * @param convertToAST
+     * @throws IOException
+     */
+    private static void testIf4(boolean print, boolean convertToAST) throws IOException {
+        
+        String testFile = "src\\test\\resources\\vhdl_samples\\if_with_function_predicate.vhd";
         final VHDLParser parser = processFile(testFile);
         final If_statementContext root = parser.if_statement();
 
