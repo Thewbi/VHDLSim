@@ -16,7 +16,8 @@ import de.vhdlmodel.CaseStmt;
 import de.vhdlmodel.CaseStmtBranch;
 import de.vhdlmodel.CharacterLiteral;
 import de.vhdlmodel.Expr;
-import de.vhdlmodel.Identifier;
+import de.vhdlmodel.FunctionCall;
+import de.vhdlmodel.FunctionCallActualParameter;
 import de.vhdlmodel.IfStmt;
 import de.vhdlmodel.IfStmtBranch;
 import de.vhdlmodel.ModelNode;
@@ -44,12 +45,16 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     private boolean case_statement_alternative_others;
 
-    @Override public void exitSimple_expression(VHDLParser.Simple_expressionContext ctx) { 
+    private String lastIdentifier;
+
+    private FunctionCall lastFunctionCall;
+
+    @Override
+    public void exitSimple_expression(VHDLParser.Simple_expressionContext ctx) {
 
         List<Adding_operatorContext> addingOperators = ctx.adding_operator();
 
-        if (addingOperators.size() == 0)
-        {
+        if (addingOperators.size() == 0) {
             return;
         }
 
@@ -73,8 +78,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             expr.children.add(lhs);
             expr.children.add(rhs);
 
-            for (Adding_operatorContext adding_operatorContext : addingOperators)
-            {
+            for (Adding_operatorContext adding_operatorContext : addingOperators) {
                 switch (adding_operatorContext.start.getType()) {
 
                     case VHDLLexer.PLUS:
@@ -231,7 +235,13 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         }
     }
 
-    @Override public void exitPrimary(VHDLParser.PrimaryContext ctx) { 
+    @Override
+    public void exitIdentifier(VHDLParser.IdentifierContext ctx) {
+        lastIdentifier = ctx.getText();
+    }
+
+    @Override
+    public void exitPrimary(VHDLParser.PrimaryContext ctx) {
 
         // System.out.println("exitPrimary: \"" + ctx.getText() + "\"");
 
@@ -240,7 +250,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             case VHDLParser.CHARACTER_LITERAL:
                 // System.out.println("CHARACTER_LITERAL: \"" + ctx.getText() + "\"");
                 CharacterLiteral characterLiteral = new CharacterLiteral();
-                //characterLiteral.value = Integer.parseInt(ctx.getText().substring(1, ctx.getText().length() - 1));
+                // characterLiteral.value = Integer.parseInt(ctx.getText().substring(1,
+                // ctx.getText().length() - 1));
                 characterLiteral.value = ctx.getText().substring(1, ctx.getText().length() - 1);
                 stack.push(characterLiteral);
                 break;
@@ -282,8 +293,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         }
     }
 
-    @Override 
-    public void exitTarget(VHDLParser.TargetContext ctx) { 
+    @Override
+    public void exitTarget(VHDLParser.TargetContext ctx) {
 
         // System.out.println("exitTarget: \"" + ctx.getText() + "\"");
 
@@ -293,7 +304,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
                 // System.out.println("CHARACTER_LITERAL: \"" + ctx.getText() + "\"");
 
                 CharacterLiteral characterLiteral = new CharacterLiteral();
-                //characterLiteral.value = Integer.parseInt(ctx.getText().substring(1, ctx.getText().length() - 1));
+                // characterLiteral.value = Integer.parseInt(ctx.getText().substring(1,
+                // ctx.getText().length() - 1));
                 characterLiteral.value = ctx.getText().substring(1, ctx.getText().length() - 1);
                 stack.push(characterLiteral);
                 break;
@@ -353,8 +365,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterIf_statement(VHDLParser.If_statementContext ctx) {
-        // System.out.println("If_statement context!");
-
         IfStmt ifStmt = new IfStmt();
         stmts.add(ifStmt);
 
@@ -408,27 +418,18 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterCase_statement_alternative(VHDLParser.Case_statement_alternativeContext ctx) {
-
-        // System.out.println("");
-
-        // ModelNode<?> valueModelNode = stack.pop();
-        // Object value = valueModelNode.value;
-
-        // System.out.println(value);
-
         CaseStmtBranch caseStmtBranch = new CaseStmtBranch();
         caseStmtBranch.parent = stmt;
         stmt.children.add(caseStmtBranch);
-
         stmt = caseStmtBranch;
-        // stmt.value = stack.pop().value;
     }
 
     @Override
     public void exitCase_statement_alternative(VHDLParser.Case_statement_alternativeContext ctx) {
 
         // only if this is not the others case, retrieve the expression from the stack
-        // The others case has no expression! It is like the else branch of an if-statement
+        // The others case has no expression! It is like the else branch of an
+        // if-statement
         // which also has no expression
         if (!case_statement_alternative_others) {
             stmt.value = stack.pop().value;
@@ -440,6 +441,40 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     }
 
     @Override
+    public void enterFunction_call_or_indexed_name_part(VHDLParser.Function_call_or_indexed_name_partContext ctx) {
+        System.out.println("FunctionCall: \"" + lastIdentifier + "\"");
+        FunctionCall functionCall = new FunctionCall();
+        functionCall.name = lastIdentifier;
+
+        lastFunctionCall = functionCall;
+
+        if (stmt instanceof IfStmtBranch) {
+
+            IfStmtBranch ifStmtBranch = (IfStmtBranch) stmt;
+
+            //stmt = ifStmtBranch;
+            //stmt = functionCall;
+
+            //ifStmtBranch.exprRoot = functionCall;
+            ifStmtBranch.exprRoot.children.add(functionCall);
+        }
+    }
+
+    @Override
+    //public void exitActual_parameter_part(VHDLParser.Actual_parameter_partContext ctx) {
+    public void exitActual_part(VHDLParser.Actual_partContext ctx) {
+        // System.out.println("Actual Parameter: \"" + ctx + "\"");
+
+        // this code was tested with and written for a function call with several actual parameters
+
+        FunctionCallActualParameter actualParameter = new FunctionCallActualParameter();
+        actualParameter.name = lastIdentifier;
+        actualParameter.value = lastIdentifier;
+
+        lastFunctionCall.children.add(actualParameter);
+    }
+
+    @Override
     public void exitSignal_assignment_statement(VHDLParser.Signal_assignment_statementContext ctx) {
 
         AssignmentStmt assignmentStmt = new AssignmentStmt();
@@ -448,12 +483,9 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         assignmentStmt.lhs = stack.pop();
         assignmentStmt.rhs = rhs;
 
-        if (stmt != null)
-        {
+        if (stmt != null) {
             stmt.children.add(assignmentStmt);
-        }
-        else 
-        {
+        } else {
             stmt = assignmentStmt;
             stmts.add(assignmentStmt);
         }

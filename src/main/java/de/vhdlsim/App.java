@@ -13,7 +13,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import de.vhdl.grammar.VHDLLexer;
 import de.vhdl.grammar.VHDLParser;
 import de.vhdl.grammar.VHDLParser.Case_statementContext;
-import de.vhdl.grammar.VHDLParser.Design_fileContext;
 import de.vhdl.grammar.VHDLParser.If_statementContext;
 import de.vhdl.grammar.VHDLParser.Process_statementContext;
 import de.vhdl.grammar.VHDLParser.Signal_assignment_statementContext;
@@ -27,27 +26,26 @@ public class App {
 
     public static void main(String[] args) throws IOException {
 
-        boolean print = false;
-        //boolean print = true;
+        //boolean print = false;
+        boolean print = true;
 
         //boolean convertToAST = false;
         boolean convertToAST = true;
 
-        testAssignment(print, convertToAST);
+        //testAssignment(print, convertToAST, "src\\test\\resources\\vhdl_samples\\signal_assignment.vhd");
         
-        testIf1(print, convertToAST);
-        testIf2(print, convertToAST);
-        testIf3(print, convertToAST);
-        testIf4(print, convertToAST);
+        //testIf1(print, convertToAST);
+        // testIf2(print, convertToAST);
+        // testIf3(print, convertToAST);
+        //testIf4(print, convertToAST);
         
-        testProcess(print, convertToAST);
+        // TODO: work on processes next
+        testProcess(print, convertToAST, "src\\test\\resources\\vhdl_samples\\process.vhd");
         
-        testCase(print, convertToAST);
+        //testCase(print, convertToAST, "src\\test\\resources\\vhdl_samples\\case.vhd");
     }
 
-    private static void testAssignment(boolean print, boolean convertToAST) throws IOException {
-
-        String testFile = "src\\test\\resources\\vhdl_samples\\signal_assignment.vhd";
+    private static void testAssignment(boolean print, boolean convertToAST, String testFile) throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Signal_assignment_statementContext root = parser.signal_assignment_statement();
 
@@ -94,18 +92,14 @@ public class App {
         traverseTree(root, print, convertToAST);
     }
 
-    private static void testProcess(boolean print, boolean convertToAST) throws IOException {
-
-        String testFile = "src\\test\\resources\\vhdl_samples\\process.vhd";
+    private static void testProcess(boolean print, boolean convertToAST, String testFile) throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Process_statementContext root = parser.process_statement();
 
         traverseTree(root, print, convertToAST);
     }
 
-    private static void testCase(boolean print, boolean convertToAST) throws IOException {
-        
-        String testFile = "src\\test\\resources\\vhdl_samples\\case.vhd";
+    private static void testCase(boolean print, boolean convertToAST, String testFile) throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Case_statementContext root = parser.case_statement();
 

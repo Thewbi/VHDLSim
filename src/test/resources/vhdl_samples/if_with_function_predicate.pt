@@ -1,0 +1,56 @@
+If_statementContext [if] 175408781
+    if
+  ConditionContext [rising_edge] 897074030    
+    ExpressionContext [rising_edge] 1885996206
+      RelationContext [rising_edge] 1859039536
+        Shift_expressionContext [rising_edge] 278934944
+          Simple_expressionContext [rising_edge] 1739876329
+            TermContext [rising_edge] 1205555397
+              FactorContext [rising_edge] 1543974463
+                PrimaryContext [rising_edge] 1293618474
+                  NameContext [rising_edge] 156545103
+                    IdentifierContext [rising_edge] 345281752
+                        rising_edge
+                    Name_partContext [(] 1896294051
+                      Function_call_or_indexed_name_partContext [(] 1684015092
+                          (
+                        Actual_parameter_partContext [clk] 1209669119
+                          Association_listContext [clk] 2014866032
+                            Association_elementContext [clk] 811760110
+                              Actual_partContext [clk] 1415157681
+                                Actual_designatorContext [clk] 1291113768
+                                  ExpressionContext [clk] 2005167404
+                                    RelationContext [clk] 1418385211
+                                      Shift_expressionContext [clk] 1282811396
+                                        Simple_expressionContext [clk] 641853239
+                                          TermContext [clk] 1920467934
+                                            FactorContext [clk] 1883840933
+                                              PrimaryContext [clk] 233996206
+                                                LiteralContext [clk] 614685048
+                                                  Enumeration_literalContext [clk] 385337537
+                                                    IdentifierContext [clk] 789219251
+                                                        clk
+                          )
+    then
+  Sequence_of_statementsContext [q] 832279283
+    Sequential_statementContext [q] 265119009
+      Signal_assignment_statementContext [q] 668210649
+        TargetContext [q] 1545087375
+          NameContext [q] 838411509
+            IdentifierContext [q] 1434041222
+                q
+          <=
+        WaveformContext [d] 1375995437
+          Waveform_elementContext [d] 1338841523
+            ExpressionContext [d] 929776179
+              RelationContext [d] 802581203
+                Shift_expressionContext [d] 1561408618
+                  Simple_expressionContext [d] 2050404090
+                    TermContext [d] 388043093
+                      FactorContext [d] 188576144
+                        PrimaryContext [d] 1608230649
+                          LiteralContext [d] 282432134
+                            Enumeration_literalContext [d] 266437232
+                              IdentifierContext [d] 1873859565
+                                  d
+          ;
