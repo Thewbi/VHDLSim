@@ -3,25 +3,9 @@ package de.vhdlmodel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModelNode<T> {
+public class Process extends Stmt {
 
-    public ModelNode<?> parent;
-
-    public List<ModelNode<?>> children = new ArrayList<>();
-
-    public String operator;
-
-    public String name;
-
-    public T value;
-
-    public ModelNode() {
-        name = "Unknown";
-    }
-
-    public ModelNode(String name) {
-        this.name = name;
-    }
+    public List<ModelNode<String>> sensitivityList = new ArrayList<>();
 
     public String toString(int indent) {
 
@@ -30,14 +14,20 @@ public class ModelNode<T> {
             stringBuffer.append("  ");
         }
 
-        stringBuffer.append("ModelNode ").append(name).append("\n");
+        stringBuffer.append("Process: ").append(name).append("\n");
 
         indent++;
+        for (ModelNode<?> signal : sensitivityList) {
+            for (int i = 0; i < indent; i++) {
+                stringBuffer.append("  ");
+            }
+            stringBuffer.append("Signal: ").append(signal.name).append("\n");
+        }
         for (ModelNode<?> child : children) {
             stringBuffer.append(child.toString(indent));
         }
 
         return stringBuffer.toString();
     }
-
+    
 }

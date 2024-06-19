@@ -11,14 +11,8 @@ public class FunctionCall extends ModelNode<Object> {
 
         stringBuffer.append("FunctionCall: ").append(name).append("\n");
 
-        // if (operator == null) {
-        //     stringBuffer.append("Expr: ").append(constantValue).append("\n");
-        // } else {
-        //     stringBuffer.append("Expr: ").append(operator).append("\n");
-        // }
-
         indent++;
-        for (ModelNode child : children) {
+        for (ModelNode<?> child : children) {
             stringBuffer.append(child.toString(indent));
         }
 

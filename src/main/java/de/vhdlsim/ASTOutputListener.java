@@ -25,6 +25,7 @@ import de.vhdlmodel.NumericLiteral;
 import de.vhdlmodel.Relation;
 import de.vhdlmodel.Stmt;
 import de.vhdlmodel.StringLiteral;
+import de.vhdlmodel.Process;
 
 /**
  * Constructs an abstract syntac tree (AST) out of the parse tree (PT).
@@ -35,9 +36,10 @@ import de.vhdlmodel.StringLiteral;
  */
 public class ASTOutputListener extends VHDLParserBaseListener {
 
+    // public ModelNode<?> stmt;
     public Stmt stmt;
 
-    public List<Stmt> stmts = new ArrayList<>();
+    // public List<Stmt> stmts = new ArrayList<>();
 
     public ModelNode<?> expr;
 
@@ -48,6 +50,20 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     private String lastIdentifier;
 
     private FunctionCall lastFunctionCall;
+
+    private Process lastProcess;
+
+    private boolean sensitivityList;
+
+    @Override
+    public void enterSensitivity_list(VHDLParser.Sensitivity_listContext ctx) {
+        sensitivityList = true;
+    }
+
+    @Override
+    public void exitSensitivity_list(VHDLParser.Sensitivity_listContext ctx) {
+        sensitivityList = false;
+    }
 
     @Override
     public void exitSimple_expression(VHDLParser.Simple_expressionContext ctx) {
@@ -238,6 +254,12 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void exitIdentifier(VHDLParser.IdentifierContext ctx) {
         lastIdentifier = ctx.getText();
+        if ((stmt != null) && (stmt instanceof Process) && sensitivityList) {
+
+            ModelNode<String> signal = new ModelNode<>();
+            signal.name = ctx.getText();
+            lastProcess.sensitivityList.add(signal);
+        }
     }
 
     @Override
@@ -366,34 +388,31 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void enterIf_statement(VHDLParser.If_statementContext ctx) {
         IfStmt ifStmt = new IfStmt();
-        stmts.add(ifStmt);
-
+        if (stmt != null) {
+            stmt.children.add(ifStmt);
+            ifStmt.parent = stmt;
+        }
         stmt = ifStmt;
     }
 
     @Override
     public void exitIf_statement(VHDLParser.If_statementContext ctx) {
-        // System.out.println("If_statement context!");
-
         // reset on exit
-        stmt = null;
         expr = null;
-
-        // assert stack empty
-        // if (stack.size() != 0) {
-        // throw new RuntimeException();
-        // }
 
         // DEBUG
         stack.clear();
+
+        stmt = stmt.parent == null ? stmt : stmt.parent;
     }
 
     @Override
     public void enterCase_statement(VHDLParser.Case_statementContext ctx) {
-
         CaseStmt caseStmt = new CaseStmt();
-        stmts.add(caseStmt);
-
+        if (stmt != null) {
+            stmt.children.add(caseStmt);
+            caseStmt.parent = stmt;
+        }
         stmt = caseStmt;
     }
 
@@ -404,16 +423,12 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         stmt.value = stack.pop();
 
         // reset on exit
-        stmt = null;
         expr = null;
-
-        // assert stack empty
-        // if (stack.size() != 0) {
-        // throw new RuntimeException();
-        // }
 
         // DEBUG
         stack.clear();
+
+        stmt = stmt.parent == null ? stmt : stmt.parent;
     }
 
     @Override
@@ -437,12 +452,14 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         case_statement_alternative_others = false;
 
-        stmt = (Stmt) stmt.parent;
+        stmt = stmt.parent == null ? stmt : stmt.parent;
     }
 
     @Override
     public void enterFunction_call_or_indexed_name_part(VHDLParser.Function_call_or_indexed_name_partContext ctx) {
+
         System.out.println("FunctionCall: \"" + lastIdentifier + "\"");
+
         FunctionCall functionCall = new FunctionCall();
         functionCall.name = lastIdentifier;
 
@@ -451,27 +468,44 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         if (stmt instanceof IfStmtBranch) {
 
             IfStmtBranch ifStmtBranch = (IfStmtBranch) stmt;
-
-            //stmt = ifStmtBranch;
-            //stmt = functionCall;
-
-            //ifStmtBranch.exprRoot = functionCall;
             ifStmtBranch.exprRoot.children.add(functionCall);
         }
     }
 
     @Override
-    //public void exitActual_parameter_part(VHDLParser.Actual_parameter_partContext ctx) {
     public void exitActual_part(VHDLParser.Actual_partContext ctx) {
         // System.out.println("Actual Parameter: \"" + ctx + "\"");
 
-        // this code was tested with and written for a function call with several actual parameters
+        // this code was tested with and written for a function call with several actual
+        // parameters
 
         FunctionCallActualParameter actualParameter = new FunctionCallActualParameter();
         actualParameter.name = lastIdentifier;
         actualParameter.value = lastIdentifier;
 
         lastFunctionCall.children.add(actualParameter);
+    }
+
+    @Override
+    public void enterProcess_statement(VHDLParser.Process_statementContext ctx) {
+
+        System.out.println("ProcessStatement: \"" + lastIdentifier + "\"");
+
+        Process process = new Process();
+        process.name = lastIdentifier;
+
+        lastProcess = process;
+
+        if (stmt != null) {
+            stmt.children.add(process);
+            process.parent = stmt;
+        }
+        stmt = process;
+    }
+
+    @Override
+    public void exitProcess_statement(VHDLParser.Process_statementContext ctx) {
+        stmt = stmt.parent == null ? stmt : stmt.parent;
     }
 
     @Override
@@ -487,7 +521,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             stmt.children.add(assignmentStmt);
         } else {
             stmt = assignmentStmt;
-            stmts.add(assignmentStmt);
         }
     }
 

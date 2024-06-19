@@ -12,7 +12,9 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import de.vhdl.grammar.VHDLLexer;
 import de.vhdl.grammar.VHDLParser;
+import de.vhdl.grammar.VHDLParser.Architecture_bodyContext;
 import de.vhdl.grammar.VHDLParser.Case_statementContext;
+import de.vhdl.grammar.VHDLParser.Entity_declarationContext;
 import de.vhdl.grammar.VHDLParser.If_statementContext;
 import de.vhdl.grammar.VHDLParser.Process_statementContext;
 import de.vhdl.grammar.VHDLParser.Signal_assignment_statementContext;
@@ -26,23 +28,34 @@ public class App {
 
     public static void main(String[] args) throws IOException {
 
-        //boolean print = false;
-        boolean print = true;
+        boolean print = false;
+        //boolean print = true;
 
         //boolean convertToAST = false;
         boolean convertToAST = true;
 
         //testAssignment(print, convertToAST, "src\\test\\resources\\vhdl_samples\\signal_assignment.vhd");
         
-        //testIf1(print, convertToAST);
-        // testIf2(print, convertToAST);
-        // testIf3(print, convertToAST);
-        //testIf4(print, convertToAST);
-        
-        // TODO: work on processes next
-        testProcess(print, convertToAST, "src\\test\\resources\\vhdl_samples\\process.vhd");
+        //testIf1(print, convertToAST, "src\\test\\resources\\vhdl_samples\\if.vhd");
+        //testIf2(print, convertToAST, "src\\test\\resources\\vhdl_samples\\if_complex_expression.vhd");
+        //testIf3(print, convertToAST, "src\\test\\resources\\vhdl_samples\\elsif.vhd");
+        //testIf4(print, convertToAST, "src\\test\\resources\\vhdl_samples\\if_with_function_predicate.vhd");
         
         //testCase(print, convertToAST, "src\\test\\resources\\vhdl_samples\\case.vhd");
+
+        // TODO: work on processes next
+        //testProcess(print, convertToAST, "src\\test\\resources\\vhdl_samples\\process.vhd");
+
+        // TODO: entity and architecture
+        //
+        // https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
+        testEntity(print, convertToAST, "src\\test\\resources\\vhdl_samples\\entity.vhd");
+        //testArchitecture(print, convertToAST, "src\\test\\resources\\vhdl_samples\\architecture.vhd");
+
+        // and-gate - https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
+        //testAndGate(print, convertToAST, "src\\test\\resources\\vhdl_samples\\and_gate.vhd");
+
+        // https://www.mikrocontroller.net/articles/VHDL_Testbench
     }
 
     private static void testAssignment(boolean print, boolean convertToAST, String testFile) throws IOException {
@@ -52,25 +65,19 @@ public class App {
         traverseTree(root, print, convertToAST);
     }
 
-    private static void testIf1(boolean print, boolean convertToAST) throws IOException {
-        
-        String testFile = "src\\test\\resources\\vhdl_samples\\if.vhd";
+    private static void testIf1(boolean print, boolean convertToAST, String testFile) throws IOException {
         final VHDLParser parser = processFile(testFile);
         final If_statementContext root = parser.if_statement();
 
         traverseTree(root, print, convertToAST);
     }
-    private static void testIf2(boolean print, boolean convertToAST) throws IOException {
-        
-        String testFile = "src\\test\\resources\\vhdl_samples\\if_complex_expression.vhd";
+    private static void testIf2(boolean print, boolean convertToAST, String testFile) throws IOException {
         final VHDLParser parser = processFile(testFile);
         final If_statementContext root = parser.if_statement();
 
         traverseTree(root, print, convertToAST);
     }
-    private static void testIf3(boolean print, boolean convertToAST) throws IOException {
-        
-        String testFile = "src\\test\\resources\\vhdl_samples\\elsif.vhd";
+    private static void testIf3(boolean print, boolean convertToAST, String testFile) throws IOException {
         final VHDLParser parser = processFile(testFile);
         final If_statementContext root = parser.if_statement();
 
@@ -83,11 +90,16 @@ public class App {
      * @param convertToAST
      * @throws IOException
      */
-    private static void testIf4(boolean print, boolean convertToAST) throws IOException {
-        
-        String testFile = "src\\test\\resources\\vhdl_samples\\if_with_function_predicate.vhd";
+    private static void testIf4(boolean print, boolean convertToAST, String testFile) throws IOException {
         final VHDLParser parser = processFile(testFile);
         final If_statementContext root = parser.if_statement();
+
+        traverseTree(root, print, convertToAST);
+    }
+
+    private static void testCase(boolean print, boolean convertToAST, String testFile) throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Case_statementContext root = parser.case_statement();
 
         traverseTree(root, print, convertToAST);
     }
@@ -99,9 +111,16 @@ public class App {
         traverseTree(root, print, convertToAST);
     }
 
-    private static void testCase(boolean print, boolean convertToAST, String testFile) throws IOException {
+    private static void testEntity(boolean print, boolean convertToAST, String testFile) throws IOException {
         final VHDLParser parser = processFile(testFile);
-        final Case_statementContext root = parser.case_statement();
+        final Entity_declarationContext root = parser.entity_declaration();
+
+        traverseTree(root, print, convertToAST);
+    }
+
+    private static void testArchitecture(boolean print, boolean convertToAST, String testFile) throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Architecture_bodyContext root = parser.architecture_body();
 
         traverseTree(root, print, convertToAST);
     }
@@ -125,12 +144,12 @@ public class App {
             final ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(astOutputListener, root);
 
+            // output the AST
             int indent = 0;
-            for (ModelNode<?> stmt : astOutputListener.stmts) {
-
-                System.out.println(stmt.toString(indent));
-                
-            }
+            // for (ModelNode<?> stmt : astOutputListener.stmts) {
+            //     System.out.println(stmt.toString(indent));
+            // }
+            System.out.println(astOutputListener.stmt.toString(indent));
         }
     }
 
