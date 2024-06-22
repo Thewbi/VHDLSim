@@ -228,6 +228,11 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void enterExpression(VHDLParser.ExpressionContext ctx) {
         System.out.println("enter expression " + ctx);
+
+        // a dummy node is entered to mark the bottom of the stack where
+        // the current expression stops. Without marking the end of the expression stack
+        // it becomes excessively hard to visit expressions because the expression element
+        // is used in so many contexts that it is not always clear how to combine elements.
         stack.push(new DummyNode());
     }
 
@@ -732,9 +737,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitCase_statement_alternative(VHDLParser.Case_statement_alternativeContext ctx) {
-
-        
-
         stmt = stmt.parent == null ? stmt : stmt.parent;
     }
 
@@ -767,6 +769,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         actualParameter.value = lastIdentifier;
 
         lastFunctionCall.children.add(actualParameter);
+
+        stackPop();
     }
 
     @Override
