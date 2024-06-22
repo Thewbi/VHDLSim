@@ -38,8 +38,7 @@ public class App {
         //testIf2(print, convertToAST, "src\\test\\resources\\vhdl_samples\\if_complex_expression.vhd");
         //testIf3(print, convertToAST, "src\\test\\resources\\vhdl_samples\\elsif.vhd");
 
-        // TODO: expression smears over into other elements
-        testIf4(print, convertToAST, "src\\test\\resources\\vhdl_samples\\if_with_function_predicate.vhd");
+        //testIf4(print, convertToAST, "src\\test\\resources\\vhdl_samples\\if_with_function_predicate.vhd");
         
         //testCase(print, convertToAST, "src\\test\\resources\\vhdl_samples\\case.vhd");
 
@@ -51,7 +50,7 @@ public class App {
         //testEntity(print, convertToAST, "src\\test\\resources\\vhdl_samples\\entity.vhd");
         
         // TODO: statements are missing
-        //testArchitecture(print, convertToAST, "src\\test\\resources\\vhdl_samples\\architecture.vhd");
+        testArchitecture(print, convertToAST, "src\\test\\resources\\vhdl_samples\\architecture.vhd");
 
         // TODO: and-gate - https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
         //testAndGate(print, convertToAST, "src\\test\\resources\\vhdl_samples\\and_gate.vhd");

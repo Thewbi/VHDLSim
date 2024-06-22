@@ -97,10 +97,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         ParseTree child11 = ctx.getChild(10); // semicolon (TOKEN)
         System.out.println(child11.getText());
 
-        // for (int i = 0; i < ctx.getChildCount(); i++) {
-        // System.out.println(ctx.getChild(i).getText());
-        // }
-
         architecture = new Architecture();
         if (stmt != null) {
             stmt.children.add(architecture);
@@ -165,9 +161,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitSimple_expression(VHDLParser.Simple_expressionContext ctx) {
-
         List<Adding_operatorContext> addingOperators = ctx.adding_operator();
-
     }
 
     @Override
@@ -177,33 +171,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void exitAdding_operator(VHDLParser.Adding_operatorContext ctx) {
 
-        // if (addingOperators.size() == 0) {
-        // return;
-        // }
-
-        // if (addingOperators.size() == 1) {
-
-        // ModelNode<?> rhs = stackPop();
-        // ModelNode<?> lhs = stackPop();
-
-        // if (lhs.parent != null) {
-        // throw new RuntimeException("Has parent!");
-        // }
-        // if (rhs.parent != null) {
-        // throw new RuntimeException("Has parent!");
-        // }
-
-        // Expr localExpr = new Expr();
-        // stackPush(localExpr);
-
-        // lhs.parent = localExpr;
-        // rhs.parent = localExpr;
-        // localExpr.children.add(lhs);
-        // localExpr.children.add(rhs);
-
         Expr operatorModelNode = new Expr();
-
-        // for (Adding_operatorContext adding_operatorContext : ctx.addingOperators) {
 
         switch (ctx.start.getType()) {
 
@@ -215,14 +183,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
                 operatorModelNode.value = "-";
                 break;
         }
-        // }
 
         stackPush(operatorModelNode);
-
-        // return;
-        // }
-
-        // throw new RuntimeException("How to deal with this case?");
     }
 
     @Override
@@ -241,16 +203,11 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         System.out.println("exit expression " + ctx);
 
-        // if (ctx.children.size() == 1) {
-        //     return;
-        // }
-
         boolean done = false;
         while (!done) {
 
             ModelNode<?> rhs = stackPop();
 
-            //if (stack.size() < 2) {
             if (stack.peek() instanceof DummyNode) {
 
                 // remove dummy node
@@ -275,9 +232,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             localExpr.children.add(lhs);
             localExpr.children.add(rhs);
 
-            // add this expression into the exression root created in enterCondition()
-            // expr.children.add(localExpr);
-
             expr = localExpr;
         }
 
@@ -287,13 +241,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     public void enterRelational_operator(VHDLParser.Relational_operatorContext ctx) {
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>
-     * The default implementation does nothing.
-     * </p>
-     */
     @Override
     public void exitRelational_operator(VHDLParser.Relational_operatorContext ctx) {
 
@@ -350,12 +297,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
             // Do nothing, let exitExpression take care of this case
 
-            // ModelNode<String> localExpr2 = new ModelNode<>();
-            // stackPush(localExpr2);
-
-            // localExpr2.value = ctx.getText();
-            // localExpr2.name = ctx.getText();
-
         } else {
 
             ModelNode<?> rhs = stackPop();
@@ -373,117 +314,11 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             rhs.parent = localExpr;
             localExpr.children.add(lhs);
             localExpr.children.add(rhs);
-
-            // Relational_operatorContext relational_operatorContext =
-            // ctx.relational_operator();
-            // if (relational_operatorContext != null) {
-
-            // Relation newRelation = new Relation();
-            // ModelNode<?> oldExpr = expr;
-
-            // // parent
-            // newRelation.parent = oldExpr;
-
-            // // child
-            // oldExpr.children.add(newRelation);
-
-            // expr = newRelation;
-
-            // switch (relational_operatorContext.start.getType()) {
-
-            // case VHDLLexer.EQ:
-            // TerminalNode eq = relational_operatorContext.EQ();
-            // expr.operator = eq.toString();
-            // break;
-
-            // case VHDLLexer.NEQ:
-            // TerminalNode neq = relational_operatorContext.NEQ();
-            // expr.operator = neq.toString();
-            // break;
-
-            // case VHDLLexer.GE:
-            // TerminalNode ge = relational_operatorContext.GE();
-            // expr.operator = ge.toString();
-            // break;
-
-            // case VHDLLexer.GREATERTHAN:
-            // TerminalNode gt = relational_operatorContext.GREATERTHAN();
-            // expr.operator = gt.toString();
-            // break;
-
-            // case VHDLLexer.LE:
-            // TerminalNode le = relational_operatorContext.LE();
-            // expr.operator = le.toString();
-            // break;
-
-            // case VHDLLexer.LOWERTHAN:
-            // TerminalNode lt = relational_operatorContext.LOWERTHAN();
-            // expr.operator = lt.toString();
-            // break;
-
-            // default:
-            // throw new RuntimeException("Unknown type: " +
-            // relational_operatorContext.start.getType());
-            // }
-
-            // stackPush(expr);
-
-            // // ModelNode rhs = stackPop();
-            // // expr.children.add(stackPop());
-            // // expr.children.add(rhs);
-            // }
         }
     }
 
     @Override
     public void exitLogical_operator(VHDLParser.Logical_operatorContext ctx) {
-
-        // Expr localExpr = null;
-
-        // if (expr instanceof Relation) {
-
-        // localExpr = new Expr();
-        // ModelNode<?> oldExpr = expr;
-
-        // // parent
-        // ModelNode<?> parent = oldExpr.parent;
-        // if (parent != null) {
-        // parent.children.remove(oldExpr);
-        // parent.children.add(localExpr);
-        // localExpr.parent = parent;
-        // }
-
-        // // children
-        // oldExpr.parent = localExpr;
-        // localExpr.children.add(oldExpr);
-
-        // expr = localExpr;
-
-        // } else if (expr instanceof Expr) {
-
-        // throw new RuntimeException();
-
-        // }
-
-        // if (expr == null) {
-        // ModelNode<?> rhs = stackPop();
-        // ModelNode<?> lhs = stackPop();
-
-        // if (lhs.parent != null) {
-        // throw new RuntimeException("Has parent!");
-        // }
-        // if (rhs.parent != null) {
-        // throw new RuntimeException("Has parent!");
-        // }
-
-        // localExpr = new Expr();
-        // stackPush(localExpr);
-
-        // lhs.parent = localExpr;
-        // rhs.parent = localExpr;
-        // localExpr.children.add(lhs);
-        // localExpr.children.add(rhs);
-        // }
 
         Expr operatorModelNode = new Expr();
         switch (ctx.start.getType()) {
@@ -770,6 +605,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         lastFunctionCall.children.add(actualParameter);
 
+        // take the value from the stack so that it is not falsely processed by the expression handler
         stackPop();
     }
 
