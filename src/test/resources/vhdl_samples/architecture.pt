@@ -1,51 +1,86 @@
-Architecture_bodyContext [architecture] 1795960102
+Architecture_bodyContext [architecture] 704024720
     architecture
-  IdentifierContext [orLogic] 1935972447
+  IdentifierContext [orLogic] 315860201
       orLogic
     of
-  IdentifierContext [OR_gate] 97652294
+  IdentifierContext [OR_gate] 604125138
       OR_gate
     is
-  Architecture_declarative_partContext [begin] 1889248251
+  Architecture_declarative_partContext [begin] 631659383
     begin
-  Architecture_statement_partContext [Y] 1027007693
-    Architecture_statementContext [Y] 1783047508
-      Concurrent_signal_assignment_statementContext [Y] 2146608740
-        Conditional_signal_assignmentContext [Y] 1381713434
-          TargetContext [Y] 1489092624
-            NameContext [Y] 192881625
-              IdentifierContext [Y] 1641313620
+  Architecture_statement_partContext [Y] 785447854
+    Architecture_statementContext [Y] 556529265
+      Concurrent_signal_assignment_statementContext [Y] 346224929
+        Conditional_signal_assignmentContext [Y] 63468833
+          TargetContext [Y] 720167805
+            NameContext [Y] 1418334255
+              IdentifierContext [Y] 1466073198
                   Y
             <=
-          OptsContext [A] 1773638882
-          Conditional_waveformsContext [A] 1059063940
-            WaveformContext [A] 1295226194
-              Waveform_elementContext [A] 252651381
-                ExpressionContext [A] 1514840818
-                  RelationContext [A] 1704064279
-                    Shift_expressionContext [A] 878274034
-                      Simple_expressionContext [A] 1117509763
-                        TermContext [A] 1296674576
-                          FactorContext [A] 664457955
-                            PrimaryContext [A] 1477657879
-                              LiteralContext [A] 1146147158
-                                Enumeration_literalContext [A] 1147258851
-                                  IdentifierContext [A] 891095110
+          OptsContext [A] 398690014
+          Conditional_waveformsContext [A] 1526298704
+            WaveformContext [A] 1593180232
+              Waveform_elementContext [A] 492079624
+                ExpressionContext [A] 380242442
+                  RelationContext [A] 125881207
+                    Shift_expressionContext [A] 1763344271
+                      Simple_expressionContext [A] 1353170030
+                        TermContext [A] 370869802
+                          FactorContext [A] 398572781
+                            PrimaryContext [A] 765284253
+                              LiteralContext [A] 1077199500
+                                Enumeration_literalContext [A] 240166646
+                                  IdentifierContext [A] 351028485
                                       A
-                  Logical_operatorContext [OR] 2011482127
+                  Logical_operatorContext [OR] 1405747618
                       OR
-                  RelationContext [B] 905735620
-                    Shift_expressionContext [B] 2145970759
-                      Simple_expressionContext [B] 577405636
-                        TermContext [B] 1931444790
-                          FactorContext [B] 626742236
-                            PrimaryContext [B] 500772834
-                              LiteralContext [B] 1800659519
-                                Enumeration_literalContext [B] 1691538257
-                                  IdentifierContext [B] 459848100
+                  RelationContext [B] 898406901
+                    Shift_expressionContext [B] 1054932644
+                      Simple_expressionContext [B] 1213349904
+                        TermContext [B] 1259769769
+                          FactorContext [B] 444920847
+                            PrimaryContext [B] 589835301
+                              LiteralContext [B] 2032188048
+                                Enumeration_literalContext [B] 112466394
+                                  IdentifierContext [B] 992846223
                                       B
             ;
-    end
-  IdentifierContext [orLogic] 1335505684
-      orLogic
-    ;
+    Architecture_statementContext [case] 1493625803
+      Simultaneous_statementContext [case] 630074945
+        Simultaneous_case_statementContext [case] 64133603
+            case
+          ExpressionContext [Sel] 1436901839
+            RelationContext [Sel] 999522307
+              Shift_expressionContext [Sel] 1866161430
+                Simple_expressionContext [Sel] 2024918163
+                  TermContext [Sel] 107241811
+                    FactorContext [Sel] 558922244
+                      PrimaryContext [Sel] 339099861
+    Architecture_statementContext [Sel] 1653986196
+    Architecture_statementContext [Sel] 1197365356
+    Architecture_statementContext ["00"] 1702660825
+    Architecture_statementContext ["00"] 1131040331
+    Architecture_statementContext [Output2] 254749889
+      Concurrent_signal_assignment_statementContext [Output2] 973576304
+        Conditional_signal_assignmentContext [Output2] 992802731
+          TargetContext [Output2] 715521683
+            NameContext [Output2] 1545242146
+              IdentifierContext [Output2] 1524126153
+                  Output2
+            <=
+          OptsContext [Sig1] 102065302
+          Conditional_waveformsContext [Sig1] 63001505
+            WaveformContext [Sig1] 191037037
+              Waveform_elementContext [Sig1] 330084561
+                ExpressionContext [Sig1] 1043351526
+                  RelationContext [Sig1] 937773018
+                    Shift_expressionContext [Sig1] 728258269
+                      Simple_expressionContext [Sig1] 1572098393
+                        TermContext [Sig1] 1627857534
+                          FactorContext [Sig1] 2084663827
+                            PrimaryContext [Sig1] 360062456
+                              LiteralContext [Sig1] 1790421142
+                                Enumeration_literalContext [Sig1] 846947180
+                                  IdentifierContext [Sig1] 1172131546
+                                      Sig1
+            ;

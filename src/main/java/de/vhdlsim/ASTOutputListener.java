@@ -193,8 +193,10 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         // a dummy node is entered to mark the bottom of the stack where
         // the current expression stops. Without marking the end of the expression stack
-        // it becomes excessively hard to visit expressions because the expression element
-        // is used in so many contexts that it is not always clear how to combine elements.
+        // it becomes excessively hard to visit expressions because the expression
+        // element
+        // is used in so many contexts that it is not always clear how to combine
+        // elements.
         stack.push(new DummyNode());
     }
 
@@ -523,6 +525,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterCase_statement(VHDLParser.Case_statementContext ctx) {
+        
         CaseStmt caseStmt = new CaseStmt();
         if (stmt != null) {
             stmt.children.add(caseStmt);
@@ -533,6 +536,32 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitCase_statement(VHDLParser.Case_statementContext ctx) {
+
+        // write the discriminator into the case-statement
+        stmt.value = stackPop();
+
+        // reset on exit
+        expr = null;
+
+        // DEBUG
+        stack.clear();
+
+        stmt = stmt.parent == null ? stmt : stmt.parent;
+    }
+
+    @Override
+    public void enterSimultaneous_case_statement(VHDLParser.Simultaneous_case_statementContext ctx) {
+
+        CaseStmt caseStmt = new CaseStmt();
+        if (stmt != null) {
+            stmt.children.add(caseStmt);
+            caseStmt.parent = stmt;
+        }
+        stmt = caseStmt;
+    }
+
+    @Override
+    public void exitSimultaneous_case_statement(VHDLParser.Simultaneous_case_statementContext ctx) {
 
         // write the discriminator into the case-statement
         stmt.value = stackPop();
@@ -605,7 +634,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         lastFunctionCall.children.add(actualParameter);
 
-        // take the value from the stack so that it is not falsely processed by the expression handler
+        // take the value from the stack so that it is not falsely processed by the
+        // expression handler
         stackPop();
     }
 
@@ -633,7 +663,21 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitSignal_assignment_statement(VHDLParser.Signal_assignment_statementContext ctx) {
+        processSignalAssignmentStatement();
+    }
 
+    @Override
+    public void enterConcurrent_signal_assignment_statement(
+            VHDLParser.Concurrent_signal_assignment_statementContext ctx) {
+    }
+
+    @Override
+    public void exitConcurrent_signal_assignment_statement(
+            VHDLParser.Concurrent_signal_assignment_statementContext ctx) {
+        processSignalAssignmentStatement();
+    }
+
+    private void processSignalAssignmentStatement() {
         AssignmentStmt assignmentStmt = new AssignmentStmt();
 
         ModelNode<?> rhs = stackPop();
