@@ -1,0 +1,51 @@
+Architecture_bodyContext [architecture] 1795960102
+    architecture
+  IdentifierContext [orLogic] 1935972447
+      orLogic
+    of
+  IdentifierContext [OR_gate] 97652294
+      OR_gate
+    is
+  Architecture_declarative_partContext [begin] 1889248251
+    begin
+  Architecture_statement_partContext [Y] 1027007693
+    Architecture_statementContext [Y] 1783047508
+      Concurrent_signal_assignment_statementContext [Y] 2146608740
+        Conditional_signal_assignmentContext [Y] 1381713434
+          TargetContext [Y] 1489092624
+            NameContext [Y] 192881625
+              IdentifierContext [Y] 1641313620
+                  Y
+            <=
+          OptsContext [A] 1773638882
+          Conditional_waveformsContext [A] 1059063940
+            WaveformContext [A] 1295226194
+              Waveform_elementContext [A] 252651381
+                ExpressionContext [A] 1514840818
+                  RelationContext [A] 1704064279
+                    Shift_expressionContext [A] 878274034
+                      Simple_expressionContext [A] 1117509763
+                        TermContext [A] 1296674576
+                          FactorContext [A] 664457955
+                            PrimaryContext [A] 1477657879
+                              LiteralContext [A] 1146147158
+                                Enumeration_literalContext [A] 1147258851
+                                  IdentifierContext [A] 891095110
+                                      A
+                  Logical_operatorContext [OR] 2011482127
+                      OR
+                  RelationContext [B] 905735620
+                    Shift_expressionContext [B] 2145970759
+                      Simple_expressionContext [B] 577405636
+                        TermContext [B] 1931444790
+                          FactorContext [B] 626742236
+                            PrimaryContext [B] 500772834
+                              LiteralContext [B] 1800659519
+                                Enumeration_literalContext [B] 1691538257
+                                  IdentifierContext [B] 459848100
+                                      B
+            ;
+    end
+  IdentifierContext [orLogic] 1335505684
+      orLogic
+    ;

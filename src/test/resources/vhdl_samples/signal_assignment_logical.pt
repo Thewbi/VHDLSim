@@ -1,0 +1,32 @@
+Signal_assignment_statementContext [Y] 797925218
+  TargetContext [Y] 450003680
+    NameContext [Y] 2134991632
+      IdentifierContext [Y] 480971771
+          Y
+    <=
+  WaveformContext [A] 1586845078
+    Waveform_elementContext [A] 1356728614
+      ExpressionContext [A] 611563982
+        RelationContext [A] 1615039080
+          Shift_expressionContext [A] 336484883
+            Simple_expressionContext [A] 876213901
+              TermContext [A] 230528013
+                FactorContext [A] 1909546776
+                  PrimaryContext [A] 392781299
+                    LiteralContext [A] 1822383117
+                      Enumeration_literalContext [A] 233021551
+                        IdentifierContext [A] 1991313236
+                            A
+        Logical_operatorContext [OR] 736778932
+            OR
+        RelationContext [B] 1032000752
+          Shift_expressionContext [B] 770911223
+            Simple_expressionContext [B] 1392906938
+              TermContext [B] 708890004
+                FactorContext [B] 255944888
+                  PrimaryContext [B] 1004095028
+                    LiteralContext [B] 1487470647
+                      Enumeration_literalContext [B] 1948863195
+                        IdentifierContext [B] 1890187342
+                            B
+    ;

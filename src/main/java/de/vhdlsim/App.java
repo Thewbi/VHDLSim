@@ -1,8 +1,6 @@
 package de.vhdlsim;
 
 import java.io.IOException;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -18,41 +16,44 @@ import de.vhdl.grammar.VHDLParser.Entity_declarationContext;
 import de.vhdl.grammar.VHDLParser.If_statementContext;
 import de.vhdl.grammar.VHDLParser.Process_statementContext;
 import de.vhdl.grammar.VHDLParser.Signal_assignment_statementContext;
-import de.vhdlmodel.ModelNode;
 
 /**
- * Hello world!
+ * Use this generator to generate your testbenches: https://vhdl.lapinoo.net/testbench/
  *
  */
 public class App {
 
     public static void main(String[] args) throws IOException {
 
-        boolean print = false;
-        //boolean print = true;
+        //boolean print = false;
+        boolean print = true;
 
         //boolean convertToAST = false;
         boolean convertToAST = true;
 
         //testAssignment(print, convertToAST, "src\\test\\resources\\vhdl_samples\\signal_assignment.vhd");
+        //testAssignment(print, convertToAST, "src\\test\\resources\\vhdl_samples\\signal_assignment_logical.vhd");
         
         //testIf1(print, convertToAST, "src\\test\\resources\\vhdl_samples\\if.vhd");
         //testIf2(print, convertToAST, "src\\test\\resources\\vhdl_samples\\if_complex_expression.vhd");
         //testIf3(print, convertToAST, "src\\test\\resources\\vhdl_samples\\elsif.vhd");
-        //testIf4(print, convertToAST, "src\\test\\resources\\vhdl_samples\\if_with_function_predicate.vhd");
+
+        // TODO: expression smears over into other elements
+        testIf4(print, convertToAST, "src\\test\\resources\\vhdl_samples\\if_with_function_predicate.vhd");
         
         //testCase(print, convertToAST, "src\\test\\resources\\vhdl_samples\\case.vhd");
 
-        // TODO: work on processes next
         //testProcess(print, convertToAST, "src\\test\\resources\\vhdl_samples\\process.vhd");
 
-        // TODO: entity and architecture
+        // entity and architecture
         //
         // https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
-        testEntity(print, convertToAST, "src\\test\\resources\\vhdl_samples\\entity.vhd");
+        //testEntity(print, convertToAST, "src\\test\\resources\\vhdl_samples\\entity.vhd");
+        
+        // TODO: statements are missing
         //testArchitecture(print, convertToAST, "src\\test\\resources\\vhdl_samples\\architecture.vhd");
 
-        // and-gate - https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
+        // TODO: and-gate - https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
         //testAndGate(print, convertToAST, "src\\test\\resources\\vhdl_samples\\and_gate.vhd");
 
         // https://www.mikrocontroller.net/articles/VHDL_Testbench
