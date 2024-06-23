@@ -11,13 +11,14 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import de.vhdl.grammar.VHDLLexer;
 import de.vhdl.grammar.VHDLParser;
 import de.vhdl.grammar.VHDLParser.Adding_operatorContext;
-import de.vhdl.grammar.VHDLParser.Relational_operatorContext;
+import de.vhdl.grammar.VHDLParser.Signal_declarationContext;
 import de.vhdl.grammar.VHDLParserBaseListener;
 import de.vhdlmodel.Architecture;
 import de.vhdlmodel.AssignmentStmt;
 import de.vhdlmodel.CaseStmt;
 import de.vhdlmodel.CaseStmtBranch;
 import de.vhdlmodel.CharacterLiteral;
+import de.vhdlmodel.Component;
 import de.vhdlmodel.Entity;
 import de.vhdlmodel.Expr;
 import de.vhdlmodel.FunctionCall;
@@ -29,6 +30,7 @@ import de.vhdlmodel.DummyNode;
 import de.vhdlmodel.NumericLiteral;
 import de.vhdlmodel.Port;
 import de.vhdlmodel.PortDirection;
+import de.vhdlmodel.PortTarget;
 import de.vhdlmodel.Relation;
 import de.vhdlmodel.Stmt;
 import de.vhdlmodel.StringLiteral;
@@ -63,13 +65,17 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     private Architecture architecture;
 
+    private Component component;
+
+    private PortTarget portTarget;
+
     @Override
     public void enterArchitecture_body(VHDLParser.Architecture_bodyContext ctx) {
 
         String architectureName = null;
         String entityName = null;
 
-        System.out.println(ctx.getText());
+        // System.out.println(ctx.getText());
 
         ParseTree child1 = ctx.getChild(0); // ARCHITECTURE (TOKEN)
         ParseTree child2 = ctx.getChild(1); // architecture identifier
@@ -82,20 +88,20 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         ParseTree child5 = ctx.getChild(4); // IS (TOKEN)
 
         ParseTree child6 = ctx.getChild(5); // architecture_declarative_part
-        System.out.println(child6.getText());
+        // System.out.println(child6.getText());
 
         ParseTree child7 = ctx.getChild(6); // BEGIN (TOKEN)
-        System.out.println(child7.getText());
+        // System.out.println(child7.getText());
 
         ParseTree child8 = ctx.getChild(7); // inner source code inside the architecture
-        System.out.println(child8.getText());
+        // System.out.println(child8.getText());
 
         ParseTree child9 = ctx.getChild(8); // END (TOKEN)
-        System.out.println(child9.getText());
+        // System.out.println(child9.getText());
         ParseTree child10 = ctx.getChild(9); // architecture identifier (see child 2)
-        System.out.println(child10.getText());
+        // System.out.println(child10.getText());
         ParseTree child11 = ctx.getChild(10); // semicolon (TOKEN)
-        System.out.println(child11.getText());
+        // System.out.println(child11.getText());
 
         architecture = new Architecture();
         if (stmt != null) {
@@ -110,7 +116,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitArchitecture_body(VHDLParser.Architecture_bodyContext ctx) {
-        stmt = architecture.parent != null ? architecture.parent : architecture;
+        // stmt = architecture.parent != null ? architecture.parent : architecture;
+        stmt = architecture.parent;
         architecture = null;
     }
 
@@ -122,8 +129,37 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             entity.parent = stmt;
         }
         stmt = entity;
+        portTarget = entity;
 
         entity.name = ctx.identifier().get(0).getText();
+    }
+
+    @Override
+    public void exitEntity_declaration(VHDLParser.Entity_declarationContext ctx) {
+        // stmt = entity.parent != null ? entity.parent : entity;
+        stmt = entity.parent;
+        entity = null;
+        portTarget = null;
+    }
+
+    @Override
+    public void enterComponent_declaration(VHDLParser.Component_declarationContext ctx) {
+        component = new Component();
+        if (stmt != null) {
+            stmt.children.add(component);
+            component.parent = stmt;
+        }
+        stmt = component;
+        portTarget = component;
+
+        component.name = ctx.identifier().get(0).getText();
+    }
+
+    @Override
+    public void exitComponent_declaration(VHDLParser.Component_declarationContext ctx) {
+        stmt = component.parent;
+        component = null;
+        portTarget = null;
     }
 
     @Override
@@ -136,17 +172,11 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         String mode = ctx.signal_mode().getText();
 
         Port port = new Port();
-        entity.ports.add(port);
+        portTarget.ports.add(port);
 
         port.name = identifier;
         port.type = type;
         port.portDirection = PortDirection.fromString(mode);
-    }
-
-    @Override
-    public void exitEntity_declaration(VHDLParser.Entity_declarationContext ctx) {
-        stmt = entity.parent != null ? entity.parent : entity;
-        entity = null;
     }
 
     @Override
@@ -189,7 +219,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterExpression(VHDLParser.ExpressionContext ctx) {
-        System.out.println("enter expression " + ctx);
+        // System.out.println("enter expression " + ctx);
 
         // a dummy node is entered to mark the bottom of the stack where
         // the current expression stops. Without marking the end of the expression stack
@@ -203,7 +233,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void exitExpression(VHDLParser.ExpressionContext ctx) {
 
-        System.out.println("exit expression " + ctx);
+        // System.out.println("exit expression " + ctx);
 
         boolean done = false;
         while (!done) {
@@ -291,7 +321,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void exitRelation(VHDLParser.RelationContext ctx) {
 
-        System.out.println("exit relation " + ctx);
+        // System.out.println("exit relation " + ctx);
 
         int operatorCount = ctx.children.size() / 2;
 
@@ -525,7 +555,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterCase_statement(VHDLParser.Case_statementContext ctx) {
-        
+
         CaseStmt caseStmt = new CaseStmt();
         if (stmt != null) {
             stmt.children.add(caseStmt);
@@ -607,7 +637,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void enterFunction_call_or_indexed_name_part(VHDLParser.Function_call_or_indexed_name_partContext ctx) {
 
-        System.out.println("FunctionCall: \"" + lastIdentifier + "\"");
+        // System.out.println("FunctionCall: \"" + lastIdentifier + "\"");
 
         FunctionCall functionCall = new FunctionCall();
         functionCall.name = lastIdentifier;
@@ -642,7 +672,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void enterProcess_statement(VHDLParser.Process_statementContext ctx) {
 
-        System.out.println("ProcessStatement: \"" + lastIdentifier + "\"");
+        // System.out.println("ProcessStatement: \"" + lastIdentifier + "\"");
 
         Process process = new Process();
         process.name = lastIdentifier;
@@ -729,12 +759,12 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     }
 
     private void stackPush(ModelNode<?> node) {
-        System.out.println("Push: " + node.name + " " + node.value);
+        // System.out.println("Push: " + node.name + " " + node.value);
         stack.push(node);
     }
 
     private ModelNode<?> stackPop() {
-        System.out.println("Pop");
+        // System.out.println("Pop");
         return stack.pop();
     }
 }

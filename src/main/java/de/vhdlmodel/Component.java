@@ -1,6 +1,6 @@
 package de.vhdlmodel;
 
-public class Entity extends PortTarget {
+public class Component extends PortTarget {
 
     public String toString(int indent) {
 
@@ -9,7 +9,7 @@ public class Entity extends PortTarget {
             stringBuffer.append("  ");
         }
 
-        stringBuffer.append("Entity ").append(name).append("\n");
+        stringBuffer.append("Component ").append(name).append("\n");
 
         indent++;
         for (Port port : ports) {

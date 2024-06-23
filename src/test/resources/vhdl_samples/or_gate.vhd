@@ -3,15 +3,15 @@
 
 -- testbench generator: https://vhdl.lapinoo.net/testbench/
 
-entity AND_gate is
+entity OR_gate is
     port(A : in std_logic;     
          B : in std_logic;     
          Y : out std_logic); 
-end AND_gate;
+end OR_gate;
 
-architecture andLogic of AND_gate is
+architecture orLogic of OR_gate is
 begin
 
-    Y <= A AND B;
+    Y <= A OR B;
 
-end andLogic;
+end orLogic;

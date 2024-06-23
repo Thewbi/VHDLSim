@@ -1,0 +1,1 @@
+signal A : std_logic;

@@ -1,0 +1,11 @@
+Signal_declarationContext [signal] 133250414
+    signal
+  Identifier_listContext [A] 674483268
+    IdentifierContext [A] 54495403
+        A
+    :
+  Subtype_indicationContext [std_logic] 665372494
+    Selected_nameContext [std_logic] 764372388
+      IdentifierContext [std_logic] 459857341
+          std_logic
+    ;
