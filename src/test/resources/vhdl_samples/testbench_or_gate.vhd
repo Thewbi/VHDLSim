@@ -46,6 +46,7 @@ architecture tb of tb_OR_gate is
     signal Y : std_logic;
 
     constant TbPeriod : time := 1000 ns; -- EDIT Put right period here
+    
     signal TbClock : std_logic := '0';
     signal TbSimEnded : std_logic := '0';
 

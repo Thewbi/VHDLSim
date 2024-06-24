@@ -1,10 +1,8 @@
 package de.vhdlmodel;
 
-public class Port extends ModelNode<String> {
+public class Signal extends ModelNode<String> {
 
     public String name;
-
-    public PortDirection portDirection = PortDirection.UNKNOWN;
 
     public String type;
 
@@ -15,7 +13,7 @@ public class Port extends ModelNode<String> {
             stringBuffer.append("  ");
         }
 
-        stringBuffer.append("Port ").append(name).append(" ").append(portDirection).append(" ").append(type).append("\n");
+        stringBuffer.append("Signal ").append(name).append(" ").append(type).append("\n");
 
         indent++;
         for (ModelNode<?> child : children) {
@@ -24,5 +22,5 @@ public class Port extends ModelNode<String> {
 
         return stringBuffer.toString();
     }
-
+    
 }

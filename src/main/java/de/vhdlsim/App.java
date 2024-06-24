@@ -35,8 +35,8 @@ public class App {
         // boolean convertToAST = false;
         boolean convertToAST = true;
 
-        ASTOutputListener astOutputListener = testSignalDeclaration(print, convertToAST,
-        "src\\test\\resources\\vhdl_samples\\signal_declaration.vhd");
+        // ASTOutputListener astOutputListener = testSignalDeclaration(print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\signal_declaration.vhd");
 
         // ASTOutputListener astOutputListener = testAssignment(print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\signal_assignment.vhd");
@@ -55,6 +55,9 @@ public class App {
         //ASTOutputListener astOutputListener = testIf4(print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\if_with_function_predicate.vhd");
 
+        // ASTOutputListener astOutputListener = testIf5(print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\if_with_expression.vhd");
+
         // ASTOutputListener astOutputListener = testCase(print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\case.vhd");
 
@@ -70,12 +73,19 @@ public class App {
         // ASTOutputListener astOutputListener = testArchitecture(print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\architecture.vhd");
 
+        ASTOutputListener astOutputListener = testArchitecture(print, convertToAST,
+        "src\\test\\resources\\vhdl_samples\\architecture_with_process_with_if.vhd");
+
         // ASTOutputListener astOutputListener = testComponent(print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\component.vhd");
 
         // TODO: and-gate -
         // https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
         //ASTOutputListener astOutputListener = testEntityAndArchitecture(print, convertToAST, "src\\test\\resources\\vhdl_samples\\and_gate.vhd");
+
+        // TODO parsing is broken!!!!
+        // ASTOutputListener astOutputListener = testEntityAndArchitecture(print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\thermostat_example.vhd");
 
         // output the AST
         int indent = 0;
@@ -133,6 +143,13 @@ public class App {
         return traverseTree(root, print, convertToAST);
     }
 
+    private static ASTOutputListener testIf5(boolean print, boolean convertToAST, String testFile) throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final If_statementContext root = parser.if_statement();
+
+        return traverseTree(root, print, convertToAST);
+    }
+
     private static ASTOutputListener testCase(boolean print, boolean convertToAST, String testFile) throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Case_statementContext root = parser.case_statement();
@@ -170,6 +187,14 @@ public class App {
     }
 
     private static ASTOutputListener testEntityAndArchitecture(boolean print, boolean convertToAST, String testFile)
+            throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Design_fileContext root = parser.design_file();
+
+        return traverseTree(root, print, convertToAST);
+    }
+
+    private static ASTOutputListener testDesignFile(boolean print, boolean convertToAST, String testFile)
             throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Design_fileContext root = parser.design_file();

@@ -1,10 +1,15 @@
 package de.vhdlmodel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Architecture extends Stmt {
 
     public String architectureName;
 
     public String entityName;
+
+    public List<Signal> signals = new ArrayList<>();
 
     public String toString(int indent) {
 

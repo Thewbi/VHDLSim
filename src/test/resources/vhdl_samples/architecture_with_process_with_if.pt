@@ -1,0 +1,154 @@
+Architecture_bodyContext [architecture] 688726285
+    architecture
+  IdentifierContext [example] 1978869058
+      example
+    of
+  IdentifierContext [thermostat] 2131952342
+      thermostat
+    is
+  Architecture_declarative_partContext [begin] 1139700454
+    begin
+  Architecture_statement_partContext [controller] 592617454
+    Architecture_statementContext [controller] 1340565491
+      Process_statementContext [controller] 671467883
+        Label_colonContext [controller] 407697359
+          IdentifierContext [controller] 802600647
+              controller
+            :
+          process
+          (
+        Sensitivity_listContext [desired_temp] 1543148593
+          NameContext [desired_temp] 1571967156
+            IdentifierContext [desired_temp] 574568002
+                desired_temp
+            ,
+          NameContext [actual_temp] 952486988
+            IdentifierContext [actual_temp] 932285561
+                actual_temp
+          )
+          is
+        Process_declarative_partContext [begin] 2028555727
+          begin
+        Process_statement_partContext [if] 591391158
+          Sequential_statementContext [if] 898557489
+            If_statementContext [if] 247944893
+                if
+              ConditionContext [actual_temp] 1014166943
+                ExpressionContext [actual_temp] 1625082366
+                  RelationContext [actual_temp] 572593338
+                    Shift_expressionContext [actual_temp] 384294141
+                      Simple_expressionContext [actual_temp] 1024597427
+                        TermContext [actual_temp] 990355670
+                          FactorContext [actual_temp] 296347592
+                            PrimaryContext [actual_temp] 956420404
+                              LiteralContext [actual_temp] 349420578
+                                Enumeration_literalContext [actual_temp] 315932542
+                                  IdentifierContext [actual_temp] 1277009227
+                                      actual_temp
+                    Relational_operatorContext [<] 2065857933
+                        <
+                    Shift_expressionContext [desired_temp] 1914301543
+                      Simple_expressionContext [desired_temp] 1157726741
+                        TermContext [desired_temp] 1708570683
+                          FactorContext [desired_temp] 225472281
+                            PrimaryContext [desired_temp] 817348612
+                              LiteralContext [desired_temp] 2045766957
+                                Enumeration_literalContext [desired_temp] 690521419
+                                  IdentifierContext [desired_temp] 665726928
+                                      desired_temp
+                        Adding_operatorContext [-] 689401025
+                            -
+                        TermContext [2] 790067787
+                          FactorContext [2] 1115201599
+                            PrimaryContext [2] 343856911
+                              LiteralContext [2] 102617125
+                                Numeric_literalContext [2] 306980751
+                                  Abstract_literalContext [2] 363988129
+                                      2
+                then
+              Sequence_of_statementsContext [heater_on] 1997963191
+                Sequential_statementContext [heater_on] 534906248
+                  Signal_assignment_statementContext [heater_on] 1826699684
+                    TargetContext [heater_on] 1769193365
+                      NameContext [heater_on] 769429195
+                        IdentifierContext [heater_on] 580718781
+                            heater_on
+                      <=
+                    WaveformContext [true] 1196695891
+                      Waveform_elementContext [true] 867148091
+                        ExpressionContext [true] 2051853139
+                          RelationContext [true] 815674463
+                            Shift_expressionContext [true] 1453774246
+                              Simple_expressionContext [true] 416153648
+                                TermContext [true] 71587369
+                                  FactorContext [true] 1169794610
+                                    PrimaryContext [true] 634540230
+                                      LiteralContext [true] 1307904972
+                                        Enumeration_literalContext [true] 1797712197
+                                          IdentifierContext [true] 1671846437
+                                              true
+                      ;
+                elsif
+              ConditionContext [actual_temp] 1422222071
+                ExpressionContext [actual_temp] 831236296
+                  RelationContext [actual_temp] 1840976765
+                    Shift_expressionContext [actual_temp] 1016925085
+                      Simple_expressionContext [actual_temp] 1127224355
+                        TermContext [actual_temp] 789653861
+                          FactorContext [actual_temp] 436532993
+                            PrimaryContext [actual_temp] 1318180415
+                              LiteralContext [actual_temp] 222511810
+                                Enumeration_literalContext [actual_temp] 733943822
+                                  IdentifierContext [actual_temp] 373182087
+                                      actual_temp
+                    Relational_operatorContext [>] 1457410641
+                        >
+                    Shift_expressionContext [desired_temp] 1100767002
+                      Simple_expressionContext [desired_temp] 313540687
+                        TermContext [desired_temp] 1990098664
+                          FactorContext [desired_temp] 1383524016
+                            PrimaryContext [desired_temp] 1907431275
+                              LiteralContext [desired_temp] 1637061418
+                                Enumeration_literalContext [desired_temp] 1686100174
+                                  IdentifierContext [desired_temp] 22671767
+                                      desired_temp
+                        Adding_operatorContext [+] 2024453272
+                            +
+                        TermContext [2] 98394724
+                          FactorContext [2] 536765369
+                            PrimaryContext [2] 1374026904
+                              LiteralContext [2] 2085002312
+                                Numeric_literalContext [2] 317071334
+                                  Abstract_literalContext [2] 2129221032
+                                      2
+                then
+              Sequence_of_statementsContext [heater_on] 1472465
+                Sequential_statementContext [heater_on] 1224347463
+                  Signal_assignment_statementContext [heater_on] 1791045777
+                    TargetContext [heater_on] 1580297332
+                      NameContext [heater_on] 1831477404
+                        IdentifierContext [heater_on] 1966250569
+                            heater_on
+                      <=
+                    WaveformContext [false] 370440646
+                      Waveform_elementContext [false] 1125381564
+                        ExpressionContext [false] 2130772866
+                          RelationContext [false] 511717113
+                            Shift_expressionContext [false] 728739494
+                              Simple_expressionContext [false] 2005733474
+                                TermContext [false] 6750210
+                                  FactorContext [false] 521081105
+                                    PrimaryContext [false] 1237550792
+                                      LiteralContext [false] 1448247698
+                                        Enumeration_literalContext [false] 1846406218
+                                          IdentifierContext [false] 158199555
+                                              false
+                      ;
+                end
+                if
+                ;
+          end
+          process
+        IdentifierContext [controller] 1556995360
+            controller
+          ;

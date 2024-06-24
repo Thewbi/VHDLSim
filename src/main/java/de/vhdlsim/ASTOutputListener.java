@@ -1,17 +1,12 @@
 package de.vhdlsim;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
-import java.util.stream.Collectors;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import de.vhdl.grammar.VHDLLexer;
 import de.vhdl.grammar.VHDLParser;
-import de.vhdl.grammar.VHDLParser.Adding_operatorContext;
-import de.vhdl.grammar.VHDLParser.Signal_declarationContext;
 import de.vhdl.grammar.VHDLParserBaseListener;
 import de.vhdlmodel.Architecture;
 import de.vhdlmodel.AssignmentStmt;
@@ -32,6 +27,7 @@ import de.vhdlmodel.Port;
 import de.vhdlmodel.PortDirection;
 import de.vhdlmodel.PortTarget;
 import de.vhdlmodel.Relation;
+import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
 import de.vhdlmodel.StringLiteral;
 import de.vhdlmodel.Process;
@@ -68,6 +64,24 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     private Component component;
 
     private PortTarget portTarget;
+
+    @Override
+    public void enterSignal_declaration(VHDLParser.Signal_declarationContext ctx) {
+        
+        String identifier = ctx.identifier_list().getChild(0).getText();
+
+        String type = ctx.subtype_indication().getText();
+
+        Signal signal = new Signal();
+        architecture.signals.add(signal);
+
+        signal.name = identifier;
+        signal.type = type;
+    }
+
+    @Override
+    public void exitSignal_declaration(VHDLParser.Signal_declarationContext ctx) {
+    }
 
     @Override
     public void enterArchitecture_body(VHDLParser.Architecture_bodyContext ctx) {
@@ -117,7 +131,9 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void exitArchitecture_body(VHDLParser.Architecture_bodyContext ctx) {
         // stmt = architecture.parent != null ? architecture.parent : architecture;
-        stmt = architecture.parent;
+
+        // Commenting out this line will leave the stmt alive for printing
+        //stmt = architecture.parent;
         architecture = null;
     }
 
@@ -190,8 +206,14 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     }
 
     @Override
+    public void enterSimple_expression(VHDLParser.Simple_expressionContext ctx) {
+        // mark start of this expression on the stack
+        stack.push(new DummyNode());
+    }
+
+    @Override
     public void exitSimple_expression(VHDLParser.Simple_expressionContext ctx) {
-        List<Adding_operatorContext> addingOperators = ctx.adding_operator();
+        processExpression();
     }
 
     @Override
@@ -232,41 +254,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitExpression(VHDLParser.ExpressionContext ctx) {
-
-        // System.out.println("exit expression " + ctx);
-
-        boolean done = false;
-        while (!done) {
-
-            ModelNode<?> rhs = stackPop();
-
-            if (stack.peek() instanceof DummyNode) {
-
-                // remove dummy node
-                stackPop();
-
-                done = true;
-                stackPush(rhs);
-
-                continue;
-            }
-
-            ModelNode<String> operator = (ModelNode<String>) stackPop();
-            ModelNode<?> lhs = stackPop();
-
-            Expr localExpr = new Expr();
-            stackPush(localExpr);
-
-            localExpr.operator = operator.value;
-
-            lhs.parent = localExpr;
-            rhs.parent = localExpr;
-            localExpr.children.add(lhs);
-            localExpr.children.add(rhs);
-
-            expr = localExpr;
-        }
-
+        processExpression();
     }
 
     @Override
@@ -526,7 +514,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         // ifStmtBranch.exprRoot.children.add(expr);
         expr = null;
-        // stmt = ifStmtBranch.parent;
+        stmt = ifStmtBranch.parent;
 
         ModelNode<?> localExpr = stackPop();
         ifStmtBranch.exprRoot.children.add(localExpr);
@@ -550,7 +538,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // DEBUG
         stack.clear();
 
-        stmt = stmt.parent == null ? stmt : stmt.parent;
+        //stmt = stmt.parent == null ? stmt : stmt.parent;
+        stmt = stmt.parent;
     }
 
     @Override
@@ -636,9 +625,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterFunction_call_or_indexed_name_part(VHDLParser.Function_call_or_indexed_name_partContext ctx) {
-
-        // System.out.println("FunctionCall: \"" + lastIdentifier + "\"");
-
         FunctionCall functionCall = new FunctionCall();
         functionCall.name = lastIdentifier;
 
@@ -671,11 +657,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterProcess_statement(VHDLParser.Process_statementContext ctx) {
-
-        // System.out.println("ProcessStatement: \"" + lastIdentifier + "\"");
-
         Process process = new Process();
-        process.name = lastIdentifier;
+        process.name = ctx.identifier().getText();
 
         lastProcess = process;
 
@@ -688,7 +671,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitProcess_statement(VHDLParser.Process_statementContext ctx) {
-        stmt = stmt.parent == null ? stmt : stmt.parent;
+        //stmt = stmt.parent == null ? stmt : stmt.parent;
+        stmt = stmt.parent;
     }
 
     @Override
@@ -720,6 +704,41 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             stmt.children.add(assignmentStmt);
         } else {
             stmt = assignmentStmt;
+        }
+    }
+
+    private void processExpression() {
+
+        boolean done = false;
+        while (!done) {
+
+            ModelNode<?> rhs = stackPop();
+
+            if (stack.peek() instanceof DummyNode) {
+
+                // remove dummy node
+                stackPop();
+
+                done = true;
+                stackPush(rhs);
+
+                continue;
+            }
+
+            ModelNode<String> operator = (ModelNode<String>) stackPop();
+            ModelNode<?> lhs = stackPop();
+
+            Expr localExpr = new Expr();
+            stackPush(localExpr);
+
+            localExpr.operator = operator.value;
+
+            lhs.parent = localExpr;
+            rhs.parent = localExpr;
+            localExpr.children.add(lhs);
+            localExpr.children.add(rhs);
+
+            expr = localExpr;
         }
     }
 
