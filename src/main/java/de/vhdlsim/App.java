@@ -35,98 +35,118 @@ public class App {
         // boolean convertToAST = false;
         boolean convertToAST = true;
 
-        // ASTOutputListener astOutputListener = testSignalDeclaration(print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\signal_declaration.vhd");
+        DebugASTOutputListenerCallback astOutputListenerCallback = new DebugASTOutputListenerCallback();
 
-        // ASTOutputListener astOutputListener = testAssignment(print, convertToAST,
+        ASTOutputListener astOutputListener = new ASTOutputListener();
+        astOutputListener.astOutputListenerCallback = astOutputListenerCallback;
+
+        testSignalDeclaration(astOutputListener, print,
+        convertToAST,
+        "src\\test\\resources\\vhdl_samples\\signal_declaration.vhd");
+
+        // testAssignment(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\signal_assignment.vhd");
-        
-        // ASTOutputListener astOutputListener = testAssignment(print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\signal_assignment_logical.vhd");
 
-        // ASTOutputListener astOutputListener = testIf1(print, convertToAST, "src\\test\\resources\\vhdl_samples\\if.vhd");
-        
-        // ASTOutputListener astOutputListener = testIf2(print, convertToAST,
+        // testAssignment(astOutputListener, print, convertToAST,
+        //         "src\\test\\resources\\vhdl_samples\\signal_assignment_logical.vhd");
+
+        // testIf1(astOutputListener, print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\if.vhd");
+
+        // testIf2(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\if_complex_expression.vhd");
-        
-        // ASTOutputListener astOutputListener = testIf3(print, convertToAST,
+
+        // testIf3(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\elsif.vhd");
-        
-        //ASTOutputListener astOutputListener = testIf4(print, convertToAST,
+
+        // testIf4(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\if_with_function_predicate.vhd");
 
-        // ASTOutputListener astOutputListener = testIf5(print, convertToAST,
+        // testIf5(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\if_with_expression.vhd");
 
-        // ASTOutputListener astOutputListener = testCase(print, convertToAST,
+        // testCase(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\case.vhd");
 
-        // ASTOutputListener astOutputListener = testProcess(print, convertToAST,
+        // testProcess(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\process.vhd");
 
         // entity and architecture
         //
         // https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
-        // ASTOutputListener astOutputListener = testEntity(print, convertToAST,
+        // testEntity(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\entity.vhd");
 
-        // ASTOutputListener astOutputListener = testArchitecture(print, convertToAST,
+        // testArchitecture(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\architecture.vhd");
 
-        ASTOutputListener astOutputListener = testArchitecture(print, convertToAST,
-        "src\\test\\resources\\vhdl_samples\\architecture_with_process_with_if.vhd");
+        // testArchitecture(astOutputListener, print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\architecture_with_process_with_if.vhd");
 
-        // ASTOutputListener astOutputListener = testComponent(print, convertToAST,
+        // testComponent(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\component.vhd");
 
-        // TODO: and-gate -
+        // and-gate
         // https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
-        //ASTOutputListener astOutputListener = testEntityAndArchitecture(print, convertToAST, "src\\test\\resources\\vhdl_samples\\and_gate.vhd");
+        // testEntityAndArchitecture(astOutputListener, print,
+        // convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\and_gate.vhd");
 
-        // TODO parsing is broken!!!!
-        // ASTOutputListener astOutputListener = testEntityAndArchitecture(print, convertToAST,
+        // testEntityAndArchitecture(astOutputListener, print,
+        // convertToAST,
         // "src\\test\\resources\\vhdl_samples\\thermostat_example.vhd");
 
-        // output the AST
-        int indent = 0;
-        System.out.println(astOutputListener.stmt.toString(indent));
+        // // DEBUG output the AST from the stmt inside the astOutputListener
+        // int indent = 0;
+        // System.out.println(astOutputListener.stmt.toString(indent));
+
+        if (astOutputListener.stmt != null) {
+            throw new RuntimeException("listener is not keeping house correctly!");
+        }
 
         // https://www.mikrocontroller.net/articles/VHDL_Testbench
     }
 
-    private static ASTOutputListener testSignalDeclaration(boolean print, boolean convertToAST, String testFile) throws IOException {
+    private static ASTOutputListener testSignalDeclaration(final ASTOutputListener astOutputListener,
+            final boolean print, final boolean convertToAST, final String testFile)
+            throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Signal_declarationContext root = parser.signal_declaration();
 
-        return traverseTree(root, print, convertToAST);
+        return traverseTree(astOutputListener, root, print, convertToAST);
     }
 
-    private static ASTOutputListener testAssignment(boolean print, boolean convertToAST, String testFile) throws IOException {
+    private static ASTOutputListener testAssignment(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile)
+            throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Signal_assignment_statementContext root = parser.signal_assignment_statement();
 
-        return traverseTree(root, print, convertToAST);
+        return traverseTree(astOutputListener, root, print, convertToAST);
     }
 
-    private static ASTOutputListener testIf1(boolean print, boolean convertToAST, String testFile) throws IOException {
+    private static ASTOutputListener testIf1(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile) throws IOException {
         final VHDLParser parser = processFile(testFile);
         final If_statementContext root = parser.if_statement();
 
-        return traverseTree(root, print, convertToAST);
+        return traverseTree(astOutputListener, root, print, convertToAST);
     }
 
-    private static ASTOutputListener testIf2(boolean print, boolean convertToAST, String testFile) throws IOException {
+    private static ASTOutputListener testIf2(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile) throws IOException {
         final VHDLParser parser = processFile(testFile);
         final If_statementContext root = parser.if_statement();
 
-        return traverseTree(root, print, convertToAST);
+        return traverseTree(astOutputListener, root, print, convertToAST);
     }
 
-    private static ASTOutputListener testIf3(boolean print, boolean convertToAST, String testFile) throws IOException {
+    private static ASTOutputListener testIf3(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile) throws IOException {
         final VHDLParser parser = processFile(testFile);
         final If_statementContext root = parser.if_statement();
 
-        return traverseTree(root, print, convertToAST);
+        return traverseTree(astOutputListener, root, print, convertToAST);
     }
 
     /**
@@ -136,73 +156,86 @@ public class App {
      * @param convertToAST
      * @throws IOException
      */
-    private static ASTOutputListener testIf4(boolean print, boolean convertToAST, String testFile) throws IOException {
+    private static ASTOutputListener testIf4(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile) throws IOException {
         final VHDLParser parser = processFile(testFile);
         final If_statementContext root = parser.if_statement();
 
-        return traverseTree(root, print, convertToAST);
+        return traverseTree(astOutputListener, root, print, convertToAST);
     }
 
-    private static ASTOutputListener testIf5(boolean print, boolean convertToAST, String testFile) throws IOException {
+    private static ASTOutputListener testIf5(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile) throws IOException {
         final VHDLParser parser = processFile(testFile);
         final If_statementContext root = parser.if_statement();
 
-        return traverseTree(root, print, convertToAST);
+        return traverseTree(astOutputListener, root, print, convertToAST);
     }
 
-    private static ASTOutputListener testCase(boolean print, boolean convertToAST, String testFile) throws IOException {
+    private static ASTOutputListener testCase(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile) throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Case_statementContext root = parser.case_statement();
 
-        return traverseTree(root, print, convertToAST);
+        return traverseTree(astOutputListener, root, print, convertToAST);
     }
 
-    private static ASTOutputListener testProcess(boolean print, boolean convertToAST, String testFile) throws IOException {
+    private static ASTOutputListener testProcess(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile)
+            throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Process_statementContext root = parser.process_statement();
 
-        return traverseTree(root, print, convertToAST);
+        return traverseTree(astOutputListener, root, print, convertToAST);
     }
 
-    private static ASTOutputListener testEntity(boolean print, boolean convertToAST, String testFile) throws IOException {
+    private static ASTOutputListener testEntity(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile)
+            throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Entity_declarationContext root = parser.entity_declaration();
 
-        return traverseTree(root, print, convertToAST);
+        return traverseTree(astOutputListener, root, print, convertToAST);
     }
 
-    private static ASTOutputListener testArchitecture(boolean print, boolean convertToAST, String testFile) throws IOException {
+    private static ASTOutputListener testArchitecture(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile)
+            throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Architecture_bodyContext root = parser.architecture_body();
 
-        return traverseTree(root, print, convertToAST);
+        return traverseTree(astOutputListener, root, print, convertToAST);
     }
 
-    private static ASTOutputListener testComponent(boolean print, boolean convertToAST, String testFile)
+    private static ASTOutputListener testComponent(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile)
             throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Component_declarationContext root = parser.component_declaration();
 
-        return traverseTree(root, print, convertToAST);
+        return traverseTree(astOutputListener, root, print, convertToAST);
     }
 
-    private static ASTOutputListener testEntityAndArchitecture(boolean print, boolean convertToAST, String testFile)
+    private static ASTOutputListener testEntityAndArchitecture(final ASTOutputListener astOutputListener,
+            final boolean print, final boolean convertToAST, final String testFile)
             throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Design_fileContext root = parser.design_file();
 
-        return traverseTree(root, print, convertToAST);
+        return traverseTree(astOutputListener, root, print, convertToAST);
     }
 
-    private static ASTOutputListener testDesignFile(boolean print, boolean convertToAST, String testFile)
+    private static ASTOutputListener testDesignFile(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile)
             throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Design_fileContext root = parser.design_file();
 
-        return traverseTree(root, print, convertToAST);
+        return traverseTree(astOutputListener, root, print, convertToAST);
     }
 
-    private static ASTOutputListener traverseTree(final ParseTree root, boolean print, boolean convertToAST) {
+    private static ASTOutputListener traverseTree(final ASTOutputListener astOutputListener, final ParseTree root,
+            final boolean print, final boolean convertToAST) {
 
         if (print) {
 
@@ -213,15 +246,13 @@ public class App {
             walker.walk(printListener, root);
         }
 
-        ASTOutputListener astOutputListener = new ASTOutputListener();
-
         if (convertToAST) {
 
             // Create a generic parse tree walker that can trigger callbacks
             final ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(astOutputListener, root);
 
-            // output the AST
+            // DEBUG output the AST
             // int indent = 0;
             // for (ModelNode<?> stmt : astOutputListener.stmts) {
             // System.out.println(stmt.toString(indent));

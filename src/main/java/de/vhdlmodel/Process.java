@@ -14,7 +14,12 @@ public class Process extends Stmt {
             stringBuffer.append("  ");
         }
 
-        stringBuffer.append("Process: ").append(name).append("\n");
+        stringBuffer.append("Process: ");
+        if (name == null) {
+            stringBuffer.append("[No name was given to this process]").append("\n");
+        } else {
+            stringBuffer.append(name).append("\n");
+        }
 
         indent++;
         for (ModelNode<?> signal : sensitivityList) {

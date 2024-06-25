@@ -16,7 +16,8 @@ public class ModelNode<T> {
     public T value;
 
     public ModelNode() {
-        name = "Unknown";
+        //name = "<UNKNOWN_NO_NAME>";
+        name = null;
     }
 
     public ModelNode(String name) {

@@ -11,7 +11,5 @@ end AND_gate;
 
 architecture andLogic of AND_gate is
 begin
-
     Y <= A AND B;
-
 end andLogic;

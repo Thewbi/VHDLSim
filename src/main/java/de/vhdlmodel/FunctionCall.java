@@ -17,7 +17,6 @@ public class FunctionCall extends ModelNode<Object> {
         }
 
         return stringBuffer.toString();
-
     }
 
 }

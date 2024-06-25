@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import de.vhdl.grammar.VHDLLexer;
 import de.vhdl.grammar.VHDLParser;
+import de.vhdl.grammar.VHDLParser.IdentifierContext;
 import de.vhdl.grammar.VHDLParserBaseListener;
 import de.vhdlmodel.Architecture;
 import de.vhdlmodel.AssignmentStmt;
@@ -45,6 +46,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     public ModelNode<?> expr;
 
+    public ASTOutputListenerCallback astOutputListenerCallback;
+
     private Stack<ModelNode<?>> stack = new Stack<>();
 
     private boolean case_statement_alternative_others;
@@ -52,6 +55,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     private String lastIdentifier;
 
     private FunctionCall lastFunctionCall;
+
+    private boolean functionCall;
 
     private Process lastProcess;
 
@@ -67,16 +72,21 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterSignal_declaration(VHDLParser.Signal_declarationContext ctx) {
-        
+
         String identifier = ctx.identifier_list().getChild(0).getText();
 
         String type = ctx.subtype_indication().getText();
 
         Signal signal = new Signal();
-        architecture.signals.add(signal);
+
+        if (architecture != null) {
+            architecture.signals.add(signal);
+        }
 
         signal.name = identifier;
         signal.type = type;
+
+        astOutputListenerCallback.signal(signal);
     }
 
     @Override
@@ -130,10 +140,11 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitArchitecture_body(VHDLParser.Architecture_bodyContext ctx) {
-        // stmt = architecture.parent != null ? architecture.parent : architecture;
+
+        astOutputListenerCallback.architecture(architecture);
 
         // Commenting out this line will leave the stmt alive for printing
-        //stmt = architecture.parent;
+        stmt = architecture.parent;
         architecture = null;
     }
 
@@ -152,7 +163,9 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitEntity_declaration(VHDLParser.Entity_declarationContext ctx) {
-        // stmt = entity.parent != null ? entity.parent : entity;
+
+        astOutputListenerCallback.entity(entity);
+
         stmt = entity.parent;
         entity = null;
         portTarget = null;
@@ -174,6 +187,9 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void exitComponent_declaration(VHDLParser.Component_declarationContext ctx) {
         stmt = component.parent;
+
+        astOutputListenerCallback.component(component);
+
         component = null;
         portTarget = null;
     }
@@ -241,6 +257,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterExpression(VHDLParser.ExpressionContext ctx) {
+
         // System.out.println("enter expression " + ctx);
 
         // a dummy node is entered to mark the bottom of the stack where
@@ -303,7 +320,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         }
 
         stackPush(operatorModelNode);
-
     }
 
     @Override
@@ -421,7 +437,14 @@ public class ASTOutputListener extends VHDLParserBaseListener {
                 // System.out.println("BASIC_IDENTIFIER: \"" + ctx + "\"");
                 StringLiteral basicStringLiteral = new StringLiteral();
                 basicStringLiteral.value = ctx.getText();
-                stackPush(basicStringLiteral);
+
+                // A function call is wrapped inside a primary.
+                // If there currently is a function call processed, do not add the BASIC_IDENTIFIER for that function call!
+                if (!functionCall) {
+                    stackPush(basicStringLiteral);
+                } else {
+                    functionCall = false;
+                }
                 break;
 
             case VHDLParser.INTEGER:
@@ -510,11 +533,11 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitCondition(VHDLParser.ConditionContext ctx) {
+
         IfStmtBranch ifStmtBranch = (IfStmtBranch) stmt;
 
-        // ifStmtBranch.exprRoot.children.add(expr);
         expr = null;
-        stmt = ifStmtBranch.parent;
+        // stmt = ifStmtBranch.parent;
 
         ModelNode<?> localExpr = stackPop();
         ifStmtBranch.exprRoot.children.add(localExpr);
@@ -522,6 +545,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterIf_statement(VHDLParser.If_statementContext ctx) {
+
         IfStmt ifStmt = new IfStmt();
         if (stmt != null) {
             stmt.children.add(ifStmt);
@@ -532,14 +556,38 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitIf_statement(VHDLParser.If_statementContext ctx) {
+
         // reset on exit
         expr = null;
 
         // DEBUG
         stack.clear();
 
-        //stmt = stmt.parent == null ? stmt : stmt.parent;
+        astOutputListenerCallback.ifStmt(stmt);
+
+        // stmt = stmt.parent == null ? stmt : stmt.parent;
         stmt = stmt.parent;
+    }
+
+    @Override
+    public void enterSequential_statement(VHDLParser.Sequential_statementContext ctx) {
+    }
+
+    @Override
+    public void exitSequential_statement(VHDLParser.Sequential_statementContext ctx) {
+
+    }
+
+    @Override
+    public void enterSequence_of_statements(VHDLParser.Sequence_of_statementsContext ctx) {
+    }
+
+    @Override
+    public void exitSequence_of_statements(VHDLParser.Sequence_of_statementsContext ctx) {
+
+        if (stmt instanceof IfStmtBranch) {
+            stmt = stmt.parent;
+        }
     }
 
     @Override
@@ -565,7 +613,10 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // DEBUG
         stack.clear();
 
-        stmt = stmt.parent == null ? stmt : stmt.parent;
+        astOutputListenerCallback.caseStmt(stmt);
+
+        //stmt = stmt.parent == null ? stmt : stmt.parent;
+        stmt = stmt.parent;
     }
 
     @Override
@@ -600,6 +651,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitChoice(VHDLParser.ChoiceContext ctx) {
+
         // only if this is not the others case, retrieve the expression from the stack
         // The others case has no expression! It is like the else branch of an
         // if-statement which also has no expression
@@ -612,6 +664,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterCase_statement_alternative(VHDLParser.Case_statement_alternativeContext ctx) {
+
         CaseStmtBranch caseStmtBranch = new CaseStmtBranch();
         caseStmtBranch.parent = stmt;
         stmt.children.add(caseStmtBranch);
@@ -625,16 +678,24 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterFunction_call_or_indexed_name_part(VHDLParser.Function_call_or_indexed_name_partContext ctx) {
-        FunctionCall functionCall = new FunctionCall();
-        functionCall.name = lastIdentifier;
 
-        lastFunctionCall = functionCall;
+        FunctionCall localFunctionCall = new FunctionCall();
+        localFunctionCall.name = lastIdentifier;
+
+        lastFunctionCall = localFunctionCall;
 
         if (stmt instanceof IfStmtBranch) {
 
             IfStmtBranch ifStmtBranch = (IfStmtBranch) stmt;
-            ifStmtBranch.exprRoot.children.add(functionCall);
+            // ifStmtBranch.exprRoot.children.add(localFunctionCall);
+            stackPush(localFunctionCall);
         }
+    }
+
+    @Override
+    public void exitFunction_call_or_indexed_name_part(VHDLParser.Function_call_or_indexed_name_partContext ctx) {
+        lastFunctionCall = null;
+        functionCall = true;
     }
 
     @Override
@@ -657,8 +718,12 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterProcess_statement(VHDLParser.Process_statementContext ctx) {
+
         Process process = new Process();
-        process.name = ctx.identifier().getText();
+        IdentifierContext identifierContext = ctx.identifier();
+        if (identifierContext != null) {
+            process.name = ctx.identifier().getText();
+        }
 
         lastProcess = process;
 
@@ -671,7 +736,9 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitProcess_statement(VHDLParser.Process_statementContext ctx) {
-        //stmt = stmt.parent == null ? stmt : stmt.parent;
+
+        astOutputListenerCallback.process(stmt);
+
         stmt = stmt.parent;
     }
 
@@ -692,13 +759,14 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     }
 
     private void processSignalAssignmentStatement() {
+
         AssignmentStmt assignmentStmt = new AssignmentStmt();
 
         ModelNode<?> rhs = stackPop();
         assignmentStmt.lhs = stackPop();
         assignmentStmt.rhs = rhs;
 
-        // System.out.println(assignmentStmt.toString(1));
+        this.astOutputListenerCallback.signalAssignment(assignmentStmt);
 
         if (stmt != null) {
             stmt.children.add(assignmentStmt);
