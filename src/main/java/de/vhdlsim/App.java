@@ -15,10 +15,13 @@ import de.vhdl.grammar.VHDLParser.Case_statementContext;
 import de.vhdl.grammar.VHDLParser.Component_declarationContext;
 import de.vhdl.grammar.VHDLParser.Design_fileContext;
 import de.vhdl.grammar.VHDLParser.Entity_declarationContext;
+import de.vhdl.grammar.VHDLParser.Function_specificationContext;
 import de.vhdl.grammar.VHDLParser.If_statementContext;
 import de.vhdl.grammar.VHDLParser.Process_statementContext;
+import de.vhdl.grammar.VHDLParser.Record_type_definitionContext;
 import de.vhdl.grammar.VHDLParser.Signal_assignment_statementContext;
 import de.vhdl.grammar.VHDLParser.Signal_declarationContext;
+import de.vhdl.grammar.VHDLParser.Type_declarationContext;
 
 /**
  * Use this generator to generate your testbenches:
@@ -29,7 +32,7 @@ public class App {
 
     public static void main(String[] args) throws IOException {
 
-        // boolean print = false;
+        //boolean print = false;
         boolean print = true;
 
         // boolean convertToAST = false;
@@ -40,9 +43,9 @@ public class App {
         ASTOutputListener astOutputListener = new ASTOutputListener();
         astOutputListener.astOutputListenerCallback = astOutputListenerCallback;
 
-        testSignalDeclaration(astOutputListener, print,
-        convertToAST,
-        "src\\test\\resources\\vhdl_samples\\signal_declaration.vhd");
+        // testSignalDeclaration(astOutputListener, print,
+        // convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\signal_declaration.vhd");
 
         // testAssignment(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\signal_assignment.vhd");
@@ -85,6 +88,12 @@ public class App {
 
         // testComponent(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\component.vhd");
+
+        // testRecord(astOutputListener, print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\record.vhd");
+
+        testFunctionSpecification(astOutputListener, print, convertToAST,
+        "src\\test\\resources\\vhdl_samples\\function_specification.vhd");
 
         // and-gate
         // https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
@@ -149,15 +158,11 @@ public class App {
         return traverseTree(astOutputListener, root, print, convertToAST);
     }
 
-    /**
-     * https://www2.cs.sfu.ca/~ggbaker/reference/std_logic/1164/rising_edge.html
-     * 
-     * @param print
-     * @param convertToAST
-     * @throws IOException
-     */
     private static ASTOutputListener testIf4(final ASTOutputListener astOutputListener, final boolean print,
             final boolean convertToAST, final String testFile) throws IOException {
+
+        // https://www2.cs.sfu.ca/~ggbaker/reference/std_logic/1164/rising_edge.html
+
         final VHDLParser parser = processFile(testFile);
         final If_statementContext root = parser.if_statement();
 
@@ -212,6 +217,24 @@ public class App {
             throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Component_declarationContext root = parser.component_declaration();
+
+        return traverseTree(astOutputListener, root, print, convertToAST);
+    }
+
+    private static ASTOutputListener testRecord(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile)
+            throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Type_declarationContext root = parser.type_declaration();
+
+        return traverseTree(astOutputListener, root, print, convertToAST);
+    }
+
+    private static ASTOutputListener testFunctionSpecification(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile)
+            throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Function_specificationContext root = parser.function_specification();
 
         return traverseTree(astOutputListener, root, print, convertToAST);
     }

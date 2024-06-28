@@ -26,7 +26,6 @@ public class Architecture extends Stmt {
         }
 
         return stringBuffer.toString();
-
     }
 
 }

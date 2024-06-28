@@ -2,13 +2,20 @@ package de.vhdlsim;
 
 import java.util.Stack;
 
+import org.antlr.v4.parse.ANTLRParser.parserRule_return;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import de.vhdl.grammar.VHDLLexer;
 import de.vhdl.grammar.VHDLParser;
+import de.vhdl.grammar.VHDLParser.DirectionContext;
 import de.vhdl.grammar.VHDLParser.IdentifierContext;
+import de.vhdl.grammar.VHDLParser.Identifier_listContext;
+import de.vhdl.grammar.VHDLParser.Selected_nameContext;
+import de.vhdl.grammar.VHDLParser.Simple_expressionContext;
+import de.vhdl.grammar.VHDLParser.Subtype_indicationContext;
 import de.vhdl.grammar.VHDLParserBaseListener;
+import de.vhdlmodel.ActualParameter;
 import de.vhdlmodel.Architecture;
 import de.vhdlmodel.AssignmentStmt;
 import de.vhdlmodel.CaseStmt;
@@ -19,6 +26,7 @@ import de.vhdlmodel.Entity;
 import de.vhdlmodel.Expr;
 import de.vhdlmodel.FunctionCall;
 import de.vhdlmodel.FunctionCallActualParameter;
+import de.vhdlmodel.FunctionSpecification;
 import de.vhdlmodel.IfStmt;
 import de.vhdlmodel.IfStmtBranch;
 import de.vhdlmodel.ModelNode;
@@ -32,6 +40,10 @@ import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
 import de.vhdlmodel.StringLiteral;
 import de.vhdlmodel.Process;
+import de.vhdlmodel.Range;
+import de.vhdlmodel.RangeDirection;
+import de.vhdlmodel.Record;
+import de.vhdlmodel.RecordField;
 
 /**
  * Constructs an abstract syntac tree (AST) out of the parse tree (PT).
@@ -69,6 +81,228 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     private Component component;
 
     private PortTarget portTarget;
+
+    private Record record;
+
+    private PortDirection portDirection = PortDirection.UNKNOWN;
+
+    private Range range;
+
+    private String subtype_indication;
+
+    private FunctionSpecification functionSpecification;
+
+    private ActualParameter actualParameter;
+
+    @Override
+    public void enterFunction_specification(VHDLParser.Function_specificationContext ctx) {
+        final String functionName = ctx.designator().getText();
+        functionSpecification = new FunctionSpecification();
+        functionSpecification.name = functionName;
+    }
+
+    @Override
+    public void exitFunction_specification(VHDLParser.Function_specificationContext ctx) {
+        astOutputListenerCallback.functionSpecification(functionSpecification);
+        functionSpecification = null;
+    }
+
+    @Override
+    public void enterInterface_constant_declaration(VHDLParser.Interface_constant_declarationContext ctx) {
+        // mark start of this interface on the stack
+        stack.push(new DummyNode());
+    }
+
+    @Override
+    public void exitInterface_constant_declaration(VHDLParser.Interface_constant_declarationContext ctx) {
+        processInterfaceDeclaration(ctx.identifier_list(), ctx.subtype_indication());
+    }
+
+    private void processInterfaceDeclaration(Identifier_listContext identifier_listContext,
+            Subtype_indicationContext subtype_indicationContext) {
+
+        actualParameter = new ActualParameter();
+        functionSpecification.actualParameters.add(actualParameter);
+
+        // System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+        // despite the name, this is used when parsing function declarations
+
+        // for every parameter this is entered in a function declaration
+
+        //
+        // parameter name
+        //
+
+        final String parameterName = identifier_listContext.getText();
+        //System.out.println(parameterName);
+
+        actualParameter.name = parameterName;
+
+        //
+        // PortDirection
+        //
+
+        // // the IN token can be null or it can be present.
+        // // when it is present, this is the signal mode (IN, OUT, INOUT, BUFFER,
+        // LINKAGE)
+        // // when the signal mode is OUT, INPUT, BUFFER or LINKAGE a specific
+        // Signal_mode
+        // // node will
+        // // be part of the parse tree! Just for IN, there will not be a Signal_mode
+        // node
+        // // but there
+        // // will be a IN token!
+        // TerminalNode inTerminalNode = ctx.IN();
+        // System.out.println(inTerminalNode);
+
+        // by default, set the portDirection to IN because this is the default for
+        // formal parameters
+        // If a specific mode node is present in the tree, override the default there
+        if (portDirection == PortDirection.UNKNOWN) {
+            portDirection = PortDirection.IN;
+        }
+
+        actualParameter.direction = portDirection;
+
+        // System.out.println(portDirection);
+
+        //
+        // datatype
+        //
+
+        // final String subtype = subtype_indicationContext.getText();
+        // System.out.println(subtype);
+
+        // System.out.println(subtype_indication);
+        actualParameter.subtype_indication = subtype_indication;
+
+        if (range != null) {
+            // System.out.println(range.toString(0));
+
+            actualParameter.range = range;
+        }
+
+        ModelNode<?> node = null;
+        if (!stack.empty()) {
+            do {
+
+                node = stack.pop();
+
+                if (!(node instanceof DummyNode)) {
+                    actualParameter.expression = node;
+                }
+
+            } while (!(node instanceof DummyNode));
+        }
+
+        // System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+
+        // reset
+        portDirection = PortDirection.UNKNOWN;
+        range = null;
+        subtype_indication = null;
+    }
+
+    @Override
+    public void enterInterface_variable_declaration(VHDLParser.Interface_variable_declarationContext ctx) {
+
+    }
+
+    @Override
+    public void exitInterface_variable_declaration(VHDLParser.Interface_variable_declarationContext ctx) {
+        processInterfaceDeclaration(ctx.identifier_list(), ctx.subtype_indication());
+    }
+
+    @Override
+    public void enterSignal_mode(VHDLParser.Signal_modeContext ctx) {
+        // System.out.println(ctx.getText());
+        portDirection = PortDirection.fromString(ctx.getText());
+
+        actualParameter.direction = portDirection;
+    }
+
+    @Override
+    public void exitSignal_mode(VHDLParser.Signal_modeContext ctx) {
+    }
+
+    @Override
+    public void enterSubtype_indication(VHDLParser.Subtype_indicationContext ctx) {
+
+    }
+
+    @Override
+    public void exitSubtype_indication(VHDLParser.Subtype_indicationContext ctx) {
+        //System.out.println(ctx.getText());
+
+        StringBuffer stringBuffer = new StringBuffer();
+        for (Selected_nameContext selected_nameContext : ctx.selected_name()) {
+            //System.out.println(selected_nameContext.getText());
+            stringBuffer.append(selected_nameContext.getText());
+        }
+
+        subtype_indication = stringBuffer.toString();
+    }
+
+    @Override
+    public void enterExplicit_range(VHDLParser.Explicit_rangeContext ctx) {
+        
+    }
+
+    @Override
+    public void exitExplicit_range(VHDLParser.Explicit_rangeContext ctx) {
+
+        //System.out.println(ctx.getText());
+
+        range = new Range();
+
+        Simple_expressionContext start_simple_expressionContext = ctx.simple_expression().get(0);
+        //System.out.println(start_simple_expressionContext.getText());
+        //range.start = Integer.parseInt(start_simple_expressionContext.getText());
+        Integer start = Integer.parseInt(start_simple_expressionContext.getText());
+        
+
+        DirectionContext directionContext = ctx.direction();
+        //System.out.println(directionContext.getText());
+        range.rangeDirection = RangeDirection.fromString(directionContext.getText());
+
+        Simple_expressionContext end_simple_expressionContext = ctx.simple_expression().get(1);
+        //System.out.println(end_simple_expressionContext.getText());
+        // range.end = Integer.parseInt(end_simple_expressionContext.getText());
+        Integer end = Integer.parseInt(end_simple_expressionContext.getText());
+
+        range.end = stack.pop();
+        range.start = stack.pop();
+    }
+
+    @Override
+    public void enterRecord_type_definition(VHDLParser.Record_type_definitionContext ctx) {
+        record = new Record();
+        record.name = ctx.identifier().getText();
+    }
+
+    @Override
+    public void exitRecord_type_definition(VHDLParser.Record_type_definitionContext ctx) {
+        astOutputListenerCallback.record(record);
+        record = null;
+    }
+
+    @Override
+    public void enterElement_declaration(VHDLParser.Element_declarationContext ctx) {
+        final String name = ctx.identifier_list().getText();
+
+        final String subtype = ctx.element_subtype_definition().getText();
+
+        RecordField recordField = new RecordField();
+        record.children.add(recordField);
+
+        recordField.identifier = name;
+        recordField.type = subtype;
+    }
+
+    @Override
+    public void exitElement_declaration(VHDLParser.Element_declarationContext ctx) {
+    }
 
     @Override
     public void enterSignal_declaration(VHDLParser.Signal_declarationContext ctx) {
@@ -201,6 +435,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         String type = ctx.subtype_indication().getText();
 
+        // port direction (in, out, inout)
         String mode = ctx.signal_mode().getText();
 
         Port port = new Port();
@@ -439,7 +674,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
                 basicStringLiteral.value = ctx.getText();
 
                 // A function call is wrapped inside a primary.
-                // If there currently is a function call processed, do not add the BASIC_IDENTIFIER for that function call!
+                // If there currently is a function call processed, do not add the
+                // BASIC_IDENTIFIER for that function call!
                 if (!functionCall) {
                     stackPush(basicStringLiteral);
                 } else {
@@ -527,7 +763,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             stmt = ifStmtBranch;
 
             ifStmtBranch.exprRoot = new ModelNode<String>("exprRoot");
-            // expr = ifStmtBranch.exprRoot;
         }
     }
 
@@ -537,7 +772,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         IfStmtBranch ifStmtBranch = (IfStmtBranch) stmt;
 
         expr = null;
-        // stmt = ifStmtBranch.parent;
 
         ModelNode<?> localExpr = stackPop();
         ifStmtBranch.exprRoot.children.add(localExpr);
@@ -615,7 +849,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         astOutputListenerCallback.caseStmt(stmt);
 
-        //stmt = stmt.parent == null ? stmt : stmt.parent;
+        // stmt = stmt.parent == null ? stmt : stmt.parent;
         stmt = stmt.parent;
     }
 
