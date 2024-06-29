@@ -2,10 +2,8 @@ package de.vhdlmodel;
 
 public class Range {
 
-    // public int start;
     public ModelNode<?> start;
 
-    // public int end;
     public ModelNode<?> end;
 
     public RangeDirection rangeDirection;

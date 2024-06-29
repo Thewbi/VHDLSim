@@ -14,11 +14,12 @@ public class FunctionSpecification extends ModelNode<Object> {
             stringBuffer.append("  ");
         }
 
-        stringBuffer.append("FunctionSpecification ").append(name).append(" ").append("\n");
+        stringBuffer.append("FunctionSpecification: '").append(name).append("' ").append("\n");
 
         indent++;
         for (ActualParameter actualParameter : actualParameters) {
-            stringBuffer.append(actualParameter.toString(indent)).append("\n");
+            String actualParameterAsString = actualParameter.toString(indent);
+            stringBuffer.append(actualParameterAsString).append("\n");
         }
 
         return stringBuffer.toString();

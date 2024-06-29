@@ -252,24 +252,10 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void exitExplicit_range(VHDLParser.Explicit_rangeContext ctx) {
 
-        //System.out.println(ctx.getText());
-
         range = new Range();
 
-        Simple_expressionContext start_simple_expressionContext = ctx.simple_expression().get(0);
-        //System.out.println(start_simple_expressionContext.getText());
-        //range.start = Integer.parseInt(start_simple_expressionContext.getText());
-        Integer start = Integer.parseInt(start_simple_expressionContext.getText());
-        
-
         DirectionContext directionContext = ctx.direction();
-        //System.out.println(directionContext.getText());
         range.rangeDirection = RangeDirection.fromString(directionContext.getText());
-
-        Simple_expressionContext end_simple_expressionContext = ctx.simple_expression().get(1);
-        //System.out.println(end_simple_expressionContext.getText());
-        // range.end = Integer.parseInt(end_simple_expressionContext.getText());
-        Integer end = Integer.parseInt(end_simple_expressionContext.getText());
 
         range.end = stack.pop();
         range.start = stack.pop();

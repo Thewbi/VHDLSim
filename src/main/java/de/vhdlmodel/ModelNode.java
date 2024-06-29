@@ -16,7 +16,6 @@ public class ModelNode<T> {
     public T value;
 
     public ModelNode() {
-        //name = "<UNKNOWN_NO_NAME>";
         name = null;
     }
 
