@@ -6,6 +6,7 @@ import de.vhdlmodel.Component;
 import de.vhdlmodel.Entity;
 import de.vhdlmodel.FunctionImplementation;
 import de.vhdlmodel.FunctionSpecification;
+import de.vhdlmodel.ModelNode;
 import de.vhdlmodel.Record;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
@@ -72,6 +73,11 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     @Override
     public void functionImplementation(FunctionImplementation functionImplementation) {
         System.out.println(functionImplementation.toString(INDENT));
+    }
+
+    @Override
+    public void expression(ModelNode<?> expr) {
+        //System.out.println(expr.toString(INDENT));
     }
 
 }

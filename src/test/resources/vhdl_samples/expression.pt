@@ -1,0 +1,29 @@
+ExpressionContext [TotalSeconds] 1418385211
+  RelationContext [TotalSeconds] 1758386724
+    Shift_expressionContext [TotalSeconds] 673068808
+      Simple_expressionContext [TotalSeconds] 900008524
+        TermContext [TotalSeconds] 520232556
+          FactorContext [TotalSeconds] 17037394
+            PrimaryContext [TotalSeconds] 1484531981
+              LiteralContext [TotalSeconds] 1159114532
+                Enumeration_literalContext [TotalSeconds] 1256728724
+                  IdentifierContext [TotalSeconds] 1412925683
+                      TotalSeconds
+          Multiplying_operatorContext [*] 1832580921
+              *
+          FactorContext [ClockFrequencyHz] 497359413
+            PrimaryContext [ClockFrequencyHz] 369241501
+              LiteralContext [ClockFrequencyHz] 2124046270
+                Enumeration_literalContext [ClockFrequencyHz] 1151593579
+                  IdentifierContext [ClockFrequencyHz] 1902260856
+                      ClockFrequencyHz
+        Adding_operatorContext [-] 1988859660
+            -
+        TermContext [1] 1514160588
+          FactorContext [1] 22756955
+            PrimaryContext [1] 1640639994
+              LiteralContext [1] 1263793464
+                Numeric_literalContext [1] 323326911
+                  Abstract_literalContext [1] 1270144618
+                      1
+

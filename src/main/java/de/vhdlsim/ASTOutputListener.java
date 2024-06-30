@@ -99,6 +99,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     private ActualParameter actualParameter;
 
+    //private Stack<Expr> operatorStack = new Stack<>();
+
     @Override
     public void enterReturn_statement(VHDLParser.Return_statementContext ctx) {
     }
@@ -562,17 +564,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     }
 
     @Override
-    public void enterSimple_expression(VHDLParser.Simple_expressionContext ctx) {
-        // mark start of this expression on the stack
-        stack.push(new DummyNode());
-    }
-
-    @Override
-    public void exitSimple_expression(VHDLParser.Simple_expressionContext ctx) {
-        processExpression();
-    }
-
-    @Override
     public void enterAdding_operator(VHDLParser.Adding_operatorContext ctx) {
     }
 
@@ -593,6 +584,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         }
 
         stackPush(operatorModelNode);
+        //operatorStack.push(operatorModelNode);
     }
 
     @Override
@@ -616,36 +608,27 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         }
 
         stackPush(operatorModelNode);
+        //operatorStack.push(operatorModelNode);
     }
 
     @Override
     public void enterExpression(VHDLParser.ExpressionContext ctx) {
 
-        // System.out.println("enter expression " + ctx);
-
-        if (ctx.getText().equals("Seconds+Minutes*60")) {
-            System.out.println("Seconds+Minutes*60");
-        }
-
         // a dummy node is entered to mark the bottom of the stack where
         // the current expression stops. Without marking the end of the expression stack
         // it becomes excessively hard to visit expressions because the expression
-        // element
-        // is used in so many contexts that it is not always clear how to combine
-        // elements.
+        // element is used in so many contexts that it is not always clear how to
+        // combine elements.
         stack.push(new DummyNode());
     }
 
     @Override
     public void exitExpression(VHDLParser.ExpressionContext ctx) {
 
-        // // DEBUG
-        // System.out.println(ctx.getText());
-        // if (ctx.getText().equals("Seconds+Minutes*60")) {
-        // System.out.println(ctx.getText());
-        // }
-
         try {
+
+            // stackPush(operatorStack.pop());
+
             processExpression();
         } catch (Exception e) {
 
@@ -655,6 +638,61 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
             throw e;
         }
+    }
+
+    @Override
+    public void enterSimple_expression(VHDLParser.Simple_expressionContext ctx) {
+        
+        // a dummy node is entered to mark the bottom of the stack where
+        // the current expression stops. Without marking the end of the expression stack
+        // it becomes excessively hard to visit expressions because the expression
+        // element is used in so many contexts that it is not always clear how to
+        // combine elements.
+        stack.push(new DummyNode());
+    }
+
+    @Override
+    public void exitSimple_expression(VHDLParser.Simple_expressionContext ctx) {
+        try {
+
+            // stackPush(operatorStack.pop());
+
+            processExpression();
+        } catch (Exception e) {
+
+            // DEBUG for breakpoints
+            System.out.println(ctx.getText());
+            e.printStackTrace();
+
+            throw e;
+        }
+    }
+
+    @Override
+    public void enterTerm(VHDLParser.TermContext ctx) {
+
+        // a dummy node is entered to mark the bottom of the stack where
+        // the current expression stops. Without marking the end of the expression stack
+        // it becomes excessively hard to visit expressions because the expression
+        // element is used in so many contexts that it is not always clear how to
+        // combine elements.
+        stack.push(new DummyNode());
+    }
+
+    @Override
+    public void exitTerm(VHDLParser.TermContext ctx) {
+
+        // if (!operatorStack.empty()) {
+        //     stackPush(operatorStack.pop());
+        // }
+
+        if (ctx.children.size() == 1) {
+            return;
+        }
+
+        System.out.println(ctx.getText());
+
+        processExpression();
     }
 
     @Override
@@ -1211,6 +1249,10 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             localExpr.children.add(rhs);
 
             expr = localExpr;
+        }
+
+        if (expr != null) {
+            astOutputListenerCallback.expression(expr);
         }
     }
 
