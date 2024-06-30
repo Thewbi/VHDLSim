@@ -2,6 +2,8 @@ package de.vhdlmodel;
 
 public class AssignmentStmt extends Stmt {
 
+    public AssignmentType assignmentType;
+
     public ModelNode<?> lhs;
 
     public ModelNode<?> rhs;
@@ -18,12 +20,22 @@ public class AssignmentStmt extends Stmt {
         for (int i = 0; i < indent; i++) {
             stringBuffer.append("  ");
         }
-        stringBuffer.append("lhs: ").append(lhs.toString(indent));
+        stringBuffer.append("lhs: ").append("\n");
+        
+        indent++;
+        stringBuffer.append(lhs.toString(indent));
+        indent--;
+
+        stringBuffer.append("\n");
 
         for (int i = 0; i < indent; i++) {
             stringBuffer.append("  ");
         }
-        stringBuffer.append("rhs: ").append(rhs.toString(indent));
+        stringBuffer.append("rhs: ").append("\n");
+
+        indent++;
+        stringBuffer.append(rhs.toString(indent));
+        indent--;
 
         return stringBuffer.toString();
     }

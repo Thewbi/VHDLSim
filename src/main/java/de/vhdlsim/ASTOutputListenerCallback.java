@@ -4,6 +4,7 @@ import de.vhdlmodel.Architecture;
 import de.vhdlmodel.AssignmentStmt;
 import de.vhdlmodel.Component;
 import de.vhdlmodel.Entity;
+import de.vhdlmodel.FunctionImplementation;
 import de.vhdlmodel.FunctionSpecification;
 import de.vhdlmodel.Record;
 import de.vhdlmodel.Signal;
@@ -30,5 +31,9 @@ public interface ASTOutputListenerCallback {
     void record(Record record);
 
     void functionSpecification(FunctionSpecification functionSpecification);
+
+    void variableAssignment(AssignmentStmt assignmentStmt);
+
+    void functionImplementation(FunctionImplementation functionImplementation);
     
 }

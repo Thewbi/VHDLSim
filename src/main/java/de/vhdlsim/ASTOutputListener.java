@@ -2,7 +2,6 @@ package de.vhdlsim;
 
 import java.util.Stack;
 
-import org.antlr.v4.parse.ANTLRParser.parserRule_return;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -12,12 +11,12 @@ import de.vhdl.grammar.VHDLParser.DirectionContext;
 import de.vhdl.grammar.VHDLParser.IdentifierContext;
 import de.vhdl.grammar.VHDLParser.Identifier_listContext;
 import de.vhdl.grammar.VHDLParser.Selected_nameContext;
-import de.vhdl.grammar.VHDLParser.Simple_expressionContext;
 import de.vhdl.grammar.VHDLParser.Subtype_indicationContext;
 import de.vhdl.grammar.VHDLParserBaseListener;
 import de.vhdlmodel.ActualParameter;
 import de.vhdlmodel.Architecture;
 import de.vhdlmodel.AssignmentStmt;
+import de.vhdlmodel.AssignmentType;
 import de.vhdlmodel.CaseStmt;
 import de.vhdlmodel.CaseStmtBranch;
 import de.vhdlmodel.CharacterLiteral;
@@ -26,6 +25,7 @@ import de.vhdlmodel.Entity;
 import de.vhdlmodel.Expr;
 import de.vhdlmodel.FunctionCall;
 import de.vhdlmodel.FunctionCallActualParameter;
+import de.vhdlmodel.FunctionImplementation;
 import de.vhdlmodel.FunctionSpecification;
 import de.vhdlmodel.IfStmt;
 import de.vhdlmodel.IfStmtBranch;
@@ -39,6 +39,7 @@ import de.vhdlmodel.Relation;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
 import de.vhdlmodel.StringLiteral;
+import de.vhdlmodel.Variable;
 import de.vhdlmodel.Process;
 import de.vhdlmodel.Range;
 import de.vhdlmodel.RangeDirection;
@@ -88,11 +89,106 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     private Range range;
 
-    private String subtype_indication;
+    private String subtypeIndication;
 
     private FunctionSpecification functionSpecification;
 
+    private FunctionImplementation functionImplementation;
+
     private ActualParameter actualParameter;
+
+    @Override
+    public void enterVariable_declaration(VHDLParser.Variable_declarationContext ctx) {
+
+        // mark start of this variable declaration on the expression stack
+        // so that it is possible to extract the initializer expression in a convenient way
+        stack.push(new DummyNode());
+    }
+
+    @Override
+    public void exitVariable_declaration(VHDLParser.Variable_declarationContext ctx) {
+
+        //
+        // Type
+        //
+
+        Subtype_indicationContext subtype_indicationContext = ctx.subtype_indication();
+        final String localSubtypeIndication = subtype_indicationContext.getText();
+        System.out.println(localSubtypeIndication);
+
+        //
+        // Initializer expression
+        //
+
+        ModelNode<?> node = null;
+        ModelNode<?> initializer = null;
+        if (!stack.empty()) {
+            do {
+
+                node = stack.pop();
+
+                if (!(node instanceof DummyNode)) {
+                    initializer = node;
+                }
+
+            } while (!(node instanceof DummyNode));
+        }
+
+        //
+        // declared variable names
+        //
+
+        for (IdentifierContext identifierContext : ctx.identifier_list().identifier()) {
+
+            String identifier = identifierContext.getText();
+            System.out.println(identifier);
+
+            Variable localVariable = new Variable();
+            functionImplementation.localVariables.add(localVariable);
+
+            localVariable.name = identifier;
+            localVariable.subtypeIndication = localSubtypeIndication;
+            if (initializer != null) {
+                localVariable.expression = initializer;
+            }
+        }
+
+        // reset for next iteration
+        portDirection = PortDirection.UNKNOWN;
+        range = null;
+        subtypeIndication = null;
+        lastIdentifier = null;
+    }
+
+    @Override
+    public void enterSubprogram_declarative_item(VHDLParser.Subprogram_declarative_itemContext ctx) {
+
+    }
+
+    @Override
+    public void exitSubprogram_declarative_item(VHDLParser.Subprogram_declarative_itemContext ctx) {
+
+    }
+
+    @Override
+    public void enterSubprogram_body(VHDLParser.Subprogram_bodyContext ctx) {
+        functionImplementation = new FunctionImplementation();
+
+        // the function implementation becomes the current statement so that any
+        // statements
+        // inside it's body are appended to the function implementation
+        if (stmt != null) {
+            stmt.children.add(functionImplementation);
+            functionImplementation.parent = stmt;
+        }
+        stmt = functionImplementation;
+    }
+
+    @Override
+    public void exitSubprogram_body(VHDLParser.Subprogram_bodyContext ctx) {
+        astOutputListenerCallback.functionImplementation(functionImplementation);
+        functionImplementation = null;
+    }
 
     @Override
     public void enterFunction_specification(VHDLParser.Function_specificationContext ctx) {
@@ -103,13 +199,31 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitFunction_specification(VHDLParser.Function_specificationContext ctx) {
+
+        // return value
+        if (lastIdentifier != null) {
+            functionSpecification.returnType = lastIdentifier;
+        }
+
+        // when parsing an implementation, there is always a complete specification
+        // before the statements. Connect the specification to the implementation.
+        if (functionImplementation != null) {
+            functionImplementation.functionSpecification = functionSpecification;
+        }
+
+        // send object to callback
         astOutputListenerCallback.functionSpecification(functionSpecification);
+
+        // reset
         functionSpecification = null;
+        actualParameter = null;
     }
 
     @Override
     public void enterInterface_constant_declaration(VHDLParser.Interface_constant_declarationContext ctx) {
         // mark start of this interface on the stack
+        // mark start of this interface parameter declaration on the expression stack
+        // so that it is possible to extract the initializer expression in a convenient way
         stack.push(new DummyNode());
     }
 
@@ -121,21 +235,19 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     private void processInterfaceDeclaration(Identifier_listContext identifier_listContext,
             Subtype_indicationContext subtype_indicationContext) {
 
-        actualParameter = new ActualParameter();
-        functionSpecification.actualParameters.add(actualParameter);
-
-        // System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-
         // despite the name, this is used when parsing function declarations
-
         // for every parameter this is entered in a function declaration
+
+        actualParameter = new ActualParameter();
+
+        // assumption: place all actual parameters into a function specification
+        functionSpecification.actualParameters.add(actualParameter);
 
         //
         // parameter name
         //
 
         final String parameterName = identifier_listContext.getText();
-        //System.out.println(parameterName);
 
         actualParameter.name = parameterName;
 
@@ -145,16 +257,9 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         // // the IN token can be null or it can be present.
         // // when it is present, this is the signal mode (IN, OUT, INOUT, BUFFER,
-        // LINKAGE)
-        // // when the signal mode is OUT, INPUT, BUFFER or LINKAGE a specific
-        // Signal_mode
-        // // node will
-        // // be part of the parse tree! Just for IN, there will not be a Signal_mode
-        // node
-        // // but there
-        // // will be a IN token!
-        // TerminalNode inTerminalNode = ctx.IN();
-        // System.out.println(inTerminalNode);
+        // LINKAGE) when the signal mode is OUT, INPUT, BUFFER or LINKAGE a specific
+        // Signal_mode node will be part of the parse tree! Just for IN, there will
+        // not be a Signal_mode but there will be a IN token!
 
         // by default, set the portDirection to IN because this is the default for
         // formal parameters
@@ -162,27 +267,22 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         if (portDirection == PortDirection.UNKNOWN) {
             portDirection = PortDirection.IN;
         }
-
         actualParameter.direction = portDirection;
-
-        // System.out.println(portDirection);
 
         //
         // datatype
         //
 
-        // final String subtype = subtype_indicationContext.getText();
-        // System.out.println(subtype);
-
-        // System.out.println(subtype_indication);
-        actualParameter.subtype_indication = subtype_indication;
-
+        actualParameter.subtypeIndication = subtypeIndication;
         if (range != null) {
-            // System.out.println(range.toString(0));
-
             actualParameter.range = range;
         }
 
+        //
+        // Initializer value/expression
+        //
+
+        // place initializer expression into the actual parameter
         ModelNode<?> node = null;
         if (!stack.empty()) {
             do {
@@ -196,12 +296,11 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             } while (!(node instanceof DummyNode));
         }
 
-        // System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-
-        // reset
+        // reset for next iteration
         portDirection = PortDirection.UNKNOWN;
         range = null;
-        subtype_indication = null;
+        subtypeIndication = null;
+        lastIdentifier = null;
     }
 
     @Override
@@ -233,20 +332,20 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitSubtype_indication(VHDLParser.Subtype_indicationContext ctx) {
-        //System.out.println(ctx.getText());
+        // System.out.println(ctx.getText());
 
         StringBuffer stringBuffer = new StringBuffer();
         for (Selected_nameContext selected_nameContext : ctx.selected_name()) {
-            //System.out.println(selected_nameContext.getText());
+            // System.out.println(selected_nameContext.getText());
             stringBuffer.append(selected_nameContext.getText());
         }
 
-        subtype_indication = stringBuffer.toString();
+        subtypeIndication = stringBuffer.toString();
     }
 
     @Override
     public void enterExplicit_range(VHDLParser.Explicit_rangeContext ctx) {
-        
+
     }
 
     @Override
@@ -477,9 +576,36 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     }
 
     @Override
+    public void enterMultiplying_operator(VHDLParser.Multiplying_operatorContext ctx) {
+    }
+
+    @Override
+    public void exitMultiplying_operator(VHDLParser.Multiplying_operatorContext ctx) {
+
+        Expr operatorModelNode = new Expr();
+
+        switch (ctx.start.getType()) {
+
+            case VHDLLexer.MUL:
+                operatorModelNode.value = "*";
+                break;
+
+            case VHDLLexer.DIV:
+                operatorModelNode.value = "/";
+                break;
+        }
+
+        stackPush(operatorModelNode);
+    }
+
+    @Override
     public void enterExpression(VHDLParser.ExpressionContext ctx) {
 
         // System.out.println("enter expression " + ctx);
+
+        if (ctx.getText().equals("Seconds+Minutes*60")) {
+            System.out.println("Seconds+Minutes*60");
+        }
 
         // a dummy node is entered to mark the bottom of the stack where
         // the current expression stops. Without marking the end of the expression stack
@@ -492,7 +618,23 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitExpression(VHDLParser.ExpressionContext ctx) {
-        processExpression();
+
+        // // DEBUG
+        // System.out.println(ctx.getText());
+        // if (ctx.getText().equals("Seconds+Minutes*60")) {
+        // System.out.println(ctx.getText());
+        // }
+
+        try {
+            processExpression();
+        } catch (Exception e) {
+
+            // DEBUG for breakpoints
+            System.out.println(ctx.getText());
+            e.printStackTrace();
+
+            throw e;
+        }
     }
 
     @Override
@@ -964,7 +1106,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitSignal_assignment_statement(VHDLParser.Signal_assignment_statementContext ctx) {
-        processSignalAssignmentStatement();
+        processAssignmentStatement(AssignmentType.SIGNAL);
     }
 
     @Override
@@ -975,18 +1117,40 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void exitConcurrent_signal_assignment_statement(
             VHDLParser.Concurrent_signal_assignment_statementContext ctx) {
-        processSignalAssignmentStatement();
+        processAssignmentStatement(AssignmentType.SIGNAL);
     }
 
-    private void processSignalAssignmentStatement() {
+    @Override
+    public void enterVariable_assignment_statement(VHDLParser.Variable_assignment_statementContext ctx) {
+    }
+
+    @Override
+    public void exitVariable_assignment_statement(VHDLParser.Variable_assignment_statementContext ctx) {
+        processAssignmentStatement(AssignmentType.VARIABLE);
+    }
+
+    private void processAssignmentStatement(AssignmentType assignmentType) {
 
         AssignmentStmt assignmentStmt = new AssignmentStmt();
+        assignmentStmt.assignmentType = assignmentType;
 
         ModelNode<?> rhs = stackPop();
         assignmentStmt.lhs = stackPop();
         assignmentStmt.rhs = rhs;
 
-        this.astOutputListenerCallback.signalAssignment(assignmentStmt);
+        switch (assignmentType) {
+
+            case SIGNAL:
+                this.astOutputListenerCallback.signalAssignment(assignmentStmt);
+                break;
+
+            case VARIABLE:
+                this.astOutputListenerCallback.variableAssignment(assignmentStmt);
+                break;
+
+            default:
+                throw new RuntimeException("Unkonwn option");
+        }
 
         if (stmt != null) {
             stmt.children.add(assignmentStmt);
@@ -1072,6 +1236,14 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     private ModelNode<?> stackPop() {
         // System.out.println("Pop");
-        return stack.pop();
+
+        try {
+            return stack.pop();
+        } catch (java.util.EmptyStackException e) {
+
+            // DEBUG allow the developer to set a breakpoint
+            e.printStackTrace();
+            throw e;
+        }
     }
 }

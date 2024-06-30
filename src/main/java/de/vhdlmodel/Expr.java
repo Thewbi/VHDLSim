@@ -17,6 +17,7 @@ public class Expr extends ModelNode<Object> {
 
     /**
      * ctor for constants TRUE and FALSE
+     * 
      * @param value
      */
     private Expr(boolean value) {
@@ -37,12 +38,20 @@ public class Expr extends ModelNode<Object> {
         }
 
         indent++;
+
+        int index = 0;
         for (ModelNode<?> child : children) {
+
             stringBuffer.append(child.toString(indent));
+
+            index++;
+
+            if (index < children.size()) {
+                stringBuffer.append("\n");
+            }
         }
 
         return stringBuffer.toString();
-
     }
 
 }

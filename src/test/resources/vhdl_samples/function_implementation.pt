@@ -1,0 +1,182 @@
+Subprogram_declarative_itemContext [function] 1769193365
+  Subprogram_bodyContext [function] 1637061418
+    Subprogram_specificationContext [function] 1686100174
+      Function_specificationContext [function] 22671767
+          function
+        DesignatorContext [CounterVal] 2024453272
+          IdentifierContext [CounterVal] 98394724
+              CounterVal
+          (
+        Formal_parameter_listContext [Minutes] 536765369
+          Interface_listContext [Minutes] 1374026904
+            Interface_elementContext [Minutes] 2085002312
+              Interface_declarationContext [Minutes] 317071334
+                Interface_constant_declarationContext [Minutes] 2129221032
+                  Identifier_listContext [Minutes] 1472465
+                    IdentifierContext [Minutes] 1224347463
+                        Minutes
+                    :
+                  Subtype_indicationContext [integer] 1791045777
+                    Selected_nameContext [integer] 1580297332
+                      IdentifierContext [integer] 1831477404
+                          integer
+                    :=
+                  ExpressionContext [0] 1966250569
+                    RelationContext [0] 370440646
+                      Shift_expressionContext [0] 1125381564
+                        Simple_expressionContext [0] 2130772866
+                          TermContext [0] 511717113
+                            FactorContext [0] 728739494
+                              PrimaryContext [0] 2005733474
+                                LiteralContext [0] 6750210
+                                  Numeric_literalContext [0] 521081105
+                                    Abstract_literalContext [0] 1237550792
+                                        0
+              ;
+            Interface_elementContext [Seconds] 1448247698
+              Interface_declarationContext [Seconds] 1846406218
+                Interface_constant_declarationContext [Seconds] 158199555
+                  Identifier_listContext [Seconds] 1556995360
+                    IdentifierContext [Seconds] 517052730
+                        Seconds
+                    :
+                  Subtype_indicationContext [integer] 524241174
+                    Selected_nameContext [integer] 2035070981
+                      IdentifierContext [integer] 1264213713
+                          integer
+                    :=
+                  ExpressionContext [0] 1506809545
+                    RelationContext [0] 1019384604
+                      Shift_expressionContext [0] 550668305
+                        Simple_expressionContext [0] 963110412
+                          TermContext [0] 1624820151
+                            FactorContext [0] 1219161283
+                              PrimaryContext [0] 2081191879
+                                LiteralContext [0] 2061347276
+                                  Numeric_literalContext [0] 1559122513
+                                    Abstract_literalContext [0] 1128096251
+                                        0
+          )
+          return
+        Subtype_indicationContext [integer] 1552978964
+          Selected_nameContext [integer] 1259652483
+            IdentifierContext [integer] 1699113578
+                integer
+      is
+    Subprogram_declarative_partContext [variable] 1306324352
+      Subprogram_declarative_itemContext [variable] 355790875
+        Variable_declarationContext [variable] 2028017635
+            variable
+          Identifier_listContext [TotalSeconds] 782378927
+            IdentifierContext [TotalSeconds] 70807318
+                TotalSeconds
+            :
+          Subtype_indicationContext [integer] 910091170
+            Selected_nameContext [integer] 1183888521
+              IdentifierContext [integer] 2041605291
+                  integer
+            :=
+          ExpressionContext [17] 1052245076
+            RelationContext [17] 2136288211
+              Shift_expressionContext [17] 1008925772
+                Simple_expressionContext [17] 1175259735
+                  TermContext [17] 1205406622
+                    FactorContext [17] 293907205
+                      PrimaryContext [17] 988800485
+                        LiteralContext [17] 345902941
+                          Numeric_literalContext [17] 454325163
+                            Abstract_literalContext [17] 796667727
+                                17
+                  Adding_operatorContext [+] 1794717576
+                      +
+                  TermContext [19] 251210093
+                    FactorContext [19] 919112242
+                      PrimaryContext [19] 2021707251
+                        LiteralContext [19] 1541857308
+                          Numeric_literalContext [19] 479397964
+                            Abstract_literalContext [19] 1861781750
+                                19
+                    Multiplying_operatorContext [/] 283717519
+                        /
+                    FactorContext [23] 2095303566
+                      PrimaryContext [23] 2025221430
+                        LiteralContext [23] 1378084334
+                          Numeric_literalContext [23] 200224114
+                            Abstract_literalContext [23] 1773283386
+                                23
+            ;
+      begin
+    Subprogram_statement_partContext [TotalSeconds] 581318631
+      Sequential_statementContext [TotalSeconds] 1877453512
+        Variable_assignment_statementContext [TotalSeconds] 487694075
+          TargetContext [TotalSeconds] 1704629915
+            NameContext [TotalSeconds] 1989184704
+              IdentifierContext [TotalSeconds] 611572016
+                  TotalSeconds
+            :=
+          ExpressionContext [Seconds] 889486595
+            RelationContext [Seconds] 77269878
+              Shift_expressionContext [Seconds] 1990160809
+                Simple_expressionContext [Seconds] 1285524499
+                  TermContext [Seconds] 1524960486
+                    FactorContext [Seconds] 117009527
+                      PrimaryContext [Seconds] 199640888
+                        LiteralContext [Seconds] 1000975683
+                          Enumeration_literalContext [Seconds] 1238959340
+                            IdentifierContext [Seconds] 76432244
+                                Seconds
+                  Adding_operatorContext [+] 1030228826
+                      +
+                  TermContext [Minutes] 1264413185
+                    FactorContext [Minutes] 1243806178
+                      PrimaryContext [Minutes] 1010931249
+                        LiteralContext [Minutes] 1099855928
+                          Enumeration_literalContext [Minutes] 1629687658
+                            IdentifierContext [Minutes] 1007880005
+                                Minutes
+                    Multiplying_operatorContext [*] 215219944
+                        *
+                    FactorContext [60] 1043208434
+                      PrimaryContext [60] 1192171522
+                        LiteralContext [60] 1661081225
+                          Numeric_literalContext [60] 1882554559
+                            Abstract_literalContext [60] 1049817027
+                                60
+            ;
+      Sequential_statementContext [return] 23211803
+        Return_statementContext [return] 1923598304
+            return
+          ExpressionContext [TotalSeconds] 776700275
+            RelationContext [TotalSeconds] 118394766
+              Shift_expressionContext [TotalSeconds] 386163331
+                Simple_expressionContext [TotalSeconds] 1540374340
+                  TermContext [TotalSeconds] 694316372
+                    FactorContext [TotalSeconds] 1516500233
+                      PrimaryContext [TotalSeconds] 1850180796
+                        LiteralContext [TotalSeconds] 884452399
+                          Enumeration_literalContext [TotalSeconds] 235237152
+                            IdentifierContext [TotalSeconds] 1259014228
+                                TotalSeconds
+                    Multiplying_operatorContext [*] 431687661
+                        *
+                    FactorContext [ClockFrequencyHz] 283383329
+                      PrimaryContext [ClockFrequencyHz] 893192050
+                        LiteralContext [ClockFrequencyHz] 644345897
+                          Enumeration_literalContext [ClockFrequencyHz] 1738674023
+                            IdentifierContext [ClockFrequencyHz] 1472682156
+                                ClockFrequencyHz
+                  Adding_operatorContext [-] 178049969
+                      -
+                  TermContext [1] 333683827
+                    FactorContext [1] 1691185247
+                      PrimaryContext [1] 153245266
+                        LiteralContext [1] 1699679644
+                          Numeric_literalContext [1] 1782580546
+                            Abstract_literalContext [1] 1702940637
+                                1
+            ;
+      end
+    Subprogram_kindContext [function] 2114684409
+        function
+      ;
+

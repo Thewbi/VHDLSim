@@ -4,6 +4,7 @@ import de.vhdlmodel.Architecture;
 import de.vhdlmodel.AssignmentStmt;
 import de.vhdlmodel.Component;
 import de.vhdlmodel.Entity;
+import de.vhdlmodel.FunctionImplementation;
 import de.vhdlmodel.FunctionSpecification;
 import de.vhdlmodel.Record;
 import de.vhdlmodel.Signal;
@@ -49,6 +50,11 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     }
 
     @Override
+    public void variableAssignment(AssignmentStmt assignmentStmt) {
+        System.out.println(assignmentStmt.toString(INDENT));
+    }
+
+    @Override
     public void caseStmt(final Stmt stmt) {
         System.out.println(stmt.toString(INDENT));
     }
@@ -61,6 +67,11 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     @Override
     public void functionSpecification(FunctionSpecification functionSpecification) {
         System.out.println(functionSpecification.toString(INDENT));
+    }
+
+    @Override
+    public void functionImplementation(FunctionImplementation functionImplementation) {
+        System.out.println(functionImplementation.toString(INDENT));
     }
 
 }
