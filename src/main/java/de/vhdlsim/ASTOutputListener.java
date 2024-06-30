@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import de.vhdl.grammar.VHDLLexer;
 import de.vhdl.grammar.VHDLParser;
 import de.vhdl.grammar.VHDLParser.DirectionContext;
+import de.vhdl.grammar.VHDLParser.ExpressionContext;
 import de.vhdl.grammar.VHDLParser.IdentifierContext;
 import de.vhdl.grammar.VHDLParser.Identifier_listContext;
 import de.vhdl.grammar.VHDLParser.Selected_nameContext;
@@ -36,6 +37,7 @@ import de.vhdlmodel.Port;
 import de.vhdlmodel.PortDirection;
 import de.vhdlmodel.PortTarget;
 import de.vhdlmodel.Relation;
+import de.vhdlmodel.ReturnStatement;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
 import de.vhdlmodel.StringLiteral;
@@ -98,10 +100,27 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     private ActualParameter actualParameter;
 
     @Override
+    public void enterReturn_statement(VHDLParser.Return_statementContext ctx) {
+    }
+
+    @Override
+    public void exitReturn_statement(VHDLParser.Return_statementContext ctx) {
+        System.out.println(ctx);
+
+        ExpressionContext expressionContext = ctx.expression();
+
+        ReturnStatement returnStatement = new ReturnStatement();
+        returnStatement.expr = stackPop();
+
+        stmt.children.add(returnStatement);
+    }
+
+    @Override
     public void enterVariable_declaration(VHDLParser.Variable_declarationContext ctx) {
 
         // mark start of this variable declaration on the expression stack
-        // so that it is possible to extract the initializer expression in a convenient way
+        // so that it is possible to extract the initializer expression in a convenient
+        // way
         stack.push(new DummyNode());
     }
 
@@ -223,7 +242,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     public void enterInterface_constant_declaration(VHDLParser.Interface_constant_declarationContext ctx) {
         // mark start of this interface on the stack
         // mark start of this interface parameter declaration on the expression stack
-        // so that it is possible to extract the initializer expression in a convenient way
+        // so that it is possible to extract the initializer expression in a convenient
+        // way
         stack.push(new DummyNode());
     }
 

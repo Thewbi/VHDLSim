@@ -35,7 +35,7 @@ public class FunctionSpecification extends ModelNode<Object> {
         for (int i = 0; i < indent; i++) {
             stringBuffer.append("  ");
         }
-        stringBuffer.append("ReturnType: ").append(returnType).append(" ");//.append("\n");
+        stringBuffer.append("ReturnType: ").append(returnType).append(" ");
 
         return stringBuffer.toString();
     }

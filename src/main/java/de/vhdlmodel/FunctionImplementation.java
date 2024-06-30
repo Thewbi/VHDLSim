@@ -38,8 +38,13 @@ public class FunctionImplementation extends Stmt {
         stringBuffer.append("\n");
 
         // statements
+        int index = 0;
         for (ModelNode<?> stmt : children) {
             stringBuffer.append(stmt.toString(indent));
+            if (index < children.size() - 1) {
+                stringBuffer.append("\n");
+            }
+            index++;
         }
 
         return stringBuffer.toString();
