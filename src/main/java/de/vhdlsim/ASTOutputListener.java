@@ -5,9 +5,12 @@ import java.util.Stack;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import com.ibm.icu.text.DisplayContext.Type;
+
 import de.vhdl.grammar.VHDLLexer;
 import de.vhdl.grammar.VHDLParser;
 import de.vhdl.grammar.VHDLParser.DirectionContext;
+import de.vhdl.grammar.VHDLParser.Enumeration_literalContext;
 import de.vhdl.grammar.VHDLParser.ExpressionContext;
 import de.vhdl.grammar.VHDLParser.IdentifierContext;
 import de.vhdl.grammar.VHDLParser.Identifier_listContext;
@@ -41,6 +44,8 @@ import de.vhdlmodel.ReturnStatement;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
 import de.vhdlmodel.StringLiteral;
+import de.vhdlmodel.TypeDeclaration;
+import de.vhdlmodel.TypeDeclarationType;
 import de.vhdlmodel.Variable;
 import de.vhdlmodel.Process;
 import de.vhdlmodel.Range;
@@ -99,7 +104,40 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     private ActualParameter actualParameter;
 
-    //private Stack<Expr> operatorStack = new Stack<>();
+    // private Stack<Expr> operatorStack = new Stack<>();
+
+    private TypeDeclaration typeDeclaration;
+
+    @Override
+    public void enterType_declaration(VHDLParser.Type_declarationContext ctx) {
+
+        typeDeclaration = new TypeDeclaration();
+        typeDeclaration.name = ctx.identifier().getText();
+    }
+
+    @Override
+    public void exitType_declaration(VHDLParser.Type_declarationContext ctx) {
+
+        typeDeclaration = null;
+    }
+
+    @Override
+    public void enterEnumeration_type_definition(VHDLParser.Enumeration_type_definitionContext ctx) {
+        
+        typeDeclaration.typeDeclarationType = TypeDeclarationType.ENUM;
+
+        for (Enumeration_literalContext enumeration_literalContext : ctx.enumeration_literal()) {
+
+            typeDeclaration.enumValues.add(enumeration_literalContext.getText());
+        }
+
+        astOutputListenerCallback.enumDataTypeDeclaration(typeDeclaration);
+        typeDeclaration = null;
+    }
+
+    @Override
+    public void exitEnumeration_type_definition(VHDLParser.Enumeration_type_definitionContext ctx) {
+    }
 
     @Override
     public void enterReturn_statement(VHDLParser.Return_statementContext ctx) {
@@ -584,7 +622,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         }
 
         stackPush(operatorModelNode);
-        //operatorStack.push(operatorModelNode);
+        // operatorStack.push(operatorModelNode);
     }
 
     @Override
@@ -608,7 +646,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         }
 
         stackPush(operatorModelNode);
-        //operatorStack.push(operatorModelNode);
+        // operatorStack.push(operatorModelNode);
     }
 
     @Override
@@ -642,7 +680,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterSimple_expression(VHDLParser.Simple_expressionContext ctx) {
-        
+
         // a dummy node is entered to mark the bottom of the stack where
         // the current expression stops. Without marking the end of the expression stack
         // it becomes excessively hard to visit expressions because the expression
@@ -683,7 +721,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     public void exitTerm(VHDLParser.TermContext ctx) {
 
         // if (!operatorStack.empty()) {
-        //     stackPush(operatorStack.pop());
+        // stackPush(operatorStack.pop());
         // }
 
         if (ctx.children.size() == 1) {

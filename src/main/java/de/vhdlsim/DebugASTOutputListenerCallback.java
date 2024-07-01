@@ -10,6 +10,7 @@ import de.vhdlmodel.ModelNode;
 import de.vhdlmodel.Record;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
+import de.vhdlmodel.TypeDeclaration;
 
 public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback {
 
@@ -78,6 +79,11 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     @Override
     public void expression(ModelNode<?> expr) {
         //System.out.println(expr.toString(INDENT));
+    }
+
+    @Override
+    public void enumDataTypeDeclaration(TypeDeclaration typeDeclaration) {
+        System.out.println(typeDeclaration.toString(INDENT));
     }
 
 }

@@ -17,6 +17,7 @@ import de.vhdl.grammar.VHDLParser.Case_statementContext;
 import de.vhdl.grammar.VHDLParser.Component_declarationContext;
 import de.vhdl.grammar.VHDLParser.Design_fileContext;
 import de.vhdl.grammar.VHDLParser.Entity_declarationContext;
+import de.vhdl.grammar.VHDLParser.Enumeration_type_definitionContext;
 import de.vhdl.grammar.VHDLParser.ExpressionContext;
 import de.vhdl.grammar.VHDLParser.Function_specificationContext;
 import de.vhdl.grammar.VHDLParser.If_statementContext;
@@ -26,6 +27,7 @@ import de.vhdl.grammar.VHDLParser.Signal_assignment_statementContext;
 import de.vhdl.grammar.VHDLParser.Signal_declarationContext;
 import de.vhdl.grammar.VHDLParser.Subprogram_declarative_itemContext;
 import de.vhdl.grammar.VHDLParser.Type_declarationContext;
+import de.vhdl.grammar.VHDLParser.Type_definitionContext;
 
 /**
  * Use this generator to generate your testbenches:
@@ -39,7 +41,7 @@ public class App {
 
     public static void main(String[] args) throws IOException {
 
-        //boolean print = false;
+        // boolean print = false;
         boolean print = true;
 
         // boolean convertToAST = false;
@@ -56,6 +58,7 @@ public class App {
         // convertToAST,
         // "src\\test\\resources\\vhdl_samples\\expression.vhd");
 
+        // parse a complex signal declaration from the traffic light example
         // testSignalDeclaration(astOutputListener, print,
         // convertToAST,
         // "src\\test\\resources\\vhdl_samples\\signal_declaration.vhd");
@@ -64,7 +67,7 @@ public class App {
         // "src\\test\\resources\\vhdl_samples\\signal_assignment.vhd");
 
         // testAssignment(astOutputListener, print, convertToAST,
-        //         "src\\test\\resources\\vhdl_samples\\signal_assignment_logical.vhd");
+        // "src\\test\\resources\\vhdl_samples\\signal_assignment_logical.vhd");
 
         // testIf1(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\if.vhd");
@@ -108,8 +111,8 @@ public class App {
         // testFunctionSpecification(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\function_specification.vhd");
 
-        testFunctionImplementation(astOutputListener, print, convertToAST,
-        "src\\test\\resources\\vhdl_samples\\function_implementation.vhd");
+        // testFunctionImplementation(astOutputListener, print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\function_implementation.vhd");
 
         // and-gate
         // https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
@@ -120,6 +123,10 @@ public class App {
         // testEntityAndArchitecture(astOutputListener, print,
         // convertToAST,
         // "src\\test\\resources\\vhdl_samples\\thermostat_example.vhd");
+
+        testEnum(astOutputListener, print,
+                convertToAST,
+                "src\\test\\resources\\vhdl_samples\\enum.vhd");
 
         // // DEBUG output the AST from the stmt inside the astOutputListener
         // int indent = 0;
@@ -255,7 +262,8 @@ public class App {
         return traverseTree(astOutputListener, root, print, convertToAST, testFile);
     }
 
-    private static ASTOutputListener testFunctionSpecification(final ASTOutputListener astOutputListener, final boolean print,
+    private static ASTOutputListener testFunctionSpecification(final ASTOutputListener astOutputListener,
+            final boolean print,
             final boolean convertToAST, final String testFile)
             throws IOException {
         final VHDLParser parser = processFile(testFile);
@@ -264,7 +272,8 @@ public class App {
         return traverseTree(astOutputListener, root, print, convertToAST, testFile);
     }
 
-    private static ASTOutputListener testFunctionImplementation(final ASTOutputListener astOutputListener, final boolean print,
+    private static ASTOutputListener testFunctionImplementation(final ASTOutputListener astOutputListener,
+            final boolean print,
             final boolean convertToAST, final String testFile)
             throws IOException {
         final VHDLParser parser = processFile(testFile);
@@ -282,6 +291,15 @@ public class App {
         return traverseTree(astOutputListener, root, print, convertToAST, testFile);
     }
 
+    private static ASTOutputListener testEnum(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile)
+            throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Type_declarationContext root = parser.type_declaration();
+
+        return traverseTree(astOutputListener, root, print, convertToAST, testFile);
+    }
+
     private static ASTOutputListener testDesignFile(final ASTOutputListener astOutputListener, final boolean print,
             final boolean convertToAST, final String testFile)
             throws IOException {
@@ -292,7 +310,8 @@ public class App {
     }
 
     private static ASTOutputListener traverseTree(final ASTOutputListener astOutputListener, final ParseTree root,
-            final boolean print, final boolean convertToAST, final String originalFilename) throws FileNotFoundException {
+            final boolean print, final boolean convertToAST, final String originalFilename)
+            throws FileNotFoundException {
 
         if (print) {
 

@@ -1,0 +1,35 @@
+Type_declarationContext [type] 1071097621
+    type
+  IdentifierContext [alu_function] 391618063
+      alu_function
+    is
+  Type_definitionContext [(] 81009902
+    Scalar_type_definitionContext [(] 57748372
+      Enumeration_type_definitionContext [(] 674483268
+          (
+        Enumeration_literalContext [disable] 54495403
+          IdentifierContext [disable] 665372494
+              disable
+          ,
+        Enumeration_literalContext [pass] 764372388
+          IdentifierContext [pass] 459857341
+              pass
+          ,
+        Enumeration_literalContext [add] 1684890795
+          IdentifierContext [add] 94264799
+              add
+          ,
+        Enumeration_literalContext [subtract] 1399499405
+          IdentifierContext [subtract] 238157928
+              subtract
+          ,
+        Enumeration_literalContext [multiply] 32863545
+          IdentifierContext [multiply] 1995616381
+              multiply
+          ,
+        Enumeration_literalContext [divide] 1883919084
+          IdentifierContext [divide] 1860513229
+              divide
+          )
+    ;
+

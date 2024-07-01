@@ -12,11 +12,10 @@ public class Relation extends ModelNode<Object> {
         stringBuffer.append("Relation ").append(operator).append("\n");
 
         indent++;
-        for (ModelNode child : children) {
+        for (ModelNode<?> child : children) {
             stringBuffer.append(child.toString(indent));
         }
 
         return stringBuffer.toString();
-
     }
 }

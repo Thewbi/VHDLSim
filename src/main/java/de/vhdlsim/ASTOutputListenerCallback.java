@@ -10,6 +10,7 @@ import de.vhdlmodel.ModelNode;
 import de.vhdlmodel.Record;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
+import de.vhdlmodel.TypeDeclaration;
 
 public interface ASTOutputListenerCallback {
 
@@ -38,5 +39,7 @@ public interface ASTOutputListenerCallback {
     void functionImplementation(FunctionImplementation functionImplementation);
 
     void expression(ModelNode<?> expr);
+
+    void enumDataTypeDeclaration(TypeDeclaration typeDeclaration);
     
 }
