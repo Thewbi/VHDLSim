@@ -1,11 +1,67 @@
-Signal_declarationContext [signal] 133250414
+Signal_declarationContext [signal] 937773018
     signal
-  Identifier_listContext [A] 674483268
-    IdentifierContext [A] 54495403
-        A
+  Identifier_listContext [Counter] 295221641
+    IdentifierContext [Counter] 2147046752
+        Counter
     :
-  Subtype_indicationContext [std_logic] 665372494
-    Selected_nameContext [std_logic] 764372388
-      IdentifierContext [std_logic] 459857341
-          std_logic
+  Subtype_indicationContext [integer] 182259421
+    Selected_nameContext [integer] 715378067
+      IdentifierContext [integer] 2124643775
+          integer
+    ConstraintContext [range] 1262773598
+      Range_constraintContext [range] 688726285
+          range
+        Range_declContext [0] 494317290
+          Explicit_rangeContext [0] 2027775614
+            Simple_expressionContext [0] 282821294
+              TermContext [0] 1344199921
+                FactorContext [0] 2025269734
+                  PrimaryContext [0] 1800031768
+                    LiteralContext [0] 667447085
+                      Numeric_literalContext [0] 26728049
+                        Abstract_literalContext [0] 1076770748
+                            0
+            DirectionContext [to] 2041416495
+                to
+            Simple_expressionContext [CounterVal] 502800944
+              TermContext [CounterVal] 576936864
+                FactorContext [CounterVal] 331418503
+                  PrimaryContext [CounterVal] 111156771
+                    NameContext [CounterVal] 1519736165
+                      IdentifierContext [CounterVal] 1653844940
+                          CounterVal
+                      Name_partContext [(] 2039810346
+                        Function_call_or_indexed_name_partContext [(] 2143437117
+                            (
+                          Actual_parameter_partContext [Minutes] 260840925
+                            Association_listContext [Minutes] 1891502635
+                              Association_elementContext [Minutes] 557023567
+                                Formal_partContext [Minutes] 1276504061
+                                  IdentifierContext [Minutes] 597190999
+                                      Minutes
+                                  =>
+                                Actual_partContext [1] 603443293
+                                  Actual_designatorContext [1] 510854293
+                                    ExpressionContext [1] 2100961961
+                                      RelationContext [1] 487075464
+                                        Shift_expressionContext [1] 6320204
+                                          Simple_expressionContext [1] 112302969
+                                            TermContext [1] 707976812
+                                              FactorContext [1] 1989335500
+                                                PrimaryContext [1] 1978869058
+                                                  LiteralContext [1] 2131952342
+                                                    Numeric_literalContext [1] 1139700454
+                                                      Abstract_literalContext [1] 592617454
+                                                          1
+                            )
+              Adding_operatorContext [+] 1340565491
+                  +
+              TermContext [1] 671467883
+                FactorContext [1] 407697359
+                  PrimaryContext [1] 802600647
+                    LiteralContext [1] 1543148593
+                      Numeric_literalContext [1] 1571967156
+                        Abstract_literalContext [1] 574568002
+                            1
     ;
+

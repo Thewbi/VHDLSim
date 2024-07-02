@@ -1,0 +1,1 @@
+CounterVal(Minutes => 1) + 1

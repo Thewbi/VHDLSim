@@ -78,7 +78,7 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
 
     @Override
     public void expression(ModelNode<?> expr) {
-        //System.out.println(expr.toString(INDENT));
+        System.out.println(expr.toString(INDENT));
     }
 
     @Override

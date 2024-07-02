@@ -34,7 +34,7 @@ architecture rtl of T21_TrafficLights is
     end function;
   
     -- Counter for counting clock periods, 1 minute max
-    signal Counter : integer range 0 to CounterVal(Minutes => 1) +1;
+    signal Counter : integer range 0 to CounterVal(Minutes => 1) + 1;
   
 begin
   

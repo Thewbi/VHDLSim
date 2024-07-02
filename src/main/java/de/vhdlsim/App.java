@@ -25,6 +25,7 @@ import de.vhdl.grammar.VHDLParser.Process_statementContext;
 import de.vhdl.grammar.VHDLParser.Record_type_definitionContext;
 import de.vhdl.grammar.VHDLParser.Signal_assignment_statementContext;
 import de.vhdl.grammar.VHDLParser.Signal_declarationContext;
+import de.vhdl.grammar.VHDLParser.Simple_expressionContext;
 import de.vhdl.grammar.VHDLParser.Subprogram_declarative_itemContext;
 import de.vhdl.grammar.VHDLParser.Type_declarationContext;
 import de.vhdl.grammar.VHDLParser.Type_definitionContext;
@@ -54,11 +55,15 @@ public class App {
 
         // top level element of the grammar is design_file
 
-        // testExpression(astOutputListener, print,
-        // convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\expression.vhd");
+        testExpression(astOutputListener, print,
+        convertToAST,
+        "src\\test\\resources\\vhdl_samples\\expression.vhd");
 
-        // parse a complex signal declaration from the traffic light example
+        // // TODO
+        // testSimpleExpression(astOutputListener, print,
+        //         convertToAST,
+        //         "src\\test\\resources\\vhdl_samples\\simple_expression.vhd");
+
         // testSignalDeclaration(astOutputListener, print,
         // convertToAST,
         // "src\\test\\resources\\vhdl_samples\\signal_declaration.vhd");
@@ -124,9 +129,9 @@ public class App {
         // convertToAST,
         // "src\\test\\resources\\vhdl_samples\\thermostat_example.vhd");
 
-        testEnum(astOutputListener, print,
-                convertToAST,
-                "src\\test\\resources\\vhdl_samples\\enum.vhd");
+        // testEnum(astOutputListener, print,
+        // convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\enum.vhd");
 
         // // DEBUG output the AST from the stmt inside the astOutputListener
         // int indent = 0;
@@ -144,6 +149,15 @@ public class App {
             throws IOException {
         final VHDLParser parser = processFile(testFile);
         final ExpressionContext root = parser.expression();
+
+        return traverseTree(astOutputListener, root, print, convertToAST, testFile);
+    }
+
+    private static ASTOutputListener testSimpleExpression(final ASTOutputListener astOutputListener,
+            final boolean print, final boolean convertToAST, final String testFile)
+            throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Simple_expressionContext root = parser.simple_expression();
 
         return traverseTree(astOutputListener, root, print, convertToAST, testFile);
     }

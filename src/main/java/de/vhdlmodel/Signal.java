@@ -6,6 +6,8 @@ public class Signal extends ModelNode<String> {
 
     public String type;
 
+    public Range range;
+
     public String toString(int indent) {
 
         StringBuffer stringBuffer = new StringBuffer();
@@ -18,6 +20,10 @@ public class Signal extends ModelNode<String> {
         indent++;
         for (ModelNode<?> child : children) {
             stringBuffer.append(child.toString(indent));
+        }
+
+        if (range != null) {
+            stringBuffer.append(range.toString(indent));
         }
 
         return stringBuffer.toString();

@@ -5,8 +5,6 @@ import java.util.Stack;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import com.ibm.icu.text.DisplayContext.Type;
-
 import de.vhdl.grammar.VHDLLexer;
 import de.vhdl.grammar.VHDLParser;
 import de.vhdl.grammar.VHDLParser.DirectionContext;
@@ -68,7 +66,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     public ASTOutputListenerCallback astOutputListenerCallback;
 
-    private Stack<ModelNode<?>> stack = new Stack<>();
+    public Stack<ModelNode<?>> stack = new Stack<>();
 
     private boolean case_statement_alternative_others;
 
@@ -104,9 +102,9 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     private ActualParameter actualParameter;
 
-    // private Stack<Expr> operatorStack = new Stack<>();
-
     private TypeDeclaration typeDeclaration;
+
+    private Signal signal;
 
     @Override
     public void enterType_declaration(VHDLParser.Type_declarationContext ctx) {
@@ -161,7 +159,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // mark start of this variable declaration on the expression stack
         // so that it is possible to extract the initializer expression in a convenient
         // way
-        stack.push(new DummyNode());
+        stackPushDummyNode();
     }
 
     @Override
@@ -284,7 +282,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // mark start of this interface parameter declaration on the expression stack
         // so that it is possible to extract the initializer expression in a convenient
         // way
-        stack.push(new DummyNode());
+        stackPushDummyNode();
     }
 
     @Override
@@ -411,6 +409,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void exitExplicit_range(VHDLParser.Explicit_rangeContext ctx) {
 
+        // range 0 to CounterVal(Minutes => 1) + 1;
+
         range = new Range();
 
         DirectionContext directionContext = ctx.direction();
@@ -456,7 +456,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         String type = ctx.subtype_indication().getText();
 
-        Signal signal = new Signal();
+        signal = new Signal();
 
         if (architecture != null) {
             architecture.signals.add(signal);
@@ -464,12 +464,14 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         signal.name = identifier;
         signal.type = type;
-
-        astOutputListenerCallback.signal(signal);
     }
 
     @Override
     public void exitSignal_declaration(VHDLParser.Signal_declarationContext ctx) {
+
+        signal.range = range;
+        astOutputListenerCallback.signal(signal);
+        signal = null;
     }
 
     @Override
@@ -646,7 +648,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         }
 
         stackPush(operatorModelNode);
-        // operatorStack.push(operatorModelNode);
     }
 
     @Override
@@ -657,16 +658,13 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // it becomes excessively hard to visit expressions because the expression
         // element is used in so many contexts that it is not always clear how to
         // combine elements.
-        stack.push(new DummyNode());
+        stackPushDummyNode();
     }
 
     @Override
     public void exitExpression(VHDLParser.ExpressionContext ctx) {
 
         try {
-
-            // stackPush(operatorStack.pop());
-
             processExpression();
         } catch (Exception e) {
 
@@ -686,22 +684,18 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // it becomes excessively hard to visit expressions because the expression
         // element is used in so many contexts that it is not always clear how to
         // combine elements.
-        stack.push(new DummyNode());
+        
+        stackPushDummyNode();
     }
 
     @Override
     public void exitSimple_expression(VHDLParser.Simple_expressionContext ctx) {
         try {
-
-            // stackPush(operatorStack.pop());
-
             processExpression();
         } catch (Exception e) {
-
             // DEBUG for breakpoints
             System.out.println(ctx.getText());
             e.printStackTrace();
-
             throw e;
         }
     }
@@ -714,21 +708,16 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // it becomes excessively hard to visit expressions because the expression
         // element is used in so many contexts that it is not always clear how to
         // combine elements.
-        stack.push(new DummyNode());
+        stackPushDummyNode();
     }
 
     @Override
     public void exitTerm(VHDLParser.TermContext ctx) {
 
-        // if (!operatorStack.empty()) {
-        // stackPush(operatorStack.pop());
+        // // why is this here?
+        // if (ctx.children.size() == 1) {
+        //     return;
         // }
-
-        if (ctx.children.size() == 1) {
-            return;
-        }
-
-        System.out.println(ctx.getText());
 
         processExpression();
     }
@@ -1142,12 +1131,9 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         lastFunctionCall = localFunctionCall;
 
-        if (stmt instanceof IfStmtBranch) {
-
-            IfStmtBranch ifStmtBranch = (IfStmtBranch) stmt;
-            // ifStmtBranch.exprRoot.children.add(localFunctionCall);
+        //if (stmt instanceof IfStmtBranch) {
             stackPush(localFunctionCall);
-        }
+        //}
     }
 
     @Override
@@ -1318,7 +1304,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
                 // the else branch has a condition of type true so it is always taken
                 expr.children.add(Expr.TRUE);
-
             }
 
         } else if (node.getText().toLowerCase().equals("others")) {
@@ -1326,12 +1311,18 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             case_statement_alternative_others = true;
 
         }
-
     }
 
     private void stackPush(ModelNode<?> node) {
         // System.out.println("Push: " + node.name + " " + node.value);
         stack.push(node);
+    }
+
+    private void stackPushDummyNode() {
+        // if ((!stack.empty()) && (stack.peek() instanceof DummyNode)) {
+        //     return;
+        // }
+        stack.push(new DummyNode());
     }
 
     private ModelNode<?> stackPop() {
