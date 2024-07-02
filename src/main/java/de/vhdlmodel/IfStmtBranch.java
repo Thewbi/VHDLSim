@@ -21,8 +21,15 @@ public class IfStmtBranch extends Stmt {
         stringBuffer.append(exprRoot.toString(indent));
 
         // statements
+        int index = 0;
         for (ModelNode<?> child : children) {
             stringBuffer.append(child.toString(indent));
+
+            if (index < children.size() - 1) {
+                stringBuffer.append("\n");
+            }
+
+            index++;
         }
 
         return stringBuffer.toString();

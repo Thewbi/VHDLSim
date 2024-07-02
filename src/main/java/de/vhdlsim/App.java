@@ -55,9 +55,9 @@ public class App {
 
         // top level element of the grammar is design_file
 
-        testExpression(astOutputListener, print,
-        convertToAST,
-        "src\\test\\resources\\vhdl_samples\\expression.vhd");
+        // testExpression(astOutputListener, print,
+        // convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\expression.vhd");
 
         // // TODO
         // testSimpleExpression(astOutputListener, print,
@@ -74,8 +74,8 @@ public class App {
         // testAssignment(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\signal_assignment_logical.vhd");
 
-        // testIf1(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\if.vhd");
+        testIf1(astOutputListener, print, convertToAST,
+        "src\\test\\resources\\vhdl_samples\\if.vhd");
 
         // testIf2(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\if_complex_expression.vhd");
