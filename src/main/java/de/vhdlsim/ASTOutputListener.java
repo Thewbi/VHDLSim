@@ -411,10 +411,18 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         // range 0 to CounterVal(Minutes => 1) + 1;
 
+        // for case statements there are ranges that only have a single child!?!?!?!
+        if (ctx.children.size() == 1) {
+            return;
+        }
+
         range = new Range();
 
+        // in case statements there can be ranges without a direction
         DirectionContext directionContext = ctx.direction();
-        range.rangeDirection = RangeDirection.fromString(directionContext.getText());
+        if (directionContext != null) {
+            range.rangeDirection = RangeDirection.fromString(directionContext.getText());
+        }
 
         range.end = stack.pop();
         range.start = stack.pop();
@@ -714,7 +722,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void exitTerm(VHDLParser.TermContext ctx) {
 
-        // // why is this here?
+        // // why is this here? This will be hit during case statements
         // if (ctx.children.size() == 1) {
         //     return;
         // }
@@ -1008,7 +1016,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         expr = null;
 
         // DEBUG
-        stack.clear();
+        //stack.clear();
 
         astOutputListenerCallback.ifStmt(stmt);
 
@@ -1058,7 +1066,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         expr = null;
 
         // DEBUG
-        stack.clear();
+        //stack.clear();
 
         astOutputListenerCallback.caseStmt(stmt);
 
@@ -1087,7 +1095,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         expr = null;
 
         // DEBUG
-        stack.clear();
+        //stack.clear();
 
         stmt = stmt.parent == null ? stmt : stmt.parent;
     }
@@ -1120,7 +1128,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitCase_statement_alternative(VHDLParser.Case_statement_alternativeContext ctx) {
-        stmt = stmt.parent == null ? stmt : stmt.parent;
+        //stmt = stmt.parent == null ? stmt : stmt.parent;
+        stmt = stmt.parent;
     }
 
     @Override
@@ -1327,6 +1336,10 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     private ModelNode<?> stackPop() {
         // System.out.println("Pop");
+
+        if (stack.empty()) {
+            System.out.println("Stack Is Empty");
+        }
 
         try {
             return stack.pop();

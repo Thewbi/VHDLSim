@@ -2,8 +2,6 @@ package de.vhdlmodel;
 
 public class CaseStmt extends Stmt {
 
-    // public ModelNode<?> expr = new ModelNode();
-
     public String toString(int indent) {
 
         StringBuffer stringBuffer = new StringBuffer();
@@ -19,8 +17,17 @@ public class CaseStmt extends Stmt {
         stringBuffer.append("alternatives:\n");
 
         indent++;
-        for (ModelNode alternative : children) {
+
+        int index = 0;
+        for (ModelNode<?> alternative : children) {
+
             stringBuffer.append(alternative.toString(indent));
+
+            if (index < children.size() - 1) {
+                stringBuffer.append("\n");
+            }
+
+            index++;
         }
 
         return stringBuffer.toString();

@@ -90,7 +90,7 @@ public class IfStatementTest {
         assignmentStmt = (AssignmentStmt) ifStmtBranch.children.get(1);
         assertTrue(assignmentStmt.assignmentType == AssignmentType.SIGNAL);
 
-       lhs = assignmentStmt.lhs;
+        lhs = assignmentStmt.lhs;
         assertEquals(lhs.value, "a");
 
         expr = (Expr) assignmentStmt.rhs;

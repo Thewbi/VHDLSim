@@ -74,8 +74,8 @@ public class App {
         // testAssignment(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\signal_assignment_logical.vhd");
 
-        testIf1(astOutputListener, print, convertToAST,
-        "src\\test\\resources\\vhdl_samples\\if.vhd");
+        // testIf1(astOutputListener, print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\if.vhd");
 
         // testIf2(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\if_complex_expression.vhd");
@@ -89,9 +89,11 @@ public class App {
         // testIf5(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\if_with_expression.vhd");
 
-        // testCase(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\case.vhd");
+        // TODO: fails
+        testCase(astOutputListener, print, convertToAST,
+        "src\\test\\resources\\vhdl_samples\\case.vhd");
 
+        // // TODO: fails
         // testProcess(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\process.vhd");
 
