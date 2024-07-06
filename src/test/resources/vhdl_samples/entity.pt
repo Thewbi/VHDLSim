@@ -1,0 +1,54 @@
+Entity_declarationContext [entity] 1511785794
+    entity
+  IdentifierContext [OR_gate] 1150538133
+      OR_gate
+    is
+  Entity_headerContext [port] 662822946
+    Port_clauseContext [port] 92150540
+        port
+        (
+      Port_listContext [A] 1110623531
+        Interface_port_listContext [A] 410495873
+          Interface_port_declarationContext [A] 811587677
+            Identifier_listContext [A] 1166807841
+              IdentifierContext [A] 289639718
+                  A
+              :
+            Signal_modeContext [in] 885851948
+                in
+            Subtype_indicationContext [std_logic] 2048834776
+              Selected_nameContext [std_logic] 1605283233
+                IdentifierContext [std_logic] 1384722895
+                    std_logic
+            ;
+          Interface_port_declarationContext [B] 245475541
+            Identifier_listContext [B] 22429093
+              IdentifierContext [B] 733957003
+                  B
+              :
+            Signal_modeContext [in] 815992954
+                in
+            Subtype_indicationContext [std_logic] 868737467
+              Selected_nameContext [std_logic] 55331187
+                IdentifierContext [std_logic] 1392425346
+                    std_logic
+            ;
+          Interface_port_declarationContext [Y] 2054574951
+            Identifier_listContext [Y] 1991294891
+              IdentifierContext [Y] 399931359
+                  Y
+              :
+            Signal_modeContext [out] 809762318
+                out
+            Subtype_indicationContext [std_logic] 2028371466
+              Selected_nameContext [std_logic] 198761306
+                IdentifierContext [std_logic] 798244209
+                    std_logic
+        )
+        ;
+  Entity_declarative_partContext [end] 525571
+    end
+  IdentifierContext [OR_gate] 1263877414
+      OR_gate
+    ;
+

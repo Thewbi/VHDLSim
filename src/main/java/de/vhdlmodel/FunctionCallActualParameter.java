@@ -13,7 +13,7 @@ public class FunctionCallActualParameter extends ModelNode<String> {
         for (int i = 0; i < indent; i++) {
             stringBuffer.append("  ");
         }
-        stringBuffer.append("ActualParameter: ").append(name).append("\n");
+        stringBuffer.append("ActualParameter: ").append(name);
 
         return stringBuffer.toString();
     }

@@ -8,7 +8,7 @@ public class CaseStmt extends Stmt {
         for (int i = 0; i < indent; i++) {
             stringBuffer.append("  ");
         }
-        stringBuffer.append("case-stmt expr: ").append(((ModelNode) value).toString(0)); //.append("\n");
+        stringBuffer.append("case-stmt expr: ").append(((ModelNode) value).toString(0)).append("\n");
 
         indent++;
         for (int i = 0; i < indent; i++) {

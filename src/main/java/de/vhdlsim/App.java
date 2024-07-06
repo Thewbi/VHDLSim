@@ -93,15 +93,14 @@ public class App {
         // testCase(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\case.vhd");
 
-        // // TODO: fails
         // testProcess(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\process.vhd");
 
+        // TODO fails
         // entity and architecture
-        //
         // https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
-        // testEntity(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\entity.vhd");
+        testEntity(astOutputListener, print, convertToAST,
+        "src\\test\\resources\\vhdl_samples\\entity.vhd");
 
         // testArchitecture(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\architecture.vhd");
