@@ -96,11 +96,10 @@ public class App {
         // testProcess(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\process.vhd");
 
-        // TODO fails
-        // entity and architecture
-        // https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
-        testEntity(astOutputListener, print, convertToAST,
-        "src\\test\\resources\\vhdl_samples\\entity.vhd");
+        // // entity and architecture
+        // // https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
+        // testEntity(astOutputListener, print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\entity.vhd");
 
         // testArchitecture(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\architecture.vhd");
@@ -114,9 +113,11 @@ public class App {
         // testRecord(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\record.vhd");
 
-        // testFunctionSpecification(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\function_specification.vhd");
+        // TODO unit test
+        testFunctionSpecification(astOutputListener, print, convertToAST,
+        "src\\test\\resources\\vhdl_samples\\function_specification.vhd");
 
+        // TODO unit test
         // testFunctionImplementation(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\function_implementation.vhd");
 

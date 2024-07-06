@@ -1,114 +1,115 @@
-Function_specificationContext [function] 2023938592
+Function_specificationContext [function] 231977479
     function
-  DesignatorContext [Bitwise_AND] 2011482127
-    IdentifierContext [Bitwise_AND] 905735620
+  DesignatorContext [Bitwise_AND] 905735620
+    IdentifierContext [Bitwise_AND] 2145970759
         Bitwise_AND
     (
-  Formal_parameter_listContext [Seconds] 2145970759
-    Interface_listContext [Seconds] 577405636
-      Interface_elementContext [Seconds] 1931444790
-        Interface_declarationContext [Seconds] 626742236
-          Interface_constant_declarationContext [Seconds] 500772834
-            Identifier_listContext [Seconds] 1800659519
-              IdentifierContext [Seconds] 1691538257
+  Formal_parameter_listContext [Seconds] 577405636
+    Interface_listContext [Seconds] 1931444790
+      Interface_elementContext [Seconds] 626742236
+        Interface_declarationContext [Seconds] 500772834
+          Interface_constant_declarationContext [Seconds] 1800659519
+            Identifier_listContext [Seconds] 1691538257
+              IdentifierContext [Seconds] 459848100
                   Seconds
               :
-            Subtype_indicationContext [integer] 459848100
-              Selected_nameContext [integer] 1335505684
-                IdentifierContext [integer] 992768706
+            Subtype_indicationContext [integer] 1335505684
+              Selected_nameContext [integer] 992768706
+                IdentifierContext [integer] 1226204845
                     integer
               :=
-            ExpressionContext [0] 1226204845
-              RelationContext [0] 393040818
-                Shift_expressionContext [0] 158453976
-                  Simple_expressionContext [0] 1368594774
-                    TermContext [0] 726281927
-                      FactorContext [0] 1447499999
-                        PrimaryContext [0] 1371006431
-                          LiteralContext [0] 413601558
-                            Numeric_literalContext [0] 1658926803
-                              Abstract_literalContext [0] 210652080
+            ExpressionContext [0] 393040818
+              RelationContext [0] 158453976
+                Shift_expressionContext [0] 1368594774
+                  Simple_expressionContext [0] 726281927
+                    TermContext [0] 1447499999
+                      FactorContext [0] 1371006431
+                        PrimaryContext [0] 413601558
+                          LiteralContext [0] 1658926803
+                            Numeric_literalContext [0] 210652080
+                              Abstract_literalContext [0] 1652149987
                                   0
         ;
-      Interface_elementContext [a_vector] 1652149987
-        Interface_declarationContext [a_vector] 1107730949
-          Interface_constant_declarationContext [a_vector] 700072760
-            Identifier_listContext [a_vector] 1461149300
-              IdentifierContext [a_vector] 2075495587
+      Interface_elementContext [a_vector] 1107730949
+        Interface_declarationContext [a_vector] 700072760
+          Interface_constant_declarationContext [a_vector] 1461149300
+            Identifier_listContext [a_vector] 2075495587
+              IdentifierContext [a_vector] 206835546
                   a_vector
               :
               in
-            Subtype_indicationContext [std_logic_vector] 206835546
-              Selected_nameContext [std_logic_vector] 1997287019
-                IdentifierContext [std_logic_vector] 436546048
+            Subtype_indicationContext [std_logic_vector] 1997287019
+              Selected_nameContext [std_logic_vector] 436546048
+                IdentifierContext [std_logic_vector] 1300393335
                     std_logic_vector
-              ConstraintContext [(] 1300393335
-                Index_constraintContext [(] 1627428162
+              ConstraintContext [(] 1627428162
+                Index_constraintContext [(] 2011791487
                     (
-                  Discrete_rangeContext [3] 2011791487
-                    Range_declContext [3] 1150284200
-                      Explicit_rangeContext [3] 439928219
-                        Simple_expressionContext [3] 2138564891
-                          TermContext [3] 1151755506
-                            FactorContext [3] 2141179775
-                              PrimaryContext [3] 592959754
-                                LiteralContext [3] 1663619914
-                                  Numeric_literalContext [3] 341748265
-                                    Abstract_literalContext [3] 364604394
+                  Discrete_rangeContext [3] 1150284200
+                    Range_declContext [3] 439928219
+                      Explicit_rangeContext [3] 2138564891
+                        Simple_expressionContext [3] 1151755506
+                          TermContext [3] 2141179775
+                            FactorContext [3] 592959754
+                              PrimaryContext [3] 1663619914
+                                LiteralContext [3] 341748265
+                                  Numeric_literalContext [3] 364604394
+                                    Abstract_literalContext [3] 146370526
                                         3
-                        DirectionContext [downto] 146370526
+                        DirectionContext [downto] 758013696
                             downto
-                        Simple_expressionContext [0] 758013696
-                          TermContext [0] 1279309678
-                            FactorContext [0] 48914743
-                              PrimaryContext [0] 1106131243
-                                LiteralContext [0] 510109769
-                                  Numeric_literalContext [0] 1473611564
-                                    Abstract_literalContext [0] 107456312
+                        Simple_expressionContext [0] 1279309678
+                          TermContext [0] 48914743
+                            FactorContext [0] 1106131243
+                              PrimaryContext [0] 510109769
+                                LiteralContext [0] 1473611564
+                                  Numeric_literalContext [0] 107456312
+                                    Abstract_literalContext [0] 921760190
                                         0
                     )
         ;
-      Interface_elementContext [b_vector] 921760190
-        Interface_declarationContext [b_vector] 360067785
-          Interface_variable_declarationContext [b_vector] 1860250540
-            Identifier_listContext [b_vector] 1426329391
-              IdentifierContext [b_vector] 1690859824
+      Interface_elementContext [b_vector] 360067785
+        Interface_declarationContext [b_vector] 1860250540
+          Interface_variable_declarationContext [b_vector] 1426329391
+            Identifier_listContext [b_vector] 1690859824
+              IdentifierContext [b_vector] 1074593562
                   b_vector
               :
-            Signal_modeContext [out] 1074593562
+            Signal_modeContext [out] 660017404
                 out
-            Subtype_indicationContext [std_logic_vector] 660017404
-              Selected_nameContext [std_logic_vector] 1381965390
-                IdentifierContext [std_logic_vector] 1979313356
+            Subtype_indicationContext [std_logic_vector] 1381965390
+              Selected_nameContext [std_logic_vector] 1979313356
+                IdentifierContext [std_logic_vector] 1386883398
                     std_logic_vector
-              ConstraintContext [(] 1386883398
-                Index_constraintContext [(] 1306854175
+              ConstraintContext [(] 1306854175
+                Index_constraintContext [(] 1742920067
                     (
-                  Discrete_rangeContext [4] 1742920067
-                    Range_declContext [4] 1564984895
-                      Explicit_rangeContext [4] 1587819720
-                        Simple_expressionContext [4] 1002191352
-                          TermContext [4] 1256440269
-                            FactorContext [4] 704024720
-                              PrimaryContext [4] 1452012306
-                                LiteralContext [4] 211968962
-                                  Numeric_literalContext [4] 1486566962
-                                    Abstract_literalContext [4] 1173643169
+                  Discrete_rangeContext [4] 1564984895
+                    Range_declContext [4] 1587819720
+                      Explicit_rangeContext [4] 1002191352
+                        Simple_expressionContext [4] 1256440269
+                          TermContext [4] 704024720
+                            FactorContext [4] 1452012306
+                              PrimaryContext [4] 211968962
+                                LiteralContext [4] 1486566962
+                                  Numeric_literalContext [4] 1173643169
+                                    Abstract_literalContext [4] 1282287470
                                         4
-                        DirectionContext [downto] 1282287470
+                        DirectionContext [downto] 1397616978
                             downto
-                        Simple_expressionContext [1] 1397616978
-                          TermContext [1] 1390835631
-                            FactorContext [1] 889729797
-                              PrimaryContext [1] 148912029
-                                LiteralContext [1] 874217650
-                                  Numeric_literalContext [1] 1436664465
-                                    Abstract_literalContext [1] 558187323
+                        Simple_expressionContext [1] 1390835631
+                          TermContext [1] 889729797
+                            FactorContext [1] 148912029
+                              PrimaryContext [1] 874217650
+                                LiteralContext [1] 1436664465
+                                  Numeric_literalContext [1] 558187323
+                                    Abstract_literalContext [1] 680576081
                                         1
                     )
     )
     return
-  Subtype_indicationContext [std_logic] 680576081
-    Selected_nameContext [std_logic] 1088872417
-      IdentifierContext [std_logic] 453523494
+  Subtype_indicationContext [std_logic] 1088872417
+    Selected_nameContext [std_logic] 453523494
+      IdentifierContext [std_logic] 274722023
           std_logic
+

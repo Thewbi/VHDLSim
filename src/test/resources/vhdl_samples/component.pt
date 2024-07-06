@@ -1,0 +1,50 @@
+Component_declarationContext [component] 1454031203
+    component
+  IdentifierContext [OR_gate] 1883919084
+      OR_gate
+  Port_clauseContext [port] 1860513229
+      port
+      (
+    Port_listContext [A] 1150538133
+      Interface_port_listContext [A] 662822946
+        Interface_port_declarationContext [A] 92150540
+          Identifier_listContext [A] 1110623531
+            IdentifierContext [A] 410495873
+                A
+            :
+          Signal_modeContext [in] 811587677
+              in
+          Subtype_indicationContext [std_logic] 1166807841
+            Selected_nameContext [std_logic] 289639718
+              IdentifierContext [std_logic] 885851948
+                  std_logic
+          ;
+        Interface_port_declarationContext [B] 2048834776
+          Identifier_listContext [B] 1605283233
+            IdentifierContext [B] 1384722895
+                B
+            :
+          Signal_modeContext [in] 245475541
+              in
+          Subtype_indicationContext [std_logic] 22429093
+            Selected_nameContext [std_logic] 733957003
+              IdentifierContext [std_logic] 815992954
+                  std_logic
+          ;
+        Interface_port_declarationContext [Y] 868737467
+          Identifier_listContext [Y] 55331187
+            IdentifierContext [Y] 1392425346
+                Y
+            :
+          Signal_modeContext [out] 2054574951
+              out
+          Subtype_indicationContext [std_logic] 1991294891
+            Selected_nameContext [std_logic] 399931359
+              IdentifierContext [std_logic] 809762318
+                  std_logic
+      )
+      ;
+    end
+    component
+    ;
+

@@ -288,6 +288,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void exitInterface_constant_declaration(VHDLParser.Interface_constant_declarationContext ctx) {
         processInterfaceDeclaration(ctx.identifier_list(), ctx.subtype_indication());
+
+        actualParameter = null;
     }
 
     private void processInterfaceDeclaration(Identifier_listContext identifier_listContext,
@@ -306,7 +308,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         //
 
         final String parameterName = identifier_listContext.getText();
-
         actualParameter.name = parameterName;
 
         //
@@ -374,9 +375,13 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void enterSignal_mode(VHDLParser.Signal_modeContext ctx) {
         // System.out.println(ctx.getText());
-        portDirection = PortDirection.fromString(ctx.getText());
 
-        actualParameter.direction = portDirection;
+        String directionAsString = ctx.getText();
+        portDirection = PortDirection.fromString(directionAsString);
+
+        if (actualParameter != null) {
+            actualParameter.direction = portDirection;
+        }
     }
 
     @Override
@@ -1158,15 +1163,17 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // this code was tested with and written for a function call with several actual
         // parameters
 
-        FunctionCallActualParameter actualParameter = new FunctionCallActualParameter();
-        actualParameter.name = lastIdentifier;
-        actualParameter.value = lastIdentifier;
+        FunctionCallActualParameter localActualParameter = new FunctionCallActualParameter();
+        localActualParameter.name = lastIdentifier;
+        localActualParameter.value = lastIdentifier;
 
-        lastFunctionCall.children.add(actualParameter);
+        lastFunctionCall.children.add(localActualParameter);
 
         // take the value from the stack so that it is not falsely processed by the
         // expression handler
         stackPop();
+
+        actualParameter = null;
     }
 
     @Override
