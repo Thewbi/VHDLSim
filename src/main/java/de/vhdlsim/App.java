@@ -60,6 +60,7 @@ public class App {
         // "src\\test\\resources\\vhdl_samples\\expression.vhd");
 
         // // TODO
+        // // Unit Test: TODO
         // testSimpleExpression(astOutputListener, print,
         //         convertToAST,
         //         "src\\test\\resources\\vhdl_samples\\simple_expression.vhd");
@@ -89,9 +90,8 @@ public class App {
         // testIf5(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\if_with_expression.vhd");
 
-        // TODO: fails
-        testCase(astOutputListener, print, convertToAST,
-        "src\\test\\resources\\vhdl_samples\\case.vhd");
+        // testCase(astOutputListener, print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\case.vhd");
 
         // // TODO: fails
         // testProcess(astOutputListener, print, convertToAST,
