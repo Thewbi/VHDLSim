@@ -22,9 +22,11 @@ VHDL allows the user to hierachically combine entities to form more complex enti
 
 The way in which entities are nested into each other is very, very elaborate.
 
+## Nesting via Entity Instantiation
 The simplest way to achieve nesting is to directly instantiate entities within other entities.
-This is called entitiy instantiation. Entity is only available in later versions of VHDL.
+This is called entitiy instantiation. Entity instantiation is only available in later versions of VHDL.
 
+## Nesting via Component Instantiation
 The more complex version of nesting is done via components.
 
 Components are top-level objects in their own right. Components do not have architectures like entities do. 
@@ -36,13 +38,37 @@ Components are used by placing
 ## Component Declaration
 The declaration part of an architecture is everything before the begin - end block.
 
+```
+-- component declaraction (!= component instantiation)
+--
+-- The component declaration will fit all entities that match the port interface
+-- defined by this component declaration.
+component INV
+    port (A: in STD_LOGIC;
+        F: out STD_LOGIC);
+end component;
+```
+
 A component declaration looks very similar to an entity in that it also defines an interface via ports 
-exactly like entities do. The idea is that when an entity has the same interface than a component, the 
+exactly like entities do. The idea is that when an entity has the same interface as a component, the 
 entity can be plugged into a component to complete the architecture.
 
 ## Component Instantiation
 The second part to a component is the component instantiations. The component instantiation is placed
 into the entitie's architectures body (between begin and end)
+
+```
+-- component instantiation
+--
+-- There is no configuration element anywhere in this design, therefore default binding is used.
+-- Because the default binding strategy is used, the name of the component declaraction/instance
+-- dictates which entity is used for this component.
+--
+-- If you want to use another entity that matches
+-- the component, then you have to specify an explicit configuration.
+G1: INV port map (SEL, SELB);
+
+```
 
 The component instance is necessary because here, the signals and ports are inserted into the 
 component instantiation. This means that when an entities is then later resolved and placed into
@@ -52,7 +78,7 @@ the component, this entity will receive the same ports and signals that where pu
 Plugging entities into components is called binding. Binding is done at compile time by the VHDL compiler.
 The VHDL compiler has to solve the following tasks in order to resolve entities for components.
 
-1. determine entities that matches the component's interface and then Pick one of the matching entities to use for the binding
+1. determine entities that match the component's interface and then pick one of the matching entities to use for the binding
 1. select an architecture for the entity that is plugged into the component
 
 ### Late Binding
@@ -62,12 +88,12 @@ element in VHDL.
 
 A component is explicitly created for a specific entity architecture.
 This means that if an entity has several architectures, and more than one architecture
-uses component declarations and instatioations, then each of these architecture has their
+uses component declarations and instatioations, then each of these architecture may have it's
 own specific component.
 
 ```
 configuration MUX2_specified_CFG of MUX2 is -- this is a configuration (called MUX2_specified_CFG) for the entity MUX2
-  for STRUCTURE -- this configuration is valid and is used for the entity architecture called STRUCTURE
+  for STRUCTURE -- this configuration is used for the specific entity architecture called STRUCTURE
     for G2 : AOI -- the architecture called STRUCTURE contains a component instance called G2 
                  -- and it's component declaration is AOI
       use entity work.AOI_12345(v1);  -- this defines which entity to use for G2. Here entity: work.AOI_12345
@@ -86,8 +112,8 @@ entities and architectures.
 If no configuration is specified at all, then the default binding strategy is used.
 Default binding will select the entity for a component instance by 
 
-1. look at the component declaration of the copmonent instance
-1. find the name of the component declaration
+1. looking at the component declaration of the copmonent instance
+1. take the name of the component declaration
 1. the name of the component declaration is used to search for an entity of that exact name!
 1. when an entity of that name is found, then the architecture of that entity is used, which was processed by the compiler most recently
 1. this entity and it's most recently scanned architecture is then bound to the component instance.
@@ -104,6 +130,4 @@ advantage of the default binding strategy unless there is only a single architec
 
 ## Edge Cases for the Compiler
 
-1. A cycle of entites that use each other either directly or accross a chain/cycle of several entites. This cycle cannot ever successfully be resolved because each entity used a entity the is based on itself recursively without abort condition. The compiler has to detect this condition and abort the compilation process!
-
-### 
+1. A cycle of entites that use each other either directly or accross a chain/cycle of several entites. This cycle cannot ever successfully be resolved because each entity uses an entity the is based on itself recursively without abort condition. The compiler has to detect cycles and abort the compilation process!
