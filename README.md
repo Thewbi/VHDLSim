@@ -71,8 +71,9 @@ G1: INV port map (SEL, SELB);
 ```
 
 The component instance is necessary because here, the signals and ports are inserted into the 
-component instantiation. This means that when an entities is then later resolved and placed into
-the component, this entity will receive the same ports and signals that where put into the component instance.
+component instantiation using port maps. This means that when an entity is then later resolved and placed into
+the component, this entity will receive the same ports and signals that where put into the component instance
+according to the port map.
 
 ## Binding and Configurations
 Plugging entities into components is called binding. Binding is done at compile time by the VHDL compiler.
