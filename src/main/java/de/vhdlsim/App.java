@@ -104,6 +104,10 @@ public class App {
         // testArchitecture(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\architecture.vhd");
 
+        // TODO: implement port map
+        testArchitecture(astOutputListener, print, convertToAST,
+        "src\\test\\resources\\vhdl_samples\\architecture_with_signal.vhd");
+
         // testArchitecture(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\architecture_with_process_with_if.vhd");
 
@@ -113,9 +117,8 @@ public class App {
         // testRecord(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\record.vhd");
 
-        // TODO unit test
-        testFunctionSpecification(astOutputListener, print, convertToAST,
-        "src\\test\\resources\\vhdl_samples\\function_specification.vhd");
+        // testFunctionSpecification(astOutputListener, print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\function_specification.vhd");
 
         // TODO unit test
         // testFunctionImplementation(astOutputListener, print, convertToAST,
