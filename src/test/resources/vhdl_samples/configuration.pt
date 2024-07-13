@@ -1,0 +1,71 @@
+Configuration_declarationContext [configuration] 1907431275
+    configuration
+  IdentifierContext [MUX2_specified_CFG] 2035070981
+      MUX2_specified_CFG
+    of
+  NameContext [MUX2] 1264213713
+    IdentifierContext [MUX2] 1506809545
+        MUX2
+    is
+  Configuration_declarative_partContext [for] 1019384604
+  Block_configurationContext [for] 550668305
+      for
+    Block_specificationContext [STRUCTURE] 963110412
+      IdentifierContext [STRUCTURE] 1624820151
+          STRUCTURE
+    Configuration_itemContext [for] 1219161283
+      Component_configurationContext [for] 2081191879
+          for
+        Component_specificationContext [G2] 2061347276
+          Instantiation_listContext [G2] 1559122513
+            IdentifierContext [G2] 1128096251
+                G2
+            :
+          NameContext [AOI] 1552978964
+            IdentifierContext [AOI] 1259652483
+                AOI
+        Binding_indicationContext [use] 1699113578
+            use
+          Entity_aspectContext [entity] 1306324352
+              entity
+            NameContext [work] 355790875
+              IdentifierContext [work] 2028017635
+                  work
+              Name_partContext [.] 782378927
+                Selected_name_partContext [.] 70807318
+                    .
+                  SuffixContext [AOI_12345] 910091170
+                    IdentifierContext [AOI_12345] 1183888521
+                        AOI_12345
+              Name_partContext [(] 2041605291
+                Function_call_or_indexed_name_partContext [(] 1052245076
+                    (
+                  Actual_parameter_partContext [v1] 2136288211
+                    Association_listContext [v1] 1008925772
+                      Association_elementContext [v1] 1175259735
+                        Actual_partContext [v1] 1205406622
+                          Actual_designatorContext [v1] 293907205
+                            ExpressionContext [v1] 988800485
+                              RelationContext [v1] 345902941
+                                Shift_expressionContext [v1] 454325163
+                                  Simple_expressionContext [v1] 796667727
+                                    TermContext [v1] 1794717576
+                                      FactorContext [v1] 251210093
+                                        PrimaryContext [v1] 919112242
+                                          LiteralContext [v1] 2021707251
+                                            Enumeration_literalContext [v1] 1541857308
+                                              IdentifierContext [v1] 479397964
+                                                  v1
+                    )
+          ;
+          end
+          for
+          ;
+      end
+      for
+      ;
+    end
+  IdentifierContext [MUX2_specified_CFG] 1861781750
+      MUX2_specified_CFG
+    ;
+

@@ -3,6 +3,7 @@ package de.vhdlsim;
 import de.vhdlmodel.Architecture;
 import de.vhdlmodel.AssignmentStmt;
 import de.vhdlmodel.Component;
+import de.vhdlmodel.Configuration;
 import de.vhdlmodel.Entity;
 import de.vhdlmodel.FunctionImplementation;
 import de.vhdlmodel.FunctionSpecification;
@@ -68,6 +69,10 @@ public class ASTOutputListenerCallbackAdapter implements ASTOutputListenerCallba
 
     @Override
     public void enumDataTypeDeclaration(TypeDeclaration typeDeclaration) {
+    }
+
+    @Override
+    public void configuration(Configuration configuration) {
     }
 
 }

@@ -12,6 +12,9 @@ import de.vhdl.grammar.VHDLParser.Enumeration_literalContext;
 import de.vhdl.grammar.VHDLParser.ExpressionContext;
 import de.vhdl.grammar.VHDLParser.IdentifierContext;
 import de.vhdl.grammar.VHDLParser.Identifier_listContext;
+import de.vhdl.grammar.VHDLParser.Instantiation_listContext;
+import de.vhdl.grammar.VHDLParser.NameContext;
+import de.vhdl.grammar.VHDLParser.Name_partContext;
 import de.vhdl.grammar.VHDLParser.Selected_nameContext;
 import de.vhdl.grammar.VHDLParser.Subtype_indicationContext;
 import de.vhdl.grammar.VHDLParserBaseListener;
@@ -23,6 +26,7 @@ import de.vhdlmodel.CaseStmt;
 import de.vhdlmodel.CaseStmtBranch;
 import de.vhdlmodel.CharacterLiteral;
 import de.vhdlmodel.Component;
+import de.vhdlmodel.Configuration;
 import de.vhdlmodel.Entity;
 import de.vhdlmodel.Expr;
 import de.vhdlmodel.FunctionCall;
@@ -106,6 +110,75 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     private Signal signal;
 
+    private Configuration configuration;
+
+    @Override
+    public void enterConfiguration_declaration(VHDLParser.Configuration_declarationContext ctx) {
+
+        configuration = new Configuration();
+
+        final String identifier = ctx.identifier().get(0).getText();
+        final String name = ctx.name().getText();
+
+        configuration.name = identifier;
+        configuration.targetEntity = name;
+    }
+
+    @Override
+    public void exitConfiguration_declaration(VHDLParser.Configuration_declarationContext ctx) {
+
+        astOutputListenerCallback.configuration(configuration);
+    }
+
+    @Override
+    public void enterBlock_specification(VHDLParser.Block_specificationContext ctx) {
+
+        IdentifierContext identifierContext = ctx.identifier();
+        final String identifier = identifierContext.getText();
+
+        configuration.targetEntityArchitecture = identifier;
+    }
+
+    @Override
+    public void exitBlock_specification(VHDLParser.Block_specificationContext ctx) {
+    }
+
+    @Override
+    public void enterComponent_specification(VHDLParser.Component_specificationContext ctx) {
+
+        Instantiation_listContext instantiation_listContext = ctx.instantiation_list();
+        String instatiation = instantiation_listContext.getText();
+        configuration.componentInstance = instatiation;
+
+        final String identifier = ctx.name().getText();
+        configuration.componentDeclaration = identifier;
+    }
+
+    @Override
+    public void exitComponent_specification(VHDLParser.Component_specificationContext ctx) {
+    }
+
+    @Override
+    public void enterEntity_aspect(VHDLParser.Entity_aspectContext ctx) {
+
+        NameContext nameContext = ctx.name();
+
+        Name_partContext namePartContext = nameContext.name_part(0);
+        String namePart = namePartContext.getText();
+        configuration.boundEntity = namePart;
+
+        Name_partContext namePartContext2 = nameContext.name_part(1);
+        String namePart2 = namePartContext2.getText();
+        configuration.boundEntityArchitecture = namePart2;
+
+        // String name = ctx.name().getText();
+        // configuration.boundEntity = name;
+    }
+
+    @Override
+    public void exitEntity_aspect(VHDLParser.Entity_aspectContext ctx) {
+    }
+
     @Override
     public void enterType_declaration(VHDLParser.Type_declarationContext ctx) {
 
@@ -121,7 +194,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterEnumeration_type_definition(VHDLParser.Enumeration_type_definitionContext ctx) {
-        
+
         typeDeclaration.typeDeclarationType = TypeDeclarationType.ENUM;
 
         for (Enumeration_literalContext enumeration_literalContext : ctx.enumeration_literal()) {
@@ -697,7 +770,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // it becomes excessively hard to visit expressions because the expression
         // element is used in so many contexts that it is not always clear how to
         // combine elements.
-        
+
         stackPushDummyNode();
     }
 
@@ -729,7 +802,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         // // why is this here? This will be hit during case statements
         // if (ctx.children.size() == 1) {
-        //     return;
+        // return;
         // }
 
         processExpression();
@@ -1021,7 +1094,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         expr = null;
 
         // DEBUG
-        //stack.clear();
+        // stack.clear();
 
         astOutputListenerCallback.ifStmt(stmt);
 
@@ -1071,7 +1144,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         expr = null;
 
         // DEBUG
-        //stack.clear();
+        // stack.clear();
 
         astOutputListenerCallback.caseStmt(stmt);
 
@@ -1100,7 +1173,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         expr = null;
 
         // DEBUG
-        //stack.clear();
+        // stack.clear();
 
         stmt = stmt.parent == null ? stmt : stmt.parent;
     }
@@ -1133,7 +1206,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitCase_statement_alternative(VHDLParser.Case_statement_alternativeContext ctx) {
-        //stmt = stmt.parent == null ? stmt : stmt.parent;
+        // stmt = stmt.parent == null ? stmt : stmt.parent;
         stmt = stmt.parent;
     }
 
@@ -1145,9 +1218,9 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         lastFunctionCall = localFunctionCall;
 
-        //if (stmt instanceof IfStmtBranch) {
-            stackPush(localFunctionCall);
-        //}
+        // if (stmt instanceof IfStmtBranch) {
+        stackPush(localFunctionCall);
+        // }
     }
 
     @Override
@@ -1336,7 +1409,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     private void stackPushDummyNode() {
         // if ((!stack.empty()) && (stack.peek() instanceof DummyNode)) {
-        //     return;
+        // return;
         // }
         stack.push(new DummyNode());
     }

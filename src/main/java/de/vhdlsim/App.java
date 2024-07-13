@@ -15,6 +15,7 @@ import de.vhdl.grammar.VHDLParser;
 import de.vhdl.grammar.VHDLParser.Architecture_bodyContext;
 import de.vhdl.grammar.VHDLParser.Case_statementContext;
 import de.vhdl.grammar.VHDLParser.Component_declarationContext;
+import de.vhdl.grammar.VHDLParser.Configuration_declarationContext;
 import de.vhdl.grammar.VHDLParser.Design_fileContext;
 import de.vhdl.grammar.VHDLParser.Entity_declarationContext;
 import de.vhdl.grammar.VHDLParser.Enumeration_type_definitionContext;
@@ -104,9 +105,9 @@ public class App {
         // testArchitecture(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\architecture.vhd");
 
-        // TODO: implement port map
-        testArchitecture(astOutputListener, print, convertToAST,
-        "src\\test\\resources\\vhdl_samples\\architecture_with_signal.vhd");
+        // // TODO: implement port map
+        // testArchitecture(astOutputListener, print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\architecture_with_signal.vhd");
 
         // testArchitecture(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\architecture_with_process_with_if.vhd");
@@ -138,6 +139,9 @@ public class App {
         // convertToAST,
         // "src\\test\\resources\\vhdl_samples\\enum.vhd");
 
+        testConfiguration(astOutputListener, print, convertToAST,
+        "src\\test\\resources\\vhdl_samples\\configuration.vhd");
+
         // // DEBUG output the AST from the stmt inside the astOutputListener
         // int indent = 0;
         // System.out.println(astOutputListener.stmt.toString(indent));
@@ -147,6 +151,15 @@ public class App {
         }
 
         // https://www.mikrocontroller.net/articles/VHDL_Testbench
+    }
+
+    private static ASTOutputListener testConfiguration(final ASTOutputListener astOutputListener,
+            final boolean print, final boolean convertToAST, final String testFile)
+            throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Configuration_declarationContext root = parser.configuration_declaration();
+
+        return traverseTree(astOutputListener, root, print, convertToAST, testFile);
     }
 
     private static ASTOutputListener testExpression(final ASTOutputListener astOutputListener,

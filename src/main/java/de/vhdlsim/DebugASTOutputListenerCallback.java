@@ -3,6 +3,7 @@ package de.vhdlsim;
 import de.vhdlmodel.Architecture;
 import de.vhdlmodel.AssignmentStmt;
 import de.vhdlmodel.Component;
+import de.vhdlmodel.Configuration;
 import de.vhdlmodel.Entity;
 import de.vhdlmodel.FunctionImplementation;
 import de.vhdlmodel.FunctionSpecification;
@@ -84,6 +85,11 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     @Override
     public void enumDataTypeDeclaration(TypeDeclaration typeDeclaration) {
         System.out.println(typeDeclaration.toString(INDENT));
+    }
+
+    @Override
+    public void configuration(Configuration configuration) {
+        System.out.println(configuration.toString(INDENT));
     }
 
 }
