@@ -1,0 +1,20 @@
+Wait_statementContext [wait] 1540270363
+    wait
+  Timeout_clauseContext [for] 292917034
+      for
+    ExpressionContext [20] 242355057
+      RelationContext [20] 455538610
+        Shift_expressionContext [20] 1226622409
+          Simple_expressionContext [20] 1957502751
+            TermContext [20] 1780132728
+              FactorContext [20] 1177377518
+                PrimaryContext [20] 1773206895
+                  LiteralContext [20] 1970881185
+                    Numeric_literalContext [20] 1250391581
+                      Physical_literalContext [20] 1725017993
+                        Abstract_literalContext [20] 140799417
+                            20
+                        IdentifierContext [ns] 926370398
+                            ns
+    ;
+

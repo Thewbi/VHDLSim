@@ -3,6 +3,7 @@ package de.vhdlsim;
 import de.vhdlmodel.Architecture;
 import de.vhdlmodel.AssignmentStmt;
 import de.vhdlmodel.Component;
+import de.vhdlmodel.ComponentInstantiationStatement;
 import de.vhdlmodel.Configuration;
 import de.vhdlmodel.Entity;
 import de.vhdlmodel.FunctionImplementation;
@@ -44,5 +45,7 @@ public interface ASTOutputListenerCallback {
     void enumDataTypeDeclaration(TypeDeclaration typeDeclaration);
 
     void configuration(Configuration configuration);
+
+    void componentInstantiationStatement(ComponentInstantiationStatement componentInstantiationStatement);
     
 }

@@ -3,6 +3,7 @@ package de.vhdlsim;
 import de.vhdlmodel.Architecture;
 import de.vhdlmodel.AssignmentStmt;
 import de.vhdlmodel.Component;
+import de.vhdlmodel.ComponentInstantiationStatement;
 import de.vhdlmodel.Configuration;
 import de.vhdlmodel.Entity;
 import de.vhdlmodel.FunctionImplementation;
@@ -73,6 +74,10 @@ public class ASTOutputListenerCallbackAdapter implements ASTOutputListenerCallba
 
     @Override
     public void configuration(Configuration configuration) {
+    }
+
+    @Override
+    public void componentInstantiationStatement(ComponentInstantiationStatement componentInstantiationStatement) {
     }
 
 }

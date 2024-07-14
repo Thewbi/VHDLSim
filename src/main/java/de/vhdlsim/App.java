@@ -34,6 +34,7 @@ import de.vhdl.grammar.VHDLParser.Simple_expressionContext;
 import de.vhdl.grammar.VHDLParser.Subprogram_declarative_itemContext;
 import de.vhdl.grammar.VHDLParser.Type_declarationContext;
 import de.vhdl.grammar.VHDLParser.Type_definitionContext;
+import de.vhdl.grammar.VHDLParser.Wait_statementContext;
 
 /**
  * Use this generator to generate your testbenches:
@@ -106,8 +107,8 @@ public class App {
         // testEntity(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\entity.vhd");
 
-        testEntityInstantiation(astOutputListener, print, convertToAST,
-        "src\\test\\resources\\vhdl_samples\\entity_instantiation.vhd");
+        // testEntityInstantiation(astOutputListener, print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\entity_instantiation.vhd");
 
         // testPortMap(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\port_map.vhd");
@@ -125,6 +126,7 @@ public class App {
         // testArchitecture(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\architecture_with_process_with_if.vhd");
 
+        // TODO: finish the entity Declaration statement and port map processing here
         // testArchitecture(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\architecture_testbench.vhd");
 
@@ -157,6 +159,10 @@ public class App {
 
         // testConfiguration(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\configuration.vhd");
+
+        testWaitStatement(astOutputListener, print, convertToAST,
+        "src\\test\\resources\\vhdl_samples\\wait_for_time_unit_statement.vhd");
+        
 
         // // DEBUG output the AST from the stmt inside the astOutputListener
         // int indent = 0;
@@ -383,6 +389,15 @@ public class App {
             throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Design_fileContext root = parser.design_file();
+
+        return traverseTree(astOutputListener, root, print, convertToAST, testFile);
+    }
+    
+    private static ASTOutputListener testWaitStatement(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile)
+            throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Wait_statementContext root = parser.wait_statement();
 
         return traverseTree(astOutputListener, root, print, convertToAST, testFile);
     }

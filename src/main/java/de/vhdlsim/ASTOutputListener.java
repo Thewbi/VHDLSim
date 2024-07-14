@@ -137,11 +137,21 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         String entityArchitecture = nameContext.getChild(2).getText();
 
+        // TODO: insert component instantiation statement into the parent architecture
+        if (architecture != null) {
+            architecture.children.add(componentInstantiationStatement);
+            componentInstantiationStatement.parent = architecture;
+            stmt = componentInstantiationStatement;
+        }
+
     }
 
     @Override
     public void exitComponent_instantiation_statement(VHDLParser.Component_instantiation_statementContext ctx) {
 
+        astOutputListenerCallback.componentInstantiationStatement(componentInstantiationStatement);
+
+        stmt = componentInstantiationStatement.parent;
         componentInstantiationStatement = null;
     }
 
@@ -156,6 +166,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
             String assoc = association_elementContext.getText();
             System.out.println(assoc);
+
+            // TODO: insert the portmap into the current componentInstantiationStatement
         }
     }
 

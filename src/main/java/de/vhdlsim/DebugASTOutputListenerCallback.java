@@ -3,6 +3,7 @@ package de.vhdlsim;
 import de.vhdlmodel.Architecture;
 import de.vhdlmodel.AssignmentStmt;
 import de.vhdlmodel.Component;
+import de.vhdlmodel.ComponentInstantiationStatement;
 import de.vhdlmodel.Configuration;
 import de.vhdlmodel.Entity;
 import de.vhdlmodel.FunctionImplementation;
@@ -90,6 +91,11 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     @Override
     public void configuration(Configuration configuration) {
         System.out.println(configuration.toString(INDENT));
+    }
+
+    @Override
+    public void componentInstantiationStatement(ComponentInstantiationStatement componentInstantiationStatement) {
+        System.out.println(componentInstantiationStatement.toString(INDENT));
     }
 
 }

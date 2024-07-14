@@ -1,249 +1,629 @@
-Architecture_bodyContext [architecture] 1372082959
+Architecture_bodyContext [architecture] 350068407
     architecture
-  IdentifierContext [test_reg4] 633075331
+  IdentifierContext [test_reg4] 530737374
       test_reg4
     of
-  IdentifierContext [test_bench] 1858609436
+  IdentifierContext [test_bench] 1332668132
       test_bench
     is
-  Architecture_declarative_partContext [signal] 1920387277
-    Block_declarative_itemContext [signal] 1414147750
-      Signal_declarationContext [signal] 775931202
+  Architecture_declarative_partContext [signal] 1147580192
+    Block_declarative_itemContext [signal] 173099767
+      Signal_declarationContext [signal] 112797691
           signal
-        Identifier_listContext [d0] 22069592
-          IdentifierContext [d0] 1160003871
+        Identifier_listContext [d0] 1045997582
+          IdentifierContext [d0] 1337335626
               d0
             ,
-          IdentifierContext [d1] 1075738627
+          IdentifierContext [d1] 1336996537
               d1
             ,
-          IdentifierContext [d2] 282828951
+          IdentifierContext [d2] 7967307
               d2
             ,
-          IdentifierContext [d3] 394721749
+          IdentifierContext [d3] 2073707154
               d3
             ,
-          IdentifierContext [en] 1884122755
+          IdentifierContext [en] 78204644
               en
             ,
-          IdentifierContext [clk] 1134612201
+          IdentifierContext [clk] 1287934450
               clk
             ,
-          IdentifierContext [q0] 246550802
+          IdentifierContext [q0] 6519275
               q0
             ,
-          IdentifierContext [q1] 786041152
+          IdentifierContext [q1] 692331943
               q1
             ,
-          IdentifierContext [q2] 897074030
+          IdentifierContext [q2] 1741979653
               q2
             ,
-          IdentifierContext [q3] 1885996206
+          IdentifierContext [q3] 166794956
               q3
           :
-        Subtype_indicationContext [bit] 1859039536
-          Selected_nameContext [bit] 278934944
-            IdentifierContext [bit] 1739876329
+        Subtype_indicationContext [bit] 306612792
+          Selected_nameContext [bit] 447212746
+            IdentifierContext [bit] 1496355635
                 bit
           ;
     begin
-  Architecture_statement_partContext [dut] 1205555397
-    Architecture_statementContext [dut] 1543974463
-      Component_instantiation_statementContext [dut] 1293618474
-        Label_colonContext [dut] 156545103
-          IdentifierContext [dut] 345281752
+  Architecture_statement_partContext [dut] 1484171695
+    Architecture_statementContext [dut] 2127036371
+      Component_instantiation_statementContext [dut] 1529060733
+        Label_colonContext [dut] 106374177
+          IdentifierContext [dut] 1803669141
               dut
             :
-        Instantiated_unitContext [entity] 1896294051
+        Instantiated_unitContext [entity] 712609105
             entity
-          NameContext [work] 1684015092
-            IdentifierContext [work] 1209669119
+          NameContext [work] 1836463382
+            IdentifierContext [work] 1388278453
                 work
-            Name_partContext [.] 2014866032
-              Selected_name_partContext [.] 811760110
+            Name_partContext [.] 934275857
+              Selected_name_partContext [.] 1364913072
                   .
-                SuffixContext [reg4] 1415157681
-                  IdentifierContext [reg4] 1291113768
+                SuffixContext [reg4] 232307208
+                  IdentifierContext [reg4] 609962972
                       reg4
-            Name_partContext [(] 2005167404
-              Function_call_or_indexed_name_partContext [(] 1418385211
+            Name_partContext [(] 1818544933
+              Function_call_or_indexed_name_partContext [(] 1793436274
                   (
-                Actual_parameter_partContext [behav] 1282811396
-                  Association_listContext [behav] 641853239
-                    Association_elementContext [behav] 1920467934
-                      Actual_partContext [behav] 1883840933
-                        Actual_designatorContext [behav] 233996206
-                          ExpressionContext [behav] 614685048
-                            RelationContext [behav] 385337537
-                              Shift_expressionContext [behav] 789219251
-                                Simple_expressionContext [behav] 832279283
-                                  TermContext [behav] 265119009
-                                    FactorContext [behav] 668210649
-                                      PrimaryContext [behav] 1545087375
-                                        LiteralContext [behav] 838411509
-                                          Enumeration_literalContext [behav] 1434041222
-                                            IdentifierContext [behav] 1375995437
+                Actual_parameter_partContext [behav] 572868060
+                  Association_listContext [behav] 1549725679
+                    Association_elementContext [behav] 371800738
+                      Actual_partContext [behav] 1364767791
+                        Actual_designatorContext [behav] 1499136125
+                          ExpressionContext [behav] 1926343982
+                            RelationContext [behav] 762476028
+                              Shift_expressionContext [behav] 966739377
+                                Simple_expressionContext [behav] 952562199
+                                  TermContext [behav] 1199673596
+                                    FactorContext [behav] 2044903525
+                                      PrimaryContext [behav] 982757413
+                                        LiteralContext [behav] 902478634
+                                          Enumeration_literalContext [behav] 2114444063
+                                            IdentifierContext [behav] 294247762
                                                 behav
                   )
-        Port_map_aspectContext [port] 1338841523
+        Port_map_aspectContext [port] 918312414
             port
             map
             (
-          Association_listContext [d0] 929776179
-            Association_elementContext [d0] 802581203
-              Actual_partContext [d0] 1561408618
-                Actual_designatorContext [d0] 2050404090
-                  ExpressionContext [d0] 388043093
-                    RelationContext [d0] 188576144
-                      Shift_expressionContext [d0] 1608230649
-                        Simple_expressionContext [d0] 282432134
-                          TermContext [d0] 266437232
-                            FactorContext [d0] 1873859565
-                              PrimaryContext [d0] 1843289228
-                                LiteralContext [d0] 1361289747
-                                  Enumeration_literalContext [d0] 1381128261
-                                    IdentifierContext [d0] 999609945
+          Association_listContext [d0] 1448061896
+            Association_elementContext [d0] 382750013
+              Actual_partContext [d0] 1240232440
+                Actual_designatorContext [d0] 489349054
+                  ExpressionContext [d0] 915416632
+                    RelationContext [d0] 574434418
+                      Shift_expressionContext [d0] 150268540
+                        Simple_expressionContext [d0] 1130894323
+                          TermContext [d0] 1962826816
+                            FactorContext [d0] 1072410641
+                              PrimaryContext [d0] 283318938
+                                LiteralContext [d0] 320304382
+                                  Enumeration_literalContext [d0] 361571968
+                                    IdentifierContext [d0] 2005169944
                                         d0
               ,
-            Association_elementContext [d1] 615634843
-              Actual_partContext [d1] 1758386724
-                Actual_designatorContext [d1] 673068808
-                  ExpressionContext [d1] 900008524
-                    RelationContext [d1] 520232556
-                      Shift_expressionContext [d1] 17037394
-                        Simple_expressionContext [d1] 1484531981
-                          TermContext [d1] 1159114532
-                            FactorContext [d1] 1256728724
-                              PrimaryContext [d1] 1412925683
-                                LiteralContext [d1] 1832580921
-                                  Enumeration_literalContext [d1] 497359413
-                                    IdentifierContext [d1] 369241501
+            Association_elementContext [d1] 2134607032
+              Actual_partContext [d1] 1470344997
+                Actual_designatorContext [d1] 728115831
+                  ExpressionContext [d1] 2131670196
+                    RelationContext [d1] 1546908073
+                      Shift_expressionContext [d1] 371439501
+                        Simple_expressionContext [d1] 210506412
+                          TermContext [d1] 112049309
+                            FactorContext [d1] 1162918744
+                              PrimaryContext [d1] 1321530272
+                                LiteralContext [d1] 573673894
+                                  Enumeration_literalContext [d1] 1226020905
+                                    IdentifierContext [d1] 156856360
                                         d1
               ,
-            Association_elementContext [d2] 2124046270
-              Actual_partContext [d2] 1151593579
-                Actual_designatorContext [d2] 1902260856
-                  ExpressionContext [d2] 1988859660
-                    RelationContext [d2] 1514160588
-                      Shift_expressionContext [d2] 22756955
-                        Simple_expressionContext [d2] 1640639994
-                          TermContext [d2] 1263793464
-                            FactorContext [d2] 323326911
-                              PrimaryContext [d2] 1270144618
-                                LiteralContext [d2] 2074185499
-                                  Enumeration_literalContext [d2] 797925218
-                                    IdentifierContext [d2] 275310919
+            Association_elementContext [d2] 1617550160
+              Actual_partContext [d2] 1325124186
+                Actual_designatorContext [d2] 461160828
+                  ExpressionContext [d2] 1499867659
+                    RelationContext [d2] 2012993836
+                      Shift_expressionContext [d2] 1740797075
+                        Simple_expressionContext [d2] 440938038
+                          TermContext [d2] 1922464006
+                            FactorContext [d2] 1536031937
+                              PrimaryContext [d2] 798981583
+                                LiteralContext [d2] 1954406292
+                                  Enumeration_literalContext [d2] 904058452
+                                    IdentifierContext [d2] 29183965
                                         d2
               ,
-            Association_elementContext [d3] 2109874862
-              Actual_partContext [d3] 183284570
-                Actual_designatorContext [d3] 1607305514
-                  ExpressionContext [d3] 146305349
-                    RelationContext [d3] 1686369710
-                      Shift_expressionContext [d3] 194706439
-                        Simple_expressionContext [d3] 942518407
-                          TermContext [d3] 1943325854
-                            FactorContext [d3] 134310351
-                              PrimaryContext [d3] 1411892748
-                                LiteralContext [d3] 22805895
-                                  Enumeration_literalContext [d3] 1413378318
-                                    IdentifierContext [d3] 1475491159
+            Association_elementContext [d3] 1427651360
+              Actual_partContext [d3] 1334042472
+                Actual_designatorContext [d3] 1827725498
+                  ExpressionContext [d3] 131635550
+                    RelationContext [d3] 319644606
+                      Shift_expressionContext [d3] 1118078504
+                        Simple_expressionContext [d3] 691690486
+                          TermContext [d3] 1793799654
+                            FactorContext [d3] 310623126
+                              PrimaryContext [d3] 1961945640
+                                LiteralContext [d3] 258931371
+                                  Enumeration_literalContext [d3] 1008315045
+                                    IdentifierContext [d3] 860481979
                                         d3
               ,
-            Association_elementContext [en] 1024429571
-              Actual_partContext [en] 1667689440
-                Actual_designatorContext [en] 1157058691
-                  ExpressionContext [en] 40472007
-                    RelationContext [en] 1138193439
-                      Shift_expressionContext [en] 398110318
-                        Simple_expressionContext [en] 1765250898
-                          TermContext [en] 670971910
-                            FactorContext [en] 1601292138
-                              PrimaryContext [en] 494586676
-                                LiteralContext [en] 1218593486
-                                  Enumeration_literalContext [en] 508198356
-                                    IdentifierContext [en] 1330754528
+            Association_elementContext [en] 1083962448
+              Actual_partContext [en] 953742666
+                Actual_designatorContext [en] 1239759990
+                  ExpressionContext [en] 891093184
+                    RelationContext [en] 708533063
+                      Shift_expressionContext [en] 1438030319
+                        Simple_expressionContext [en] 902830499
+                          TermContext [en] 1754662105
+                            FactorContext [en] 403147759
+                              PrimaryContext [en] 2040467681
+                                LiteralContext [en] 1278677872
+                                  Enumeration_literalContext [en] 341796579
+                                    IdentifierContext [en] 807657332
                                         en
               ,
-            Association_elementContext [clk] 79290965
-              Actual_partContext [clk] 1582785598
-                Actual_designatorContext [clk] 322836221
-                  ExpressionContext [clk] 1370651081
-                    RelationContext [clk] 450003680
-                      Shift_expressionContext [clk] 2134991632
-                        Simple_expressionContext [clk] 480971771
-                          TermContext [clk] 1586845078
-                            FactorContext [clk] 1356728614
-                              PrimaryContext [clk] 611563982
-                                LiteralContext [clk] 1615039080
-                                  Enumeration_literalContext [clk] 336484883
-                                    IdentifierContext [clk] 876213901
+            Association_elementContext [clk] 825936265
+              Actual_partContext [clk] 1164107853
+                Actual_designatorContext [clk] 711327356
+                  ExpressionContext [clk] 68377659
+                    RelationContext [clk] 1661123505
+                      Shift_expressionContext [clk] 825249556
+                        Simple_expressionContext [clk] 883151184
+                          TermContext [clk] 709865851
+                            FactorContext [clk] 1550207152
+                              PrimaryContext [clk] 1864230087
+                                LiteralContext [clk] 1168019749
+                                  Enumeration_literalContext [clk] 311239812
+                                    IdentifierContext [clk] 2093010349
                                         clk
               ,
-            Association_elementContext [q0] 230528013
-              Actual_partContext [q0] 1909546776
-                Actual_designatorContext [q0] 392781299
-                  ExpressionContext [q0] 1822383117
-                    RelationContext [q0] 233021551
-                      Shift_expressionContext [q0] 1991313236
-                        Simple_expressionContext [q0] 736778932
-                          TermContext [q0] 1032000752
-                            FactorContext [q0] 770911223
-                              PrimaryContext [q0] 1392906938
-                                LiteralContext [q0] 708890004
-                                  Enumeration_literalContext [q0] 255944888
-                                    IdentifierContext [q0] 1004095028
+            Association_elementContext [q0] 2088445230
+              Actual_partContext [q0] 1297978429
+                Actual_designatorContext [q0] 915349526
+                  ExpressionContext [q0] 1280851663
+                    RelationContext [q0] 1764696127
+                      Shift_expressionContext [q0] 1223867739
+                        Simple_expressionContext [q0] 129153987
+                          TermContext [q0] 168907708
+                            FactorContext [q0] 447718425
+                              PrimaryContext [q0] 1206569586
+                                LiteralContext [q0] 1427381743
+                                  Enumeration_literalContext [q0] 1427646530
+                                    IdentifierContext [q0] 846254484
                                         q0
               ,
-            Association_elementContext [q1] 1487470647
-              Actual_partContext [q1] 1948863195
-                Actual_designatorContext [q1] 1890187342
-                  ExpressionContext [q1] 19986569
-                    RelationContext [q1] 294184992
-                      Shift_expressionContext [q1] 793315160
-                        Simple_expressionContext [q1] 270397815
-                          TermContext [q1] 376416077
-                            FactorContext [q1] 1089504328
-                              PrimaryContext [q1] 660879561
-                                LiteralContext [q1] 1485697819
-                                  Enumeration_literalContext [q1] 867398280
-                                    IdentifierContext [q1] 2007331442
+            Association_elementContext [q1] 592983282
+              Actual_partContext [q1] 1448525331
+                Actual_designatorContext [q1] 1108924067
+                  ExpressionContext [q1] 1984975621
+                    RelationContext [q1] 348984985
+                      Shift_expressionContext [q1] 2005435445
+                        Simple_expressionContext [q1] 1939990953
+                          TermContext [q1] 119358627
+                            FactorContext [q1] 2073621255
+                              PrimaryContext [q1] 1208121709
+                                LiteralContext [q1] 873610597
+                                  Enumeration_literalContext [q1] 1497845528
+                                    IdentifierContext [q1] 1710989308
                                         q1
               ,
-            Association_elementContext [q2] 1904324159
-              Actual_partContext [q2] 1176735295
-                Actual_designatorContext [q2] 1848415041
-                  ExpressionContext [q2] 843467284
-                    RelationContext [q2] 1313532469
-                      Shift_expressionContext [q2] 339924917
-                        Simple_expressionContext [q2] 520022247
-                          TermContext [q2] 518522822
-                            FactorContext [q2] 124407148
-                              PrimaryContext [q2] 85445963
-                                LiteralContext [q2] 1825027294
-                                  Enumeration_literalContext [q2] 852445367
-                                    IdentifierContext [q2] 1738236591
+            Association_elementContext [q2] 1047087935
+              Actual_partContext [q2] 464887938
+                Actual_designatorContext [q2] 2020152163
+                  ExpressionContext [q2] 1104443373
+                    RelationContext [q2] 898694235
+                      Shift_expressionContext [q2] 60292059
+                        Simple_expressionContext [q2] 869601985
+                          TermContext [q2] 1365008457
+                            FactorContext [q2] 1671179293
+                              PrimaryContext [q2] 1609124502
+                                LiteralContext [q2] 1144068272
+                                  Enumeration_literalContext [q2] 1985836631
+                                    IdentifierContext [q2] 1948471365
                                         q2
               ,
-            Association_elementContext [q3] 1558021762
-              Actual_partContext [q3] 225290371
-                Actual_designatorContext [q3] 1169146729
-                  ExpressionContext [q3] 2040352617
-                    RelationContext [q3] 1237598030
-                      Shift_expressionContext [q3] 688766789
-                        Simple_expressionContext [q3] 302155142
-                          TermContext [q3] 24606376
-                            FactorContext [q3] 1772160903
-                              PrimaryContext [q3] 756185697
-                                LiteralContext [q3] 733672688
-                                  Enumeration_literalContext [q3] 297927961
-                                    IdentifierContext [q3] 1891546521
+            Association_elementContext [q3] 1636506029
+              Actual_partContext [q3] 758348212
+                Actual_designatorContext [q3] 817978763
+                  ExpressionContext [q3] 1578009262
+                    RelationContext [q3] 1735507635
+                      Shift_expressionContext [q3] 1362728240
+                        Simple_expressionContext [q3] 1798219673
+                          TermContext [q3] 1092572064
+                            FactorContext [q3] 728885526
+                              PrimaryContext [q3] 922511709
+                                LiteralContext [q3] 678433396
+                                  Enumeration_literalContext [q3] 331994761
+                                    IdentifierContext [q3] 928294079
                                         q3
             )
           ;
+    Architecture_statementContext [stimulus] 1647809929
+      Process_statementContext [stimulus] 1258084361
+        Label_colonContext [stimulus] 391914049
+          IdentifierContext [stimulus] 96406857
+              stimulus
+            :
+          process
+          is
+        Process_declarative_partContext [begin] 1534745514
+          begin
+        Process_statement_partContext [d0] 2003496028
+          Sequential_statementContext [d0] 30578394
+            Signal_assignment_statementContext [d0] 2088371948
+              TargetContext [d0] 1976870338
+                NameContext [d0] 1434234664
+                  IdentifierContext [d0] 1083021083
+                      d0
+                <=
+              WaveformContext ['1'] 1819063424
+                Waveform_elementContext ['1'] 1011279482
+                  ExpressionContext ['1'] 208866101
+                    RelationContext ['1'] 543846639
+                      Shift_expressionContext ['1'] 690686166
+                        Simple_expressionContext ['1'] 576020159
+                          TermContext ['1'] 921420643
+                            FactorContext ['1'] 1165303897
+                              PrimaryContext ['1'] 887750041
+                                LiteralContext ['1'] 1010953501
+                                  Enumeration_literalContext ['1'] 1423561005
+                                      '1'
+                ;
+          Sequential_statementContext [d1] 943870983
+            Signal_assignment_statementContext [d1] 1136419747
+              TargetContext [d1] 1881561036
+                NameContext [d1] 1785507932
+                  IdentifierContext [d1] 1084502906
+                      d1
+                <=
+              WaveformContext ['1'] 1613095350
+                Waveform_elementContext ['1'] 587153993
+                  ExpressionContext ['1'] 757004314
+                    RelationContext ['1'] 1279271200
+                      Shift_expressionContext ['1'] 52908367
+                        Simple_expressionContext ['1'] 1527953000
+                          TermContext ['1'] 18242360
+                            FactorContext ['1'] 1276261147
+                              PrimaryContext ['1'] 1971764991
+                                LiteralContext ['1'] 996796369
+                                  Enumeration_literalContext ['1'] 135640095
+                                      '1'
+                ;
+          Sequential_statementContext [d2] 1430439149
+            Signal_assignment_statementContext [d2] 359922172
+              TargetContext [d2] 1632682988
+                NameContext [d2] 1153447573
+                  IdentifierContext [d2] 132577100
+                      d2
+                <=
+              WaveformContext ['1'] 231756373
+                Waveform_elementContext ['1'] 1786294176
+                  ExpressionContext ['1'] 793331940
+                    RelationContext ['1'] 522553046
+                      Shift_expressionContext ['1'] 275266973
+                        Simple_expressionContext ['1'] 1069716895
+                          TermContext ['1'] 1521083627
+                            FactorContext ['1'] 1770642014
+                              PrimaryContext ['1'] 945591847
+                                LiteralContext ['1'] 328827614
+                                  Enumeration_literalContext ['1'] 109228794
+                                      '1'
+                ;
+          Sequential_statementContext [d3] 561959774
+            Signal_assignment_statementContext [d3] 2110756088
+              TargetContext [d3] 580871917
+                NameContext [d3] 823723302
+                  IdentifierContext [d3] 1714078840
+                      d3
+                <=
+              WaveformContext ['1'] 1732502545
+                Waveform_elementContext ['1'] 1051876890
+                  ExpressionContext ['1'] 1199262943
+                    RelationContext ['1'] 2009221452
+                      Shift_expressionContext ['1'] 257513673
+                        Simple_expressionContext ['1'] 590845366
+                          TermContext ['1'] 1052195003
+                            FactorContext ['1'] 1541049864
+                              PrimaryContext ['1'] 511707818
+                                LiteralContext ['1'] 25536233
+                                  Enumeration_literalContext ['1'] 116405378
+                                      '1'
+                ;
+          Sequential_statementContext [en] 164974746
+            Signal_assignment_statementContext [en] 396283472
+              TargetContext [en] 989892772
+                NameContext [en] 1020520290
+                  IdentifierContext [en] 530653666
+                      en
+                <=
+              WaveformContext ['0'] 2125238280
+                Waveform_elementContext ['0'] 1092004553
+                  ExpressionContext ['0'] 1658699134
+                    RelationContext ['0'] 1961176822
+                      Shift_expressionContext ['0'] 1859374258
+                        Simple_expressionContext ['0'] 442987331
+                          TermContext ['0'] 366873404
+                            FactorContext ['0'] 1217467887
+                              PrimaryContext ['0'] 945288723
+                                LiteralContext ['0'] 428566321
+                                  Enumeration_literalContext ['0'] 2087258327
+                                      '0'
+                ;
+          Sequential_statementContext [clk] 1016550616
+            Signal_assignment_statementContext [clk] 1006094903
+              TargetContext [clk] 2030538903
+                NameContext [clk] 1293680848
+                  IdentifierContext [clk] 1261153343
+                      clk
+                <=
+              WaveformContext ['0'] 1309176095
+                Waveform_elementContext ['0'] 198099809
+                  ExpressionContext ['0'] 645482568
+                    RelationContext ['0'] 807752428
+                      Shift_expressionContext ['0'] 1026055550
+                        Simple_expressionContext ['0'] 1073763441
+                          TermContext ['0'] 752316209
+                            FactorContext ['0'] 914356853
+                              PrimaryContext ['0'] 1229161065
+                                LiteralContext ['0'] 195228908
+                                  Enumeration_literalContext ['0'] 471579726
+                                      '0'
+                ;
+          Sequential_statementContext [wait] 1442726378
+            Wait_statementContext [wait] 16503286
+                wait
+              Timeout_clauseContext [for] 484589713
+                  for
+                ExpressionContext [20] 1574598287
+                  RelationContext [20] 2056031695
+                    Shift_expressionContext [20] 606508809
+                      Simple_expressionContext [20] 718187988
+                        TermContext [20] 615438348
+                          FactorContext [20] 978508707
+                            PrimaryContext [20] 710708543
+                              LiteralContext [20] 1965237677
+                                Numeric_literalContext [20] 664792509
+                                  Physical_literalContext [20] 188523822
+                                    Abstract_literalContext [20] 1170727939
+                                        20
+                                    IdentifierContext [ns] 690339675
+                                        ns
+                ;
+          Sequential_statementContext [en] 1896828359
+            Signal_assignment_statementContext [en] 536122141
+              TargetContext [en] 1709804316
+                NameContext [en] 1630678941
+                  IdentifierContext [en] 1792550665
+                      en
+                <=
+              WaveformContext ['1'] 1359953204
+                Waveform_elementContext ['1'] 2014838114
+                  ExpressionContext ['1'] 136936250
+                    RelationContext ['1'] 593687897
+                      Shift_expressionContext ['1'] 187472540
+                        Simple_expressionContext ['1'] 1276611190
+                          TermContext ['1'] 262457445
+                            FactorContext ['1'] 1004023029
+                              PrimaryContext ['1'] 1414506856
+                                LiteralContext ['1'] 612097453
+                                  Enumeration_literalContext ['1'] 221634215
+                                      '1'
+                ;
+          Sequential_statementContext [wait] 2003891312
+            Wait_statementContext [wait] 1583159071
+                wait
+              Timeout_clauseContext [for] 607207372
+                  for
+                ExpressionContext [20] 131206411
+                  RelationContext [20] 2012330741
+                    Shift_expressionContext [20] 1101184763
+                      Simple_expressionContext [20] 1816147548
+                        TermContext [20] 2079179914
+                          FactorContext [20] 20049680
+                            PrimaryContext [20] 1437654187
+                              LiteralContext [20] 951050903
+                                Numeric_literalContext [20] 770947228
+                                  Physical_literalContext [20] 590646109
+                                    Abstract_literalContext [20] 1882349076
+                                        20
+                                    IdentifierContext [ns] 936292831
+                                        ns
+                ;
+          Sequential_statementContext [clk] 130668770
+            Signal_assignment_statementContext [clk] 2151717
+              TargetContext [clk] 1644231115
+                NameContext [clk] 537066525
+                  IdentifierContext [clk] 1766145591
+                      clk
+                <=
+              WaveformContext ['1'] 1867139015
+                Waveform_elementContext ['1'] 182531396
+                  ExpressionContext ['1'] 1026871825
+                    RelationContext ['1'] 2109798150
+                      Shift_expressionContext ['1'] 1074389766
+                        Simple_expressionContext ['1'] 1136768342
+                          TermContext ['1'] 1484673893
+                            FactorContext ['1'] 587003819
+                              PrimaryContext ['1'] 769798433
+                                LiteralContext ['1'] 1665620686
+                                  Enumeration_literalContext ['1'] 1233705144
+                                      '1'
+                ;
+          Sequential_statementContext [wait] 202125197
+            Wait_statementContext [wait] 811301908
+                wait
+              Timeout_clauseContext [for] 1762902523
+                  for
+                ExpressionContext [20] 1725008249
+                  RelationContext [20] 197964393
+                    Shift_expressionContext [20] 1620890840
+                      Simple_expressionContext [20] 402115881
+                        TermContext [20] 2106000623
+                          FactorContext [20] 330739404
+                            PrimaryContext [20] 361398902
+                              LiteralContext [20] 1010670443
+                                Numeric_literalContext [20] 2044215423
+                                  Physical_literalContext [20] 1606304070
+                                    Abstract_literalContext [20] 510063093
+                                        20
+                                    IdentifierContext [ns] 1313916817
+                                        ns
+                ;
+          Sequential_statementContext [d0] 1966124444
+            Signal_assignment_statementContext [d0] 1487500813
+              TargetContext [d0] 1911152052
+                NameContext [d0] 961409111
+                  IdentifierContext [d0] 1231156911
+                      d0
+                <=
+              WaveformContext ['0'] 1525409936
+                Waveform_elementContext ['0'] 1708169732
+                  ExpressionContext ['0'] 868815265
+                    RelationContext ['0'] 1977310713
+                      Shift_expressionContext ['0'] 1886491834
+                        Simple_expressionContext ['0'] 294658058
+                          TermContext ['0'] 1781493632
+                            FactorContext ['0'] 1169474473
+                              PrimaryContext ['0'] 966544353
+                                LiteralContext ['0'] 689745064
+                                  Enumeration_literalContext ['0'] 945722724
+                                      '0'
+                ;
+          Sequential_statementContext [d1] 1536471117
+            Signal_assignment_statementContext [d1] 9190301
+              TargetContext [d1] 1278852808
+                NameContext [d1] 63390
+                  IdentifierContext [d1] 2129144075
+                      d1
+                <=
+              WaveformContext ['0'] 525968792
+                Waveform_elementContext ['0'] 504858437
+                  ExpressionContext ['0'] 422330142
+                    RelationContext ['0'] 649329985
+                      Shift_expressionContext ['0'] 1955920234
+                        Simple_expressionContext ['0'] 1444635922
+                          TermContext ['0'] 775386112
+                            FactorContext ['0'] 391630194
+                              PrimaryContext ['0'] 1146825051
+                                LiteralContext ['0'] 1239807799
+                                  Enumeration_literalContext ['0'] 1550261631
+                                      '0'
+                ;
+          Sequential_statementContext [d2] 1970436060
+            Signal_assignment_statementContext [d2] 1753127384
+              TargetContext [d2] 239372207
+                NameContext [d2] 1789718525
+                  IdentifierContext [d2] 210156003
+                      d2
+                <=
+              WaveformContext ['0'] 279593458
+                Waveform_elementContext ['0'] 989447607
+                  ExpressionContext ['0'] 925308434
+                    RelationContext ['0'] 249034932
+                      Shift_expressionContext ['0'] 1278254413
+                        Simple_expressionContext ['0'] 940584193
+                          TermContext ['0'] 931675031
+                            FactorContext ['0'] 111900554
+                              PrimaryContext ['0'] 1312381159
+                                LiteralContext ['0'] 2012744708
+                                  Enumeration_literalContext ['0'] 31114735
+                                      '0'
+                ;
+          Sequential_statementContext [d3] 1552999801
+            Signal_assignment_statementContext [d3] 1491755116
+              TargetContext [d3] 1866850137
+                NameContext [d3] 954702563
+                  IdentifierContext [d3] 1661406123
+                      d3
+                <=
+              WaveformContext ['0'] 1759899303
+                Waveform_elementContext ['0'] 689654773
+                  ExpressionContext ['0'] 758119607
+                    RelationContext ['0'] 1982787818
+                      Shift_expressionContext ['0'] 838449246
+                        Simple_expressionContext ['0'] 1112414583
+                          TermContext ['0'] 282496973
+                            FactorContext ['0'] 293508253
+                              PrimaryContext ['0'] 1840903588
+                                LiteralContext ['0'] 1603198149
+                                  Enumeration_literalContext ['0'] 2063763486
+                                      '0'
+                ;
+          Sequential_statementContext [wait] 515715487
+            Wait_statementContext [wait] 1007412025
+                wait
+              Timeout_clauseContext [for] 365590665
+                  for
+                ExpressionContext [20] 2053591126
+                  RelationContext [20] 220309324
+                    Shift_expressionContext [20] 1850777594
+                      Simple_expressionContext [20] 681094281
+                        TermContext [20] 1748876332
+                          FactorContext [20] 1747352992
+                            PrimaryContext [20] 40075281
+                              LiteralContext [20] 1878169648
+                                Numeric_literalContext [20] 1781241150
+                                  Physical_literalContext [20] 825962150
+                                    Abstract_literalContext [20] 793138072
+                                        20
+                                    IdentifierContext [ns] 1418620248
+                                        ns
+                ;
+          Sequential_statementContext [en] 1648001170
+            Signal_assignment_statementContext [en] 169663597
+              TargetContext [en] 391877669
+                NameContext [en] 815320891
+                  IdentifierContext [en] 101775274
+                      en
+                <=
+              WaveformContext ['0'] 1778629809
+                Waveform_elementContext ['0'] 565372776
+                  ExpressionContext ['0'] 1462044018
+                    RelationContext ['0'] 1443435931
+                      Shift_expressionContext ['0'] 555273695
+                        Simple_expressionContext ['0'] 396883763
+                          TermContext ['0'] 1750498848
+                            FactorContext ['0'] 1995250556
+                              PrimaryContext ['0'] 301749835
+                                LiteralContext ['0'] 961160488
+                                  Enumeration_literalContext ['0'] 1647766367
+                                      '0'
+                ;
+          Sequential_statementContext [wait] 2082351774
+            Wait_statementContext [wait] 262366552
+                wait
+              Timeout_clauseContext [for] 1730704097
+                  for
+                ExpressionContext [20] 848363848
+                  RelationContext [20] 1062635358
+                    Shift_expressionContext [20] 726379593
+                      Simple_expressionContext [20] 265321659
+                        TermContext [20] 896644936
+                          FactorContext [20] 1050065615
+                            PrimaryContext [20] 1212772528
+                              LiteralContext [20] 1148254374
+                                Numeric_literalContext [20] 2089016471
+                                  Physical_literalContext [20] 2001223946
+                                    Abstract_literalContext [20] 1946645411
+                                        20
+                                    IdentifierContext [ns] 938545229
+                                        ns
+                ;
+          Sequential_statementContext [wait] 1433666880
+            Wait_statementContext [wait] 1610702581
+                wait
+                ;
+          end
+          process
+        IdentifierContext [stimulus] 794075965
+            stimulus
+          ;
     end
     architecture
-  IdentifierContext [test_reg4] 1312884893
+  IdentifierContext [test_reg4] 270056930
       test_reg4
     ;
 
