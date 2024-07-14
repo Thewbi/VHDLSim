@@ -21,7 +21,35 @@ public class Architecture extends Stmt {
         stringBuffer.append("Architecture ").append(architectureName).append(" ").append(entityName).append("\n");
 
         indent++;
+
+        for (int i = 0; i < indent; i++) {
+            stringBuffer.append("  ");
+        }
+
         int index = 0;
+
+        if (signals.size() > 0) {
+
+            stringBuffer.append("signals:\n");
+
+            indent++;
+        
+            for (Signal signal : signals) {
+
+                stringBuffer.append(signal.toString(indent));
+
+                if (index < children.size() - 1) {
+                    stringBuffer.append("\n");
+                }
+
+                index++;
+            }
+
+            indent--;
+
+        }
+
+        index = 0;
         for (ModelNode<?> stmt : children) {
 
             stringBuffer.append(stmt.toString(indent));

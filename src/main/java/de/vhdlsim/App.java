@@ -15,6 +15,7 @@ import de.vhdl.grammar.VHDLParser;
 import de.vhdl.grammar.VHDLParser.Architecture_bodyContext;
 import de.vhdl.grammar.VHDLParser.Case_statementContext;
 import de.vhdl.grammar.VHDLParser.Component_declarationContext;
+import de.vhdl.grammar.VHDLParser.Component_instantiation_statementContext;
 import de.vhdl.grammar.VHDLParser.Configuration_declarationContext;
 import de.vhdl.grammar.VHDLParser.Design_fileContext;
 import de.vhdl.grammar.VHDLParser.Entity_declarationContext;
@@ -22,6 +23,9 @@ import de.vhdl.grammar.VHDLParser.Enumeration_type_definitionContext;
 import de.vhdl.grammar.VHDLParser.ExpressionContext;
 import de.vhdl.grammar.VHDLParser.Function_specificationContext;
 import de.vhdl.grammar.VHDLParser.If_statementContext;
+import de.vhdl.grammar.VHDLParser.Instantiated_unitContext;
+import de.vhdl.grammar.VHDLParser.Name_partContext;
+import de.vhdl.grammar.VHDLParser.Port_map_aspectContext;
 import de.vhdl.grammar.VHDLParser.Process_statementContext;
 import de.vhdl.grammar.VHDLParser.Record_type_definitionContext;
 import de.vhdl.grammar.VHDLParser.Signal_assignment_statementContext;
@@ -102,6 +106,15 @@ public class App {
         // testEntity(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\entity.vhd");
 
+        testEntityInstantiation(astOutputListener, print, convertToAST,
+        "src\\test\\resources\\vhdl_samples\\entity_instantiation.vhd");
+
+        // testPortMap(astOutputListener, print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\port_map.vhd");
+
+        // testInstantiatedUnit(astOutputListener, print, convertToAST,
+        //     "src\\test\\resources\\vhdl_samples\\instantiated_unit.vhd");
+
         // testArchitecture(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\architecture.vhd");
 
@@ -111,6 +124,9 @@ public class App {
 
         // testArchitecture(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\architecture_with_process_with_if.vhd");
+
+        // testArchitecture(astOutputListener, print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\architecture_testbench.vhd");
 
         // testComponent(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\component.vhd");
@@ -139,8 +155,8 @@ public class App {
         // convertToAST,
         // "src\\test\\resources\\vhdl_samples\\enum.vhd");
 
-        testConfiguration(astOutputListener, print, convertToAST,
-        "src\\test\\resources\\vhdl_samples\\configuration.vhd");
+        // testConfiguration(astOutputListener, print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\configuration.vhd");
 
         // // DEBUG output the AST from the stmt inside the astOutputListener
         // int indent = 0;
@@ -263,6 +279,36 @@ public class App {
             throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Entity_declarationContext root = parser.entity_declaration();
+
+        return traverseTree(astOutputListener, root, print, convertToAST, testFile);
+    }
+
+    /**
+     * A entity instantiation is a component instantiation statement
+     */
+    private static ASTOutputListener testEntityInstantiation(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile)
+            throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Component_instantiation_statementContext root = parser.component_instantiation_statement();
+
+        return traverseTree(astOutputListener, root, print, convertToAST, testFile);
+    }
+
+    private static ASTOutputListener testPortMap(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile)
+            throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Port_map_aspectContext root = parser.port_map_aspect();
+
+        return traverseTree(astOutputListener, root, print, convertToAST, testFile);
+    }
+
+    private static ASTOutputListener testInstantiatedUnit(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile)
+            throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Instantiated_unitContext root = parser.instantiated_unit();
 
         return traverseTree(astOutputListener, root, print, convertToAST, testFile);
     }
