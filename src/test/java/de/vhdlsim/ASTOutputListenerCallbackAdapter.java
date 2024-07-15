@@ -69,6 +69,10 @@ public class ASTOutputListenerCallbackAdapter implements ASTOutputListenerCallba
     }
 
     @Override
+    public void typeDeclaration(TypeDeclaration typeDeclaration) {
+    }
+
+    @Override
     public void enumDataTypeDeclaration(TypeDeclaration typeDeclaration) {
     }
 

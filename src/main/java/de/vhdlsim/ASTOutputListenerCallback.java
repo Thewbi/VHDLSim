@@ -42,6 +42,8 @@ public interface ASTOutputListenerCallback {
 
     void expression(ModelNode<?> expr);
 
+    void typeDeclaration(TypeDeclaration typeDeclaration);
+
     void enumDataTypeDeclaration(TypeDeclaration typeDeclaration);
 
     void configuration(Configuration configuration);

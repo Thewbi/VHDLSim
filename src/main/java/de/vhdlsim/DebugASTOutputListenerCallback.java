@@ -84,6 +84,11 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     }
 
     @Override
+    public void typeDeclaration(TypeDeclaration typeDeclaration) {
+        System.out.println(typeDeclaration.toString(INDENT));
+    }
+
+    @Override
     public void enumDataTypeDeclaration(TypeDeclaration typeDeclaration) {
         System.out.println(typeDeclaration.toString(INDENT));
     }

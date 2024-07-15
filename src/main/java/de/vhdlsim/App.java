@@ -25,6 +25,7 @@ import de.vhdl.grammar.VHDLParser.Function_specificationContext;
 import de.vhdl.grammar.VHDLParser.If_statementContext;
 import de.vhdl.grammar.VHDLParser.Instantiated_unitContext;
 import de.vhdl.grammar.VHDLParser.Name_partContext;
+import de.vhdl.grammar.VHDLParser.Physical_literalContext;
 import de.vhdl.grammar.VHDLParser.Port_map_aspectContext;
 import de.vhdl.grammar.VHDLParser.Process_statementContext;
 import de.vhdl.grammar.VHDLParser.Record_type_definitionContext;
@@ -160,9 +161,11 @@ public class App {
         // testConfiguration(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\configuration.vhd");
 
-        testWaitStatement(astOutputListener, print, convertToAST,
-        "src\\test\\resources\\vhdl_samples\\wait_for_time_unit_statement.vhd");
-        
+        // testWaitStatement(astOutputListener, print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\wait_for_time_unit_statement.vhd");
+
+        testPhysicalUnits(astOutputListener, print, convertToAST,
+            "src\\test\\resources\\vhdl_samples\\physical_units.vhd");
 
         // // DEBUG output the AST from the stmt inside the astOutputListener
         // int indent = 0;
@@ -398,6 +401,15 @@ public class App {
             throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Wait_statementContext root = parser.wait_statement();
+
+        return traverseTree(astOutputListener, root, print, convertToAST, testFile);
+    }
+
+    private static ASTOutputListener testPhysicalUnits(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile)
+            throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Type_declarationContext root = parser.type_declaration();
 
         return traverseTree(astOutputListener, root, print, convertToAST, testFile);
     }

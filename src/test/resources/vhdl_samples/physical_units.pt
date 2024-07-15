@@ -1,0 +1,110 @@
+Type_declarationContext [type] 1159114532
+    type
+  IdentifierContext [time] 1024429571
+      time
+    is
+  Type_definitionContext [range] 1667689440
+    Scalar_type_definitionContext [range] 1157058691
+      Physical_type_definitionContext [range] 40472007
+        Range_constraintContext [range] 1138193439
+            range
+          Range_declContext [-] 398110318
+            Explicit_rangeContext [-] 1765250898
+              Simple_expressionContext [-] 670971910
+                  -
+                TermContext [2147483647] 1601292138
+                  FactorContext [2147483647] 494586676
+                    PrimaryContext [2147483647] 1218593486
+                      LiteralContext [2147483647] 508198356
+                        Numeric_literalContext [2147483647] 1330754528
+                          Abstract_literalContext [2147483647] 79290965
+                              2147483647
+              DirectionContext [to] 1582785598
+                  to
+              Simple_expressionContext [2147483647] 322836221
+                TermContext [2147483647] 1370651081
+                  FactorContext [2147483647] 450003680
+                    PrimaryContext [2147483647] 2134991632
+                      LiteralContext [2147483647] 480971771
+                        Numeric_literalContext [2147483647] 1586845078
+                          Abstract_literalContext [2147483647] 1356728614
+                              2147483647
+          units
+        Base_unit_declarationContext [fs] 611563982
+          IdentifierContext [fs] 1615039080
+              fs
+            ;
+        Secondary_unit_declarationContext [ps] 336484883
+          IdentifierContext [ps] 876213901
+              ps
+            =
+          Physical_literalContext [1000] 230528013
+            Abstract_literalContext [1000] 1909546776
+                1000
+            IdentifierContext [fs] 392781299
+                fs
+            ;
+        Secondary_unit_declarationContext [ns] 1822383117
+          IdentifierContext [ns] 233021551
+              ns
+            =
+          Physical_literalContext [1000] 1991313236
+            Abstract_literalContext [1000] 736778932
+                1000
+            IdentifierContext [ps] 1032000752
+                ps
+            ;
+        Secondary_unit_declarationContext [us] 770911223
+          IdentifierContext [us] 1392906938
+              us
+            =
+          Physical_literalContext [1000] 708890004
+            Abstract_literalContext [1000] 255944888
+                1000
+            IdentifierContext [ns] 1004095028
+                ns
+            ;
+        Secondary_unit_declarationContext [ms] 1487470647
+          IdentifierContext [ms] 1948863195
+              ms
+            =
+          Physical_literalContext [1000] 1890187342
+            Abstract_literalContext [1000] 19986569
+                1000
+            IdentifierContext [us] 294184992
+                us
+            ;
+        Secondary_unit_declarationContext [sec] 793315160
+          IdentifierContext [sec] 270397815
+              sec
+            =
+          Physical_literalContext [1000] 376416077
+            Abstract_literalContext [1000] 1089504328
+                1000
+            IdentifierContext [ms] 660879561
+                ms
+            ;
+        Secondary_unit_declarationContext [min] 1485697819
+          IdentifierContext [min] 867398280
+              min
+            =
+          Physical_literalContext [60] 2007331442
+            Abstract_literalContext [60] 1904324159
+                60
+            IdentifierContext [sec] 1176735295
+                sec
+            ;
+        Secondary_unit_declarationContext [hr] 1848415041
+          IdentifierContext [hr] 843467284
+              hr
+            =
+          Physical_literalContext [60] 1313532469
+            Abstract_literalContext [60] 339924917
+                60
+            IdentifierContext [min] 520022247
+                min
+            ;
+          end
+          units
+    ;
+
