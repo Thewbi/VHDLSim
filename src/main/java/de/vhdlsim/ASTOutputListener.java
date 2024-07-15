@@ -266,6 +266,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         typeDeclaration = new TypeDeclaration();
         typeDeclaration.name = ctx.identifier().getText();
+        typeDeclaration.physicalUnit.name = ctx.identifier().getText();
     }
 
     @Override
@@ -644,8 +645,45 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             range.rangeDirection = RangeDirection.fromString(directionContext.getText());
         }
 
-        range.end = stackPop();
-        range.start = stackPop();
+        
+        ModelNode<?> modelNode = null;
+        modelNode = stackPop();
+        if (modelNode.children.size() > 0) {
+
+            if (modelNode.operator.equals("-")) {
+
+                Object obj = modelNode.children.get(0).value;
+                Integer val = (Integer) obj;
+
+                //range.start = new ModelNode<Integer>();
+                //((ModelNode<Integer>) range.start).value = val.intValue() * -1;
+
+                NumericLiteral numericLiteral = new NumericLiteral();
+                numericLiteral.value = val.intValue() * -1;
+                range.end = numericLiteral;
+            }
+        } else {
+            range.end = modelNode;
+        }
+
+        modelNode = stackPop();
+        if (modelNode.children.size() > 0) {
+
+            if (modelNode.operator.equals("-")) {
+
+                Object obj = modelNode.children.get(0).value;
+                Integer val = (Integer) obj;
+
+                //range.start = new ModelNode<Integer>();
+                //((ModelNode<Integer>) range.start).value = val.intValue() * -1;
+
+                NumericLiteral numericLiteral = new NumericLiteral();
+                numericLiteral.value = val.intValue() * -1;
+                range.start = numericLiteral;
+            }
+        } else {
+            range.start = modelNode;
+        }
     }
 
     @Override
@@ -928,6 +966,16 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // combine elements.
 
         stackPushDummyNode();
+
+        final String operand = ctx.getChild(0).getText();
+        if (operand.equals("-")) {
+            System.out.println("MInus");
+
+            Expr operatorModelNode = new Expr();
+            operatorModelNode.value = "-";
+
+            stackPush(operatorModelNode);
+        }
     }
 
     @Override
@@ -1581,17 +1629,42 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             // assumption: this contains the left hand side operand of an operator
             ModelNode<?> lhs = stackPop();
 
-            Expr localExpr = new Expr();
-            stackPush(localExpr);
+            if (lhs instanceof DummyNode) {
 
-            localExpr.operator = operator.value;
+                // operator with a single operand (unary operator)
 
-            lhs.parent = localExpr;
-            rhs.parent = localExpr;
-            localExpr.children.add(lhs);
-            localExpr.children.add(rhs);
+                Expr localExpr = new Expr();
+                stackPush(localExpr);
 
-            expr = localExpr;
+                localExpr.operator = operator.value;
+
+                // if (operator.value.equalsIgnoreCase("-")) {
+                //     //localExpr.value = lhs.value * -1;
+                    
+                // }
+
+                localExpr.children.add(rhs);
+
+                expr = localExpr;
+
+            } else {
+
+                // operator with two operands (binary operator)
+
+                Expr localExpr = new Expr();
+                stackPush(localExpr);
+
+                localExpr.operator = operator.value;
+
+                lhs.parent = localExpr;
+                rhs.parent = localExpr;
+                localExpr.children.add(lhs);
+                localExpr.children.add(rhs);
+
+                expr = localExpr;
+
+            }
+            
         }
 
         if (expr != null) {
