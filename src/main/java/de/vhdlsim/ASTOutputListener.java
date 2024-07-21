@@ -62,6 +62,7 @@ import de.vhdlmodel.SubPhysicalUnit;
 import de.vhdlmodel.TypeDeclaration;
 import de.vhdlmodel.TypeDeclarationType;
 import de.vhdlmodel.Variable;
+import de.vhdlmodel.WaitStatement;
 import de.vhdlmodel.Process;
 import de.vhdlmodel.Range;
 import de.vhdlmodel.RangeDirection;
@@ -127,7 +128,9 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     private ComponentInstantiationStatement componentInstantiationStatement;
 
-    private Map<String, PhysicalUnit> units = new HashMap<>();
+    public Map<String, PhysicalUnit> units = null;
+
+    private NumericLiteral physicalUnitValue = null;
 
     @Override
     public void enterWait_statement(VHDLParser.Wait_statementContext ctx) {
@@ -136,6 +139,11 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void exitWait_statement(VHDLParser.Wait_statementContext ctx) {
         System.out.println("a");
+
+        WaitStatement waitStatement = new WaitStatement();
+        waitStatement.numericLiteral = (NumericLiteral) stack.pop();
+
+        stmt.children.add(waitStatement);
     }
 
     @Override
@@ -162,7 +170,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             componentInstantiationStatement.parent = architecture;
             stmt = componentInstantiationStatement;
         }
-
     }
 
     @Override
@@ -273,7 +280,9 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     public void exitType_declaration(VHDLParser.Type_declarationContext ctx) {
 
         typeDeclaration.range = this.range;
+
         astOutputListenerCallback.typeDeclaration(typeDeclaration);
+
         typeDeclaration = null;
         range = null;
     }
@@ -301,14 +310,14 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override public void enterSecondary_unit_declaration(VHDLParser.Secondary_unit_declarationContext ctx) {
 
         IdentifierContext identifierContext = ctx.identifier();
-        System.out.println(identifierContext.getText());
+        // System.out.println(identifierContext.getText());
 
         Physical_literalContext physical_literalContext = ctx.physical_literal();
         Abstract_literalContext abstract_literalContext = physical_literalContext.abstract_literal();
-        System.out.println(abstract_literalContext.getText());
+        // System.out.println(abstract_literalContext.getText());
         
         IdentifierContext parentIdentifierContext = physical_literalContext.identifier();
-        System.out.println(parentIdentifierContext.getText());
+        // System.out.println(parentIdentifierContext.getText());
 
         SubPhysicalUnit parent = typeDeclaration.physicalUnit.subPhysicalUnits.get(parentIdentifierContext.getText());
 
@@ -325,6 +334,37 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         typeDeclaration.physicalUnit.subPhysicalUnits.put(identifierContext.getText(), subPhysicalUnit);
     }
 	@Override public void exitSecondary_unit_declaration(VHDLParser.Secondary_unit_declarationContext ctx) { }
+
+    @Override public void enterPhysical_literal(VHDLParser.Physical_literalContext ctx) {
+
+        // disinguish between type declaration and type usage.
+        // type declaration is when there currently is a non-null typeDeclaration in place
+        // type usage is when the typeDeclaration field is null!
+        if (typeDeclaration == null) {
+
+            System.out.println(ctx.getText());
+
+            final String value = ctx.abstract_literal().getText();
+            final String unit = ctx.identifier().getText();
+
+            physicalUnitValue = new NumericLiteral();
+            physicalUnitValue.value = Integer.parseInt(value);
+
+            // resolve the unit in string form into a physical unit type
+            for (Map.Entry<String, PhysicalUnit> entry : units.entrySet()) {
+
+                PhysicalUnit physicalUnit = entry.getValue();
+
+                if (physicalUnit.subPhysicalUnits.containsKey(unit)) {
+                    physicalUnitValue.physicalUnit = physicalUnit;
+                    break;
+                }
+            }
+        }
+    }
+	@Override public void exitPhysical_literal(VHDLParser.Physical_literalContext ctx) { 
+
+    }
 
     @Override
     public void enterEnumeration_type_definition(VHDLParser.Enumeration_type_definitionContext ctx) {
@@ -361,7 +401,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     public void exitReturn_statement(VHDLParser.Return_statementContext ctx) {
         // System.out.println(ctx);
 
-        ExpressionContext expressionContext = ctx.expression();
+        // ExpressionContext expressionContext = ctx.expression();
 
         ReturnStatement returnStatement = new ReturnStatement();
         returnStatement.expr = stackPop();
@@ -1190,15 +1230,22 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
                 NumericLiteral numericLiteral = new NumericLiteral();
 
-                String valueAsString = ctx.getText();
+                //if (containsUnit(valueAsString)) {
+                if (physicalUnitValue != null) {
 
-                if (containsUnit(valueAsString)) {
+                    //throw new RuntimeException("Look for the unit in the 'units' property. If it does not exist throw exception, else insert it into the NumericLiteral");
 
-                    throw new RuntimeException("Look for the unit in the 'units' property. If it does not exist throw exception, else insert it into the NumericLiteral");
+                    numericLiteral.physicalUnit = physicalUnitValue.physicalUnit;
+                    numericLiteral.value = physicalUnitValue.value;
+
+                    physicalUnitValue = null;                    
 
                 } else {
+
+                    String valueAsString = ctx.getText();
                     int value = Integer.parseInt(valueAsString);
                     numericLiteral.value = value;
+
                 }
                 
                 stackPush(numericLiteral);

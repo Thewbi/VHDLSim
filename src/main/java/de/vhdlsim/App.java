@@ -3,6 +3,8 @@ package de.vhdlsim;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -36,6 +38,7 @@ import de.vhdl.grammar.VHDLParser.Subprogram_declarative_itemContext;
 import de.vhdl.grammar.VHDLParser.Type_declarationContext;
 import de.vhdl.grammar.VHDLParser.Type_definitionContext;
 import de.vhdl.grammar.VHDLParser.Wait_statementContext;
+import de.vhdlmodel.PhysicalUnit;
 
 /**
  * Use this generator to generate your testbenches:
@@ -55,10 +58,21 @@ public class App {
         // boolean convertToAST = false;
         boolean convertToAST = true;
 
+        Map<String, PhysicalUnit> units = new HashMap<>();
+
         DebugASTOutputListenerCallback astOutputListenerCallback = new DebugASTOutputListenerCallback();
+        astOutputListenerCallback.units = units;
 
         ASTOutputListener astOutputListener = new ASTOutputListener();
+        astOutputListener.units = units;
         astOutputListener.astOutputListenerCallback = astOutputListenerCallback;
+
+        // parse pyhsical units
+
+        testPhysicalUnits(astOutputListener, print, convertToAST,
+            "src\\test\\resources\\vhdl_samples\\physical_units.vhd");
+
+        System.out.println(units);
 
         // top level element of the grammar is design_file
 
@@ -127,7 +141,8 @@ public class App {
         // testArchitecture(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\architecture_with_process_with_if.vhd");
 
-        // TODO: finish the entity Declaration statement and port map processing here
+        // next
+        // // TODO: finish the entity Declaration statement and port map processing here
         // testArchitecture(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\architecture_testbench.vhd");
 
@@ -161,11 +176,10 @@ public class App {
         // testConfiguration(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\configuration.vhd");
 
-        // testWaitStatement(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\wait_for_time_unit_statement.vhd");
+        testWaitStatement(astOutputListener, print, convertToAST,
+        "src\\test\\resources\\vhdl_samples\\wait_for_time_unit_statement.vhd");
 
-        testPhysicalUnits(astOutputListener, print, convertToAST,
-            "src\\test\\resources\\vhdl_samples\\physical_units.vhd");
+        
 
         // // DEBUG output the AST from the stmt inside the astOutputListener
         // int indent = 0;

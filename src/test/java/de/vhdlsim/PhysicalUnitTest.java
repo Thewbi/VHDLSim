@@ -14,8 +14,6 @@ import org.junit.jupiter.api.Test;
 import de.vhdl.grammar.VHDLLexer;
 import de.vhdl.grammar.VHDLParser;
 import de.vhdl.grammar.VHDLParser.Type_declarationContext;
-import de.vhdlmodel.FunctionSpecification;
-import de.vhdlmodel.ModelNode;
 import de.vhdlmodel.NumericLiteral;
 import de.vhdlmodel.PhysicalUnit;
 import de.vhdlmodel.SubPhysicalUnit;

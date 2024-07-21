@@ -1,11 +1,7 @@
 package de.vhdlmodel;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import org.antlr.v4.runtime.misc.Array2DHashSet;
 
 /**
  * -- The VHDL standard predefines only one physical type: TIME, which is defined in the
@@ -30,10 +26,6 @@ import org.antlr.v4.runtime.misc.Array2DHashSet;
 public class PhysicalUnit {
 
     public String name;
-
-    // public List<String> units = new ArrayList<>();
-
-    // public List<Integer> factors = new ArrayList<>();
 
     public Map<String, SubPhysicalUnit> subPhysicalUnits = new HashMap<String, SubPhysicalUnit>();
     

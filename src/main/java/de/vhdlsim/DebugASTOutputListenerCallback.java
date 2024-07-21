@@ -1,5 +1,8 @@
 package de.vhdlsim;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import de.vhdlmodel.Architecture;
 import de.vhdlmodel.AssignmentStmt;
 import de.vhdlmodel.Component;
@@ -9,6 +12,7 @@ import de.vhdlmodel.Entity;
 import de.vhdlmodel.FunctionImplementation;
 import de.vhdlmodel.FunctionSpecification;
 import de.vhdlmodel.ModelNode;
+import de.vhdlmodel.PhysicalUnit;
 import de.vhdlmodel.Record;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
@@ -17,6 +21,8 @@ import de.vhdlmodel.TypeDeclaration;
 public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback {
 
     private static final int INDENT = 0;
+
+    public Map<String, PhysicalUnit> units;
 
     @Override
     public void architecture(final Architecture architecture) {
@@ -86,6 +92,18 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     @Override
     public void typeDeclaration(TypeDeclaration typeDeclaration) {
         System.out.println(typeDeclaration.toString(INDENT));
+
+        // check if a physical unit has been declared
+        PhysicalUnit physicalUnit = typeDeclaration.physicalUnit;
+        if (physicalUnit != null) {
+
+            if (units.containsKey(physicalUnit.name)) {
+                throw new RuntimeException("Duplicate entry of physical unit: '" + physicalUnit.name + "'");
+            }
+
+            // insert the unit into the external storage of all physcial units
+            units.put(physicalUnit.name, physicalUnit);
+        }
     }
 
     @Override
