@@ -15,6 +15,8 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+// Start Symbol: design_file
+
 parser grammar VHDLParser;
 
 // reuse the token which have been defined in the lexer

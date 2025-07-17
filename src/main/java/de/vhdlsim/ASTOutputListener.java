@@ -71,7 +71,7 @@ import de.vhdlmodel.RecordField;
 
 /**
  * Constructs an abstract syntac tree (AST) out of the parse tree (PT).
- * 
+ *
  * In the resources folder, you will find .ast and .pt files.
  * .pt files contain the parse trees.
  * .ast files contain the abstract syntax trees.
@@ -287,14 +287,15 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         range = null;
     }
 
-    @Override public void enterBase_unit_declaration(VHDLParser.Base_unit_declarationContext ctx) {
+    @Override
+    public void enterBase_unit_declaration(VHDLParser.Base_unit_declarationContext ctx) {
 
         String unit = ctx.getText();
 
         final String unitTrimmed = unit.substring(0, unit.length() - 1);
-        
-        //typeDeclaration.physicalUnit.units.add(unitTrimmed);
-        //typeDeclaration.physicalUnit.factors.add(1);
+
+        // typeDeclaration.physicalUnit.units.add(unitTrimmed);
+        // typeDeclaration.physicalUnit.factors.add(1);
 
         final SubPhysicalUnit subPhysicalUnit = new SubPhysicalUnit();
         subPhysicalUnit.name = unitTrimmed;
@@ -305,9 +306,12 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         typeDeclaration.physicalUnit.subPhysicalUnits.put(unitTrimmed, subPhysicalUnit);
     }
 
-	@Override public void exitBase_unit_declaration(VHDLParser.Base_unit_declarationContext ctx) { }
+    @Override
+    public void exitBase_unit_declaration(VHDLParser.Base_unit_declarationContext ctx) {
+    }
 
-    @Override public void enterSecondary_unit_declaration(VHDLParser.Secondary_unit_declarationContext ctx) {
+    @Override
+    public void enterSecondary_unit_declaration(VHDLParser.Secondary_unit_declarationContext ctx) {
 
         IdentifierContext identifierContext = ctx.identifier();
         // System.out.println(identifierContext.getText());
@@ -315,7 +319,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         Physical_literalContext physical_literalContext = ctx.physical_literal();
         Abstract_literalContext abstract_literalContext = physical_literalContext.abstract_literal();
         // System.out.println(abstract_literalContext.getText());
-        
+
         IdentifierContext parentIdentifierContext = physical_literalContext.identifier();
         // System.out.println(parentIdentifierContext.getText());
 
@@ -333,12 +337,17 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         typeDeclaration.physicalUnit.subPhysicalUnits.put(identifierContext.getText(), subPhysicalUnit);
     }
-	@Override public void exitSecondary_unit_declaration(VHDLParser.Secondary_unit_declarationContext ctx) { }
 
-    @Override public void enterPhysical_literal(VHDLParser.Physical_literalContext ctx) {
+    @Override
+    public void exitSecondary_unit_declaration(VHDLParser.Secondary_unit_declarationContext ctx) {
+    }
+
+    @Override
+    public void enterPhysical_literal(VHDLParser.Physical_literalContext ctx) {
 
         // disinguish between type declaration and type usage.
-        // type declaration is when there currently is a non-null typeDeclaration in place
+        // type declaration is when there currently is a non-null typeDeclaration in
+        // place
         // type usage is when the typeDeclaration field is null!
         if (typeDeclaration == null) {
 
@@ -362,7 +371,9 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             }
         }
     }
-	@Override public void exitPhysical_literal(VHDLParser.Physical_literalContext ctx) { 
+
+    @Override
+    public void exitPhysical_literal(VHDLParser.Physical_literalContext ctx) {
 
     }
 
@@ -384,14 +395,15 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     public void exitEnumeration_type_definition(VHDLParser.Enumeration_type_definitionContext ctx) {
     }
 
-    @Override 
+    @Override
     public void enterPhysical_type_definition(VHDLParser.Physical_type_definitionContext ctx) {
         typeDeclaration.typeDeclarationType = TypeDeclarationType.PHYSICAL_TYPE;
 
-     }
-	
-    @Override 
-    public void exitPhysical_type_definition(VHDLParser.Physical_type_definitionContext ctx) { }
+    }
+
+    @Override
+    public void exitPhysical_type_definition(VHDLParser.Physical_type_definitionContext ctx) {
+    }
 
     @Override
     public void enterReturn_statement(VHDLParser.Return_statementContext ctx) {
@@ -685,7 +697,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             range.rangeDirection = RangeDirection.fromString(directionContext.getText());
         }
 
-        
         ModelNode<?> modelNode = null;
         modelNode = stackPop();
         if (modelNode.children.size() > 0) {
@@ -695,8 +706,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
                 Object obj = modelNode.children.get(0).value;
                 Integer val = (Integer) obj;
 
-                //range.start = new ModelNode<Integer>();
-                //((ModelNode<Integer>) range.start).value = val.intValue() * -1;
+                // range.start = new ModelNode<Integer>();
+                // ((ModelNode<Integer>) range.start).value = val.intValue() * -1;
 
                 NumericLiteral numericLiteral = new NumericLiteral();
                 numericLiteral.value = val.intValue() * -1;
@@ -714,8 +725,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
                 Object obj = modelNode.children.get(0).value;
                 Integer val = (Integer) obj;
 
-                //range.start = new ModelNode<Integer>();
-                //((ModelNode<Integer>) range.start).value = val.intValue() * -1;
+                // range.start = new ModelNode<Integer>();
+                // ((ModelNode<Integer>) range.start).value = val.intValue() * -1;
 
                 NumericLiteral numericLiteral = new NumericLiteral();
                 numericLiteral.value = val.intValue() * -1;
@@ -1230,15 +1241,16 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
                 NumericLiteral numericLiteral = new NumericLiteral();
 
-                //if (containsUnit(valueAsString)) {
+                // if (containsUnit(valueAsString)) {
                 if (physicalUnitValue != null) {
 
-                    //throw new RuntimeException("Look for the unit in the 'units' property. If it does not exist throw exception, else insert it into the NumericLiteral");
+                    // throw new RuntimeException("Look for the unit in the 'units' property. If it
+                    // does not exist throw exception, else insert it into the NumericLiteral");
 
                     numericLiteral.physicalUnit = physicalUnitValue.physicalUnit;
                     numericLiteral.value = physicalUnitValue.value;
 
-                    physicalUnitValue = null;                    
+                    physicalUnitValue = null;
 
                 } else {
 
@@ -1247,7 +1259,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
                     numericLiteral.value = value;
 
                 }
-                
+
                 stackPush(numericLiteral);
                 break;
 
@@ -1629,6 +1641,16 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         }
     }
 
+    @Override
+    public void enterSelected_signal_assignment(VHDLParser.Selected_signal_assignmentContext ctx) {
+        throw new RuntimeException();
+    }
+
+    @Override
+    public void exitSelected_signal_assignment(VHDLParser.Selected_signal_assignmentContext ctx) {
+        throw new RuntimeException();
+    }
+
     private void processExpression() {
 
         // erase all dummy nodes that are not located below a real value
@@ -1686,8 +1708,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
                 localExpr.operator = operator.value;
 
                 // if (operator.value.equalsIgnoreCase("-")) {
-                //     //localExpr.value = lhs.value * -1;
-                    
+                // //localExpr.value = lhs.value * -1;
+
                 // }
 
                 localExpr.children.add(rhs);
@@ -1711,7 +1733,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
                 expr = localExpr;
 
             }
-            
+
         }
 
         if (expr != null) {

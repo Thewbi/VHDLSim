@@ -43,7 +43,7 @@ import de.vhdlmodel.PhysicalUnit;
 /**
  * Use this generator to generate your testbenches:
  * https://vhdl.lapinoo.net/testbench/
- * 
+ *
  * To test the grammar use http://lab.antlr.org/
  * top level element of the grammar is design_file
  *
@@ -52,8 +52,8 @@ public class App {
 
     public static void main(String[] args) throws IOException {
 
-        // boolean print = false;
-        boolean print = true;
+        boolean print = false;
+        // boolean print = true;
 
         // boolean convertToAST = false;
         boolean convertToAST = true;
@@ -69,10 +69,10 @@ public class App {
 
         // parse pyhsical units
 
-        testPhysicalUnits(astOutputListener, print, convertToAST,
-            "src\\test\\resources\\vhdl_samples\\physical_units.vhd");
+        // testPhysicalUnits(astOutputListener, print, convertToAST,
+        //     "src\\test\\resources\\vhdl_samples\\physical_units.vhd");
 
-        System.out.println(units);
+        // System.out.println(units);
 
         // top level element of the grammar is design_file
 
@@ -90,8 +90,10 @@ public class App {
         // convertToAST,
         // "src\\test\\resources\\vhdl_samples\\signal_declaration.vhd");
 
-        // testAssignment(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\signal_assignment.vhd");
+        //testAssignment(astOutputListener, print, convertToAST,
+        //"src\\test\\resources\\vhdl_samples\\signal_assignment.vhd");
+
+
 
         // testAssignment(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\signal_assignment_logical.vhd");
@@ -159,11 +161,15 @@ public class App {
         // testFunctionImplementation(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\function_implementation.vhd");
 
-        // and-gate
-        // https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
+        // // and-gate
+        // //https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
         // testEntityAndArchitecture(astOutputListener, print,
         // convertToAST,
         // "src\\test\\resources\\vhdl_samples\\and_gate.vhd");
+
+        TODO: when statements werden nicht richtig geparst!
+        testEntityAndArchitecture(astOutputListener, print, convertToAST,
+        "src\\test\\resources\\vhdl_samples\\multiplexer.vhd");
 
         // testEntityAndArchitecture(astOutputListener, print,
         // convertToAST,
@@ -176,10 +182,10 @@ public class App {
         // testConfiguration(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\configuration.vhd");
 
-        testWaitStatement(astOutputListener, print, convertToAST,
-        "src\\test\\resources\\vhdl_samples\\wait_for_time_unit_statement.vhd");
+        // testWaitStatement(astOutputListener, print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\wait_for_time_unit_statement.vhd");
 
-        
+
 
         // // DEBUG output the AST from the stmt inside the astOutputListener
         // int indent = 0;
@@ -409,7 +415,7 @@ public class App {
 
         return traverseTree(astOutputListener, root, print, convertToAST, testFile);
     }
-    
+
     private static ASTOutputListener testWaitStatement(final ASTOutputListener astOutputListener, final boolean print,
             final boolean convertToAST, final String testFile)
             throws IOException {
@@ -450,6 +456,9 @@ public class App {
         }
 
         if (convertToAST) {
+
+            System.out.println("");
+            System.out.println("AST GENERATION:");
 
             // Create a generic parse tree walker that can trigger callbacks
             final ParseTreeWalker walker = new ParseTreeWalker();

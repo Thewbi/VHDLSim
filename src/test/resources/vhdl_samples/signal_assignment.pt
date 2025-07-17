@@ -1,29 +1,30 @@
-Signal_assignment_statementContext [read_ptr] 127618319
-  TargetContext [read_ptr] 1566723494        
-    NameContext [read_ptr] 510113906
-      IdentifierContext [read_ptr] 1622006612
+Signal_assignment_statementContext [read_ptr] 385337537
+  TargetContext [read_ptr] 1256728724
+    NameContext [read_ptr] 1412925683
+      IdentifierContext [read_ptr] 1832580921
           read_ptr
     <=
-  WaveformContext [read_ptr] 66233253
-    Waveform_elementContext [read_ptr] 1286783232
-      ExpressionContext [read_ptr] 1874154700
-        RelationContext [read_ptr] 1632392469
-          Shift_expressionContext [read_ptr] 2008362258
-            Simple_expressionContext [read_ptr] 760563749
-              TermContext [read_ptr] 1753447031
-                FactorContext [read_ptr] 1810132623
-                  PrimaryContext [read_ptr] 895947612
-                    LiteralContext [read_ptr] 846492085
-                      Enumeration_literalContext [read_ptr] 1096283470
-                        IdentifierContext [read_ptr] 152005629
+  WaveformContext [read_ptr] 497359413
+    Waveform_elementContext [read_ptr] 369241501
+      ExpressionContext [read_ptr] 2124046270
+        RelationContext [read_ptr] 1151593579
+          Shift_expressionContext [read_ptr] 1902260856
+            Simple_expressionContext [read_ptr] 1988859660
+              TermContext [read_ptr] 1514160588
+                FactorContext [read_ptr] 22756955
+                  PrimaryContext [read_ptr] 1640639994
+                    LiteralContext [read_ptr] 1263793464
+                      Enumeration_literalContext [read_ptr] 323326911
+                        IdentifierContext [read_ptr] 1270144618
                             read_ptr
-              Adding_operatorContext [+] 75457651
+              Adding_operatorContext [+] 2074185499
                   +
-              TermContext [1] 362239120
-                FactorContext [1] 1796488937
-                  PrimaryContext [1] 423031029
-                    LiteralContext [1] 1712669532
-                      Numeric_literalContext [1] 1225373914
-                        Abstract_literalContext [1] 60830820
+              TermContext [1] 797925218
+                FactorContext [1] 275310919
+                  PrimaryContext [1] 2109874862
+                    LiteralContext [1] 183284570
+                      Numeric_literalContext [1] 1607305514
+                        Abstract_literalContext [1] 146305349
                             1
     ;
+
