@@ -10,6 +10,7 @@ import de.vhdlmodel.FunctionImplementation;
 import de.vhdlmodel.FunctionSpecification;
 import de.vhdlmodel.ModelNode;
 import de.vhdlmodel.Record;
+import de.vhdlmodel.SelectedSignalAssignment;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
 import de.vhdlmodel.TypeDeclaration;
@@ -49,5 +50,7 @@ public interface ASTOutputListenerCallback {
     void configuration(Configuration configuration);
 
     void componentInstantiationStatement(ComponentInstantiationStatement componentInstantiationStatement);
-    
+
+    void selectedSignalAssignment(Stmt stmt);
+
 }

@@ -2,6 +2,10 @@ package de.vhdlmodel;
 
 public class CaseStmt extends Stmt {
 
+    public void addChoice(Object value) {
+        this.value = value;
+    }
+
     public String toString(int indent) {
 
         StringBuffer stringBuffer = new StringBuffer();

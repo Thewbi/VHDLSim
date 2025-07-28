@@ -67,6 +67,10 @@ public class App {
         astOutputListener.units = units;
         astOutputListener.astOutputListenerCallback = astOutputListenerCallback;
 
+        // // TODO: finish the entity Declaration statement and port map processing here
+        // testArchitecture(astOutputListener, print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\architecture_testbench.vhd");
+
         // parse pyhsical units
 
         // testPhysicalUnits(astOutputListener, print, convertToAST,
@@ -90,8 +94,8 @@ public class App {
         // convertToAST,
         // "src\\test\\resources\\vhdl_samples\\signal_declaration.vhd");
 
-        //testAssignment(astOutputListener, print, convertToAST,
-        //"src\\test\\resources\\vhdl_samples\\signal_assignment.vhd");
+        // testAssignment(astOutputListener, print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\signal_assignment.vhd");
 
 
 
@@ -143,10 +147,7 @@ public class App {
         // testArchitecture(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\architecture_with_process_with_if.vhd");
 
-        // next
-        // // TODO: finish the entity Declaration statement and port map processing here
-        // testArchitecture(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\architecture_testbench.vhd");
+
 
         // testComponent(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\component.vhd");
@@ -167,7 +168,7 @@ public class App {
         // convertToAST,
         // "src\\test\\resources\\vhdl_samples\\and_gate.vhd");
 
-        TODO: when statements werden nicht richtig geparst!
+        //TODO: when statements werden nicht richtig geparst!
         testEntityAndArchitecture(astOutputListener, print, convertToAST,
         "src\\test\\resources\\vhdl_samples\\multiplexer.vhd");
 
@@ -460,7 +461,7 @@ public class App {
             System.out.println("");
             System.out.println("AST GENERATION:");
 
-            // Create a generic parse tree walker that can trigger callbacks
+            // create a generic parse tree walker that can trigger callbacks
             final ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(astOutputListener, root);
 

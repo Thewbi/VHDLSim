@@ -11,8 +11,8 @@ end MUX4X1;
 architecture VERHALTEN of MUX4X1 is
 begin
    with S select
-   Y <=    E(0) when "00",
-           E(1) when "01",
-           E(2) when "10",
-           E(3) when "11";
+   Y <= E(0) when "00",
+        E(1) when "01",
+        E(2) when "10",
+        E(3) when "11";
 end VERHALTEN;

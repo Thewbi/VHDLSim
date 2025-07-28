@@ -55,6 +55,8 @@ import de.vhdlmodel.PortDirection;
 import de.vhdlmodel.PortTarget;
 import de.vhdlmodel.Relation;
 import de.vhdlmodel.ReturnStatement;
+import de.vhdlmodel.SelectedSignalAssignment;
+import de.vhdlmodel.SelectedSignalAssignmentDummyNode;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
 import de.vhdlmodel.StringLiteral;
@@ -138,12 +140,17 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitWait_statement(VHDLParser.Wait_statementContext ctx) {
-        System.out.println("a");
+        // System.out.println("a");
 
         WaitStatement waitStatement = new WaitStatement();
-        waitStatement.numericLiteral = (NumericLiteral) stack.pop();
+
+        ModelNode<?> peek = stack.peek();
+        if (peek instanceof NumericLiteral) {
+            waitStatement.numericLiteral = (NumericLiteral) stack.pop();
+        }
 
         stmt.children.add(waitStatement);
+
     }
 
     @Override
@@ -191,7 +198,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         for (Association_elementContext association_elementContext : association_listContext.association_element()) {
 
             String assoc = association_elementContext.getText();
-            System.out.println(assoc);
+            //System.out.println(assoc);
 
             // TODO: insert the portmap into the current componentInstantiationStatement
         }
@@ -259,9 +266,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         Name_partContext namePartContext2 = nameContext.name_part(1);
         String namePart2 = namePartContext2.getText();
         configuration.boundEntityArchitecture = namePart2;
-
-        // String name = ctx.name().getText();
-        // configuration.boundEntity = name;
     }
 
     @Override
@@ -293,9 +297,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         String unit = ctx.getText();
 
         final String unitTrimmed = unit.substring(0, unit.length() - 1);
-
-        // typeDeclaration.physicalUnit.units.add(unitTrimmed);
-        // typeDeclaration.physicalUnit.factors.add(1);
 
         final SubPhysicalUnit subPhysicalUnit = new SubPhysicalUnit();
         subPhysicalUnit.name = unitTrimmed;
@@ -351,7 +352,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // type usage is when the typeDeclaration field is null!
         if (typeDeclaration == null) {
 
-            System.out.println(ctx.getText());
+            //System.out.println(ctx.getText());
 
             final String value = ctx.abstract_literal().getText();
             final String unit = ctx.identifier().getText();
@@ -1010,6 +1011,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void enterSimple_expression(VHDLParser.Simple_expressionContext ctx) {
 
+        //System.out.println(ctx.getText());
+
         // a dummy node is entered to mark the bottom of the stack where
         // the current expression stops. Without marking the end of the expression stack
         // it becomes excessively hard to visit expressions because the expression
@@ -1020,7 +1023,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         final String operand = ctx.getChild(0).getText();
         if (operand.equals("-")) {
-            System.out.println("MInus");
+            //System.out.println("Minus");
 
             Expr operatorModelNode = new Expr();
             operatorModelNode.value = "-";
@@ -1031,6 +1034,9 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitSimple_expression(VHDLParser.Simple_expressionContext ctx) {
+
+        System.out.println(ctx.getText());
+
         try {
             processExpression();
         } catch (Exception e) {
@@ -1054,11 +1060,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitTerm(VHDLParser.TermContext ctx) {
-
-        // // why is this here? This will be hit during case statements
-        // if (ctx.children.size() == 1) {
-        // return;
-        // }
 
         processExpression();
     }
@@ -1387,12 +1388,9 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // reset on exit
         expr = null;
 
-        // DEBUG
-        // stack.clear();
-
+        // emit the statement
         astOutputListenerCallback.ifStmt(stmt);
 
-        // stmt = stmt.parent == null ? stmt : stmt.parent;
         stmt = stmt.parent;
     }
 
@@ -1402,7 +1400,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitSequential_statement(VHDLParser.Sequential_statementContext ctx) {
-
     }
 
     @Override
@@ -1411,7 +1408,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitSequence_of_statements(VHDLParser.Sequence_of_statementsContext ctx) {
-
         if (stmt instanceof IfStmtBranch) {
             stmt = stmt.parent;
         }
@@ -1437,12 +1433,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // reset on exit
         expr = null;
 
-        // DEBUG
-        // stack.clear();
-
         astOutputListenerCallback.caseStmt(stmt);
 
-        // stmt = stmt.parent == null ? stmt : stmt.parent;
         stmt = stmt.parent;
     }
 
@@ -1466,9 +1458,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // reset on exit
         expr = null;
 
-        // DEBUG
-        // stack.clear();
-
         stmt = stmt.parent == null ? stmt : stmt.parent;
     }
 
@@ -1483,7 +1472,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // The others case has no expression! It is like the else branch of an
         // if-statement which also has no expression
         if (!case_statement_alternative_others) {
-            stmt.value = stackPop().value;
+            stmt.addChoice(stackPop().value);
         }
 
         case_statement_alternative_others = false;
@@ -1500,7 +1489,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitCase_statement_alternative(VHDLParser.Case_statement_alternativeContext ctx) {
-        // stmt = stmt.parent == null ? stmt : stmt.parent;
         stmt = stmt.parent;
     }
 
@@ -1532,8 +1520,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     public void exitFunction_call_or_indexed_name_part(VHDLParser.Function_call_or_indexed_name_partContext ctx) {
         lastFunctionCall = null;
         functionCall = true;
-
-        // stackPop();
     }
 
     @Override
@@ -1541,7 +1527,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // System.out.println("Actual Parameter: \"" + ctx + "\"");
 
         if (lastFunctionCall != null) {
-            // if (lastFunctionCall != null && actualParameter != null) {
 
             // this code was tested with and written for a function call with several actual
             // parameters
@@ -1550,13 +1535,17 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             localActualParameter.name = lastIdentifier;
             localActualParameter.value = lastIdentifier;
 
+            /* TODO: this was the original code. I changed it for selected_signal_assignment!
             // take the value from the stack so that it is not falsely processed by the
             // expression handler
             stackPop();
             lastFunctionCall.children.add(localActualParameter);
+            */
+
+            ModelNode<?> actualParameterFromStack = stackPop();
+            lastFunctionCall.children.add(actualParameterFromStack);
 
             actualParameter = null;
-
         }
     }
 
@@ -1580,9 +1569,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitProcess_statement(VHDLParser.Process_statementContext ctx) {
-
         astOutputListenerCallback.process(stmt);
-
         stmt = stmt.parent;
     }
 
@@ -1623,11 +1610,11 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         switch (assignmentType) {
 
             case SIGNAL:
-                this.astOutputListenerCallback.signalAssignment(assignmentStmt);
+                astOutputListenerCallback.signalAssignment(assignmentStmt);
                 break;
 
             case VARIABLE:
-                this.astOutputListenerCallback.variableAssignment(assignmentStmt);
+                astOutputListenerCallback.variableAssignment(assignmentStmt);
                 break;
 
             default:
@@ -1642,13 +1629,62 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     }
 
     @Override
+    public void enterSelected_waveforms(VHDLParser.Selected_waveformsContext ctx) {
+    }
+
+    @Override
+    public void exitSelected_waveforms(VHDLParser.Selected_waveformsContext ctx) {
+    }
+
+    @Override
     public void enterSelected_signal_assignment(VHDLParser.Selected_signal_assignmentContext ctx) {
-        throw new RuntimeException();
+
+        // put a special stack marker so that selected_signal_assignment can consume the stack in the exit() call
+        SelectedSignalAssignmentDummyNode selectedSignalAssignmentDummyNode = new SelectedSignalAssignmentDummyNode();
+        stack.push(selectedSignalAssignmentDummyNode);
+
+        SelectedSignalAssignment selectedSignalAssignment = new SelectedSignalAssignment();
+        if (stmt != null) {
+            stmt.children.add(selectedSignalAssignment);
+            selectedSignalAssignment.parent = stmt;
+        }
+
+        // descend
+        stmt = selectedSignalAssignment;
     }
 
     @Override
     public void exitSelected_signal_assignment(VHDLParser.Selected_signal_assignmentContext ctx) {
-        throw new RuntimeException();
+
+        // use the special stack marker so that selected_signal_assignment can consume the stack in the exit() call
+
+        SelectedSignalAssignment selectedSignalAssignment = (SelectedSignalAssignment) stmt;
+
+        int discriminator = 0;
+
+        ModelNode<?> temp = null;
+        while (!((temp = stack.pop()) instanceof SelectedSignalAssignmentDummyNode)) {
+
+            if (temp instanceof DummyNode) {
+                continue;
+            } else if (temp instanceof StringLiteral) {
+                if (discriminator == 0) {
+                    discriminator = 1;
+                    selectedSignalAssignment.lhs = (StringLiteral) temp;
+                } else {
+                    selectedSignalAssignment.discriminator = (StringLiteral) temp;
+                }
+            } else {
+                //System.out.println(temp);
+                selectedSignalAssignment.branches.add((FunctionCall) temp);
+            }
+        }
+
+        // emit the statement
+        astOutputListenerCallback.selectedSignalAssignment(selectedSignalAssignment);
+
+        // ascend
+        stmt = stmt.parent;
     }
 
     private void processExpression() {
@@ -1666,78 +1702,90 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             return;
         }
 
-        boolean done = false;
-        while (!done) {
-
-            // assumption: this contains the right hand side operand of an operator
-            ModelNode<?> rhs = stackPop();
-
-            // if (stack.peek() instanceof DummyNode) {
-            if ((!stack.empty()) && stack.peek() instanceof DummyNode) {
-
-                // remove dummy node
-                stackPop();
-
-                // done = true;
-                stackPush(rhs);
-
-                // continue;
-
-                // abort evaluation
+        FunctionCall functionCall = null;
+        boolean inFunctionCall = false;
+        for (int i = stack.size()-1; i >= 0; i--) {
+            if (stack.elementAt(i) instanceof FunctionCall) {
+                inFunctionCall = true;
+                functionCall = (FunctionCall) stack.elementAt(i);
                 break;
             }
-
-            if (stack.isEmpty()) {
-                stackPush(rhs);
-                break;
-            }
-
-            // assumption: this contains the operator
-            ModelNode<String> operator = (ModelNode<String>) stackPop();
-
-            // assumption: this contains the left hand side operand of an operator
-            ModelNode<?> lhs = stackPop();
-
-            if (lhs instanceof DummyNode) {
-
-                // operator with a single operand (unary operator)
-
-                Expr localExpr = new Expr();
-                stackPush(localExpr);
-
-                localExpr.operator = operator.value;
-
-                // if (operator.value.equalsIgnoreCase("-")) {
-                // //localExpr.value = lhs.value * -1;
-
-                // }
-
-                localExpr.children.add(rhs);
-
-                expr = localExpr;
-
-            } else {
-
-                // operator with two operands (binary operator)
-
-                Expr localExpr = new Expr();
-                stackPush(localExpr);
-
-                localExpr.operator = operator.value;
-
-                lhs.parent = localExpr;
-                rhs.parent = localExpr;
-                localExpr.children.add(lhs);
-                localExpr.children.add(rhs);
-
-                expr = localExpr;
-
-            }
-
         }
 
-        if (expr != null) {
-            astOutputListenerCallback.expression(expr);
+        if (inFunctionCall) {
+
+            //throw new RuntimeException();
+            System.out.println("FunctionCall");
+            // functionCall.children.add(stackPop());
+
+        } else {
+
+            // unary or binary operand case
+
+            boolean done = false;
+            while (!done) {
+
+                // assumption: this contains the right hand side operand of an operator
+                ModelNode<?> rhs = stackPop();
+
+                if ((!stack.empty()) && stack.peek() instanceof DummyNode) {
+
+                    // remove dummy node
+                    stackPop();
+
+                    stackPush(rhs);
+
+                    // abort evaluation
+                    break;
+                }
+
+                if (stack.isEmpty()) {
+                    stackPush(rhs);
+                    break;
+                }
+
+                // assumption: this contains the operator
+                ModelNode<String> operator = (ModelNode<String>) stackPop();
+
+                // assumption: this contains the left hand side operand of an operator
+                ModelNode<?> lhs = stackPop();
+
+                if (lhs instanceof DummyNode) {
+
+                    // operator with a single operand (unary operator)
+
+                    Expr localExpr = new Expr();
+                    stackPush(localExpr);
+
+                    localExpr.operator = operator.value;
+
+                    localExpr.children.add(rhs);
+
+                    expr = localExpr;
+
+                } else {
+
+                    // operator with two operands (binary operator)
+
+                    Expr localExpr = new Expr();
+                    stackPush(localExpr);
+
+                    localExpr.operator = operator.value;
+
+                    lhs.parent = localExpr;
+                    rhs.parent = localExpr;
+                    localExpr.children.add(lhs);
+                    localExpr.children.add(rhs);
+
+                    expr = localExpr;
+
+                }
+
+            }
+
+            if (expr != null) {
+                astOutputListenerCallback.expression(expr);
+            }
         }
     }
 

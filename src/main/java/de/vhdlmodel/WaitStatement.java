@@ -12,12 +12,15 @@ public class WaitStatement extends Stmt {
         }
         stringBuffer.append("wait-stmt\n");
 
-        indent++;
-        stringBuffer.append(numericLiteral.toString(indent));
-        indent--;
+        if (numericLiteral != null) {
+            indent++;
+            stringBuffer.append(numericLiteral.toString(indent));
+            indent--;
+        }
+
+        stringBuffer.append("\n");
 
         return stringBuffer.toString();
-
     }
-    
+
 }

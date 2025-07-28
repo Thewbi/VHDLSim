@@ -14,7 +14,6 @@ begin
         d3 <= '1';
         en <= '0';
         clk <= '0';
-
         wait for 20 ns;
 
         en <= '1';

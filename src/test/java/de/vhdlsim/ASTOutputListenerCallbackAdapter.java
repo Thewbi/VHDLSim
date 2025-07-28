@@ -84,4 +84,8 @@ public class ASTOutputListenerCallbackAdapter implements ASTOutputListenerCallba
     public void componentInstantiationStatement(ComponentInstantiationStatement componentInstantiationStatement) {
     }
 
+    @Override
+    public void selectedSignalAssignment(Stmt stmt) {
+    }
+
 }
