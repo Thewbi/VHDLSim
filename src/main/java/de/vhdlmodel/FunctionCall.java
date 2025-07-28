@@ -16,6 +16,8 @@ public class FunctionCall extends ModelNode<Object> {
             stringBuffer.append(child.toString(indent));
         }
 
+        stringBuffer.append("\n");
+
         return stringBuffer.toString();
     }
 

@@ -47,7 +47,7 @@ public class SelectedSignalAssignment extends Stmt {
             for (int i = 0; i < (indent + 1); i++) {
                 stringBuffer.append("  ");
             }
-            stringBuffer.append("BRANCH ").append(branchIndex + 1).append(": ").append(functionCall.name).append("[").append(functionCall.children.get(0).value).append("] value: ").append(choices.get(branchIndex)).append("\n");
+            stringBuffer.append("BRANCH ").append(branchIndex + 1).append(": ").append(functionCall.name).append("[").append(functionCall.children.get(0).value).append("] when-value: ").append(choices.get(branchIndex)).append("\n");
             branchIndex++;
         }
 

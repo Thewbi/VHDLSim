@@ -1,13 +1,8 @@
 package de.vhdlmodel;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class IfStmtBranch extends Stmt {
 
     public ModelNode<?> exprRoot;
-
-    public List<ModelNode<?>> stmts = new ArrayList<>();
 
     public String toString(int indent) {
 

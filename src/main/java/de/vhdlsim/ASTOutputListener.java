@@ -198,7 +198,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         for (Association_elementContext association_elementContext : association_listContext.association_element()) {
 
             String assoc = association_elementContext.getText();
-            //System.out.println(assoc);
+            // System.out.println(assoc);
 
             // TODO: insert the portmap into the current componentInstantiationStatement
         }
@@ -352,7 +352,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // type usage is when the typeDeclaration field is null!
         if (typeDeclaration == null) {
 
-            //System.out.println(ctx.getText());
+            // System.out.println(ctx.getText());
 
             final String value = ctx.abstract_literal().getText();
             final String unit = ctx.identifier().getText();
@@ -1011,6 +1011,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void enterSimple_expression(VHDLParser.Simple_expressionContext ctx) {
 
+        // DEBUG
         //System.out.println(ctx.getText());
 
         // a dummy node is entered to mark the bottom of the stack where
@@ -1023,7 +1024,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         final String operand = ctx.getChild(0).getText();
         if (operand.equals("-")) {
-            //System.out.println("Minus");
+            // System.out.println("Minus");
 
             Expr operatorModelNode = new Expr();
             operatorModelNode.value = "-";
@@ -1035,6 +1036,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void exitSimple_expression(VHDLParser.Simple_expressionContext ctx) {
 
+        // DEBUG
         System.out.println(ctx.getText());
 
         try {
@@ -1496,13 +1498,15 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     public void enterFunction_call_or_indexed_name_part(VHDLParser.Function_call_or_indexed_name_partContext ctx) {
 
         // Special case: an entity declaration contains the architecture to use inside
-        // brackets that
-        // Look like a function call. The grammar parse tree actually contains a
-        // function call when
-        // an entity is declared! The grammar is not very nice in that regard. It should
-        // not use a
-        // function call where there is none! Therefore, disable the function call
-        // handling when there is
+        // brackets that Look like a function call. 
+        //
+        // The grammar parse tree actually contains a function call when 
+        // an entity is declared! 
+        //
+        // The grammar is not very nice in that regard. It should
+        // not use a function call where there is none! 
+        //
+        // Therefore, disable the function call handling when there is
         // no function call!
         if (componentInstantiationStatement != null) {
             return;
@@ -1518,14 +1522,42 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitFunction_call_or_indexed_name_part(VHDLParser.Function_call_or_indexed_name_partContext ctx) {
+        
+        if (lastFunctionCall == null) {
+            throw new RuntimeException("no lastFunctionCall!");
+        }
+
+        while (true) {
+
+            ModelNode<?> modelNode = stackPeek();
+
+            if (modelNode == lastFunctionCall) {
+                break;
+            }
+
+            modelNode = stackPop();
+
+            FunctionCallActualParameter localActualParameter = new FunctionCallActualParameter();
+            localActualParameter.name = lastIdentifier;
+            localActualParameter.value = lastIdentifier;
+
+            ModelNode<?> actualParameterFromStack = modelNode;
+            lastFunctionCall.children.add(actualParameterFromStack);
+
+            actualParameter = null;
+        }
+        
         lastFunctionCall = null;
         functionCall = true;
     }
 
     @Override
     public void exitActual_part(VHDLParser.Actual_partContext ctx) {
-        // System.out.println("Actual Parameter: \"" + ctx + "\"");
+        System.out.println("Actual Parameter: \"" + ctx + "\"");
 
+        /*
+        // check simple_expression.vhd. Here, the actual_part is not part of a function
+        // call but part of a actual_parameter_part
         if (lastFunctionCall != null) {
 
             // this code was tested with and written for a function call with several actual
@@ -1535,18 +1567,14 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             localActualParameter.name = lastIdentifier;
             localActualParameter.value = lastIdentifier;
 
-            /* TODO: this was the original code. I changed it for selected_signal_assignment!
-            // take the value from the stack so that it is not falsely processed by the
-            // expression handler
-            stackPop();
-            lastFunctionCall.children.add(localActualParameter);
-            */
+            
 
             ModelNode<?> actualParameterFromStack = stackPop();
             lastFunctionCall.children.add(actualParameterFromStack);
 
             actualParameter = null;
         }
+         */
     }
 
     @Override
@@ -1603,6 +1631,12 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         AssignmentStmt assignmentStmt = new AssignmentStmt();
         assignmentStmt.assignmentType = assignmentType;
 
+        // cheap fix inserted for parsing concurrent signal assignment statements
+        // see multiplexer.vhd
+        if (stack.isEmpty()) {
+            return;
+        }
+
         ModelNode<?> rhs = stackPop();
         assignmentStmt.lhs = stackPop();
         assignmentStmt.rhs = rhs;
@@ -1629,6 +1663,15 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     }
 
     @Override
+    public void enterAssociation_element(VHDLParser.Association_elementContext ctx) {
+    }
+
+    @Override
+    public void exitAssociation_element(VHDLParser.Association_elementContext ctx) {
+        System.out.println("");
+    }
+
+    @Override
     public void enterSelected_waveforms(VHDLParser.Selected_waveformsContext ctx) {
     }
 
@@ -1639,7 +1682,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void enterSelected_signal_assignment(VHDLParser.Selected_signal_assignmentContext ctx) {
 
-        // put a special stack marker so that selected_signal_assignment can consume the stack in the exit() call
+        // put a special stack marker so that selected_signal_assignment can consume the
+        // stack in the exit() call
         SelectedSignalAssignmentDummyNode selectedSignalAssignmentDummyNode = new SelectedSignalAssignmentDummyNode();
         stack.push(selectedSignalAssignmentDummyNode);
 
@@ -1656,7 +1700,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void exitSelected_signal_assignment(VHDLParser.Selected_signal_assignmentContext ctx) {
 
-        // use the special stack marker so that selected_signal_assignment can consume the stack in the exit() call
+        // use the special stack marker so that selected_signal_assignment can consume
+        // the stack in the exit() call
 
         SelectedSignalAssignment selectedSignalAssignment = (SelectedSignalAssignment) stmt;
 
@@ -1675,7 +1720,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
                     selectedSignalAssignment.discriminator = (StringLiteral) temp;
                 }
             } else {
-                //System.out.println(temp);
+                // System.out.println(temp);
                 selectedSignalAssignment.branches.add((FunctionCall) temp);
             }
         }
@@ -1702,21 +1747,20 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             return;
         }
 
-        FunctionCall functionCall = null;
+        // // what is this here for? Which file requires this?
+        //FunctionCall functionCall = null;
         boolean inFunctionCall = false;
-        for (int i = stack.size()-1; i >= 0; i--) {
-            if (stack.elementAt(i) instanceof FunctionCall) {
-                inFunctionCall = true;
-                functionCall = (FunctionCall) stack.elementAt(i);
-                break;
-            }
-        }
+        // for (int i = stack.size() - 1; i >= 0; i--) {
+        //     if (stack.elementAt(i) instanceof FunctionCall) {
+        //         inFunctionCall = true;
+        //         functionCall = (FunctionCall) stack.elementAt(i);
+        //         break;
+        //     }
+        // }
 
         if (inFunctionCall) {
 
-            //throw new RuntimeException();
-            System.out.println("FunctionCall");
-            // functionCall.children.add(stackPop());
+            // System.out.println("FunctionCall");
 
         } else {
 
@@ -1841,21 +1885,29 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     private ModelNode<?> stackPop() {
         // System.out.println("Pop");
 
-        if (stack.empty()) {
-            System.out.println("Stack Is Empty");
-        }
+        // // DEBUG
+        // if (stack.empty()) {
+        // System.out.println("Stack Is Empty");
+        // }
 
         try {
 
             ModelNode<?> modelNode = stack.pop();
             outputStack();
+
             return modelNode;
+
         } catch (java.util.EmptyStackException e) {
 
             // DEBUG allow the developer to set a breakpoint
             e.printStackTrace();
             throw e;
+
         }
+    }
+
+    private ModelNode<?> stackPeek() {
+        return stack.peek();
     }
 
     private void outputStack() {

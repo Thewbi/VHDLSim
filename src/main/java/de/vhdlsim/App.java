@@ -84,11 +84,11 @@ public class App {
         // convertToAST,
         // "src\\test\\resources\\vhdl_samples\\expression.vhd");
 
-        // // TODO
-        // // Unit Test: TODO
-        // testSimpleExpression(astOutputListener, print,
-        //         convertToAST,
-        //         "src\\test\\resources\\vhdl_samples\\simple_expression.vhd");
+        // TODO Conflicts / problems with actual_parameters in function calls!!!!
+        // Unit Test: TODO
+        testSimpleExpression(astOutputListener, print,
+                convertToAST,
+                "src\\test\\resources\\vhdl_samples\\simple_expression.vhd");
 
         // testSignalDeclaration(astOutputListener, print,
         // convertToAST,
@@ -96,8 +96,6 @@ public class App {
 
         // testAssignment(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\signal_assignment.vhd");
-
-
 
         // testAssignment(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\signal_assignment_logical.vhd");
@@ -114,77 +112,79 @@ public class App {
         // testIf4(astOutputListener, print, convertToAST,
         // "src\\test\\resources\\vhdl_samples\\if_with_function_predicate.vhd");
 
+        // testFunctionCall(astOutputListener, print, convertToAST,
+        // "src\\test\\resources\\vhdl_samples\\function_call.vhd");
+
         // testIf5(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\if_with_expression.vhd");
+        // "src\test\resources\vhdl_samples\if_with_expression.vhd");
 
         // testCase(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\case.vhd");
+        // "src\test\resources\vhdl_samples\case.vhd");
 
         // testProcess(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\process.vhd");
+        // "src\test\resources\vhdl_samples\process.vhd");
 
         // // entity and architecture
         // // https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
         // testEntity(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\entity.vhd");
+        // "src\test\resources\vhdl_samples\entity.vhd");
 
         // testEntityInstantiation(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\entity_instantiation.vhd");
+        // "src\test\resources\vhdl_samples\entity_instantiation.vhd");
 
         // testPortMap(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\port_map.vhd");
+        // "src\test\resources\vhdl_samples\port_map.vhd");
 
         // testInstantiatedUnit(astOutputListener, print, convertToAST,
-        //     "src\\test\\resources\\vhdl_samples\\instantiated_unit.vhd");
+        //     "src\test\resources\vhdl_samples\instantiated_unit.vhd");
 
         // testArchitecture(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\architecture.vhd");
+        // "src\test\resources\vhdl_samples\architecture.vhd");
 
         // // TODO: implement port map
         // testArchitecture(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\architecture_with_signal.vhd");
+        // "src\test\resources\vhdl_samples\architecture_with_signal.vhd");
 
         // testArchitecture(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\architecture_with_process_with_if.vhd");
+        // "src\test\resources\vhdl_samples\architecture_with_process_with_if.vhd");
 
 
 
         // testComponent(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\component.vhd");
+        // "src\test\resources\vhdl_samples\component.vhd");
 
         // testRecord(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\record.vhd");
+        // "src\test\resources\vhdl_samples\record.vhd");
 
         // testFunctionSpecification(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\function_specification.vhd");
+        // "src\test\resources\vhdl_samples\function_specification.vhd");
 
         // TODO unit test
         // testFunctionImplementation(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\function_implementation.vhd");
+        // "src\test\resources\vhdl_samples\function_implementation.vhd");
 
         // // and-gate
         // //https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
         // testEntityAndArchitecture(astOutputListener, print,
         // convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\and_gate.vhd");
+        // "src\test\resources\vhdl_samples\and_gate.vhd");
 
-        //TODO: when statements werden nicht richtig geparst!
-        testEntityAndArchitecture(astOutputListener, print, convertToAST,
-        "src\\test\\resources\\vhdl_samples\\multiplexer.vhd");
+        // testEntityAndArchitecture(astOutputListener, print, convertToAST,
+        // "src\test\resources\vhdl_samples\multiplexer.vhd");
 
         // testEntityAndArchitecture(astOutputListener, print,
         // convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\thermostat_example.vhd");
+        // "src\test\resources\vhdl_samples\thermostat_example.vhd");
 
         // testEnum(astOutputListener, print,
         // convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\enum.vhd");
+        // "src\test\resources\vhdl_samples\enum.vhd");
 
         // testConfiguration(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\configuration.vhd");
+        // "src\test\resources\vhdl_samples\configuration.vhd");
 
         // testWaitStatement(astOutputListener, print, convertToAST,
-        // "src\\test\\resources\\vhdl_samples\\wait_for_time_unit_statement.vhd");
+        // "src\test\resources\vhdl_samples\wait_for_time_unit_statement.vhd");
 
 
 
@@ -197,6 +197,14 @@ public class App {
         }
 
         // https://www.mikrocontroller.net/articles/VHDL_Testbench
+    }
+
+    private static ASTOutputListener testFunctionCall(ASTOutputListener astOutputListener, boolean print, boolean convertToAST,
+            String testFile) throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Simple_expressionContext root = parser.simple_expression();
+
+        return traverseTree(astOutputListener, root, print, convertToAST, testFile);
     }
 
     private static ASTOutputListener testConfiguration(final ASTOutputListener astOutputListener,

@@ -37,6 +37,8 @@ public class AssignmentStmt extends Stmt {
         stringBuffer.append(rhs.toString(indent));
         indent--;
 
+        stringBuffer.append("\n");
+
         return stringBuffer.toString();
     }
 
