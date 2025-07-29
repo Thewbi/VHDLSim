@@ -6,11 +6,11 @@ import de.vhdlmodel.Component;
 import de.vhdlmodel.ComponentInstantiationStatement;
 import de.vhdlmodel.Configuration;
 import de.vhdlmodel.Entity;
+import de.vhdlmodel.FunctionCall;
 import de.vhdlmodel.FunctionImplementation;
 import de.vhdlmodel.FunctionSpecification;
 import de.vhdlmodel.ModelNode;
 import de.vhdlmodel.Record;
-import de.vhdlmodel.SelectedSignalAssignment;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
 import de.vhdlmodel.TypeDeclaration;
@@ -37,9 +37,11 @@ public interface ASTOutputListenerCallback {
 
     void functionSpecification(FunctionSpecification functionSpecification);
 
-    void variableAssignment(AssignmentStmt assignmentStmt);
-
     void functionImplementation(FunctionImplementation functionImplementation);
+    
+    void functionCall(FunctionCall lastFunctionCall);
+
+    void variableAssignment(AssignmentStmt assignmentStmt);
 
     void expression(ModelNode<?> expr);
 

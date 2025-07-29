@@ -1,0 +1,1 @@
+range 0 to CounterVal(Minutes => 1)

@@ -32,6 +32,7 @@ import de.vhdlmodel.ActualParameter;
 import de.vhdlmodel.Architecture;
 import de.vhdlmodel.AssignmentStmt;
 import de.vhdlmodel.AssignmentType;
+import de.vhdlmodel.AssociationElement;
 import de.vhdlmodel.CaseStmt;
 import de.vhdlmodel.CaseStmtBranch;
 import de.vhdlmodel.CharacterLiteral;
@@ -140,7 +141,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitWait_statement(VHDLParser.Wait_statementContext ctx) {
-        // System.out.println("a");
+        //System.out.println(ctx.getText());
 
         WaitStatement waitStatement = new WaitStatement();
 
@@ -150,7 +151,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         }
 
         stmt.children.add(waitStatement);
-
     }
 
     @Override
@@ -702,40 +702,53 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         modelNode = stackPop();
         if (modelNode.children.size() > 0) {
 
-            if (modelNode.operator.equals("-")) {
+            if ((modelNode.operator != null) && (modelNode.operator.equals("-"))) {
 
                 Object obj = modelNode.children.get(0).value;
                 Integer val = (Integer) obj;
 
-                // range.start = new ModelNode<Integer>();
-                // ((ModelNode<Integer>) range.start).value = val.intValue() * -1;
-
                 NumericLiteral numericLiteral = new NumericLiteral();
                 numericLiteral.value = val.intValue() * -1;
                 range.end = numericLiteral;
+
+            } else {
+
+                range.end = modelNode;
+
             }
+
         } else {
+
             range.end = modelNode;
+
         }
 
         modelNode = stackPop();
         if (modelNode.children.size() > 0) {
 
-            if (modelNode.operator.equals("-")) {
+            if ((modelNode.operator != null) && modelNode.operator.equals("-")) {
 
                 Object obj = modelNode.children.get(0).value;
                 Integer val = (Integer) obj;
 
-                // range.start = new ModelNode<Integer>();
-                // ((ModelNode<Integer>) range.start).value = val.intValue() * -1;
-
                 NumericLiteral numericLiteral = new NumericLiteral();
                 numericLiteral.value = val.intValue() * -1;
                 range.start = numericLiteral;
+
+            } else {
+
+                range.end = modelNode;
+                
             }
+
         } else {
+
             range.start = modelNode;
+
         }
+
+        // DEBUG
+        System.out.println("Range: " + range.toString(0));
     }
 
     @Override
@@ -859,6 +872,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterEntity_declaration(VHDLParser.Entity_declarationContext ctx) {
+
         entity = new Entity();
         if (stmt != null) {
             stmt.children.add(entity);
@@ -882,6 +896,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterComponent_declaration(VHDLParser.Component_declarationContext ctx) {
+        
         component = new Component();
         if (stmt != null) {
             stmt.children.add(component);
@@ -895,6 +910,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitComponent_declaration(VHDLParser.Component_declarationContext ctx) {
+
         stmt = component.parent;
 
         astOutputListenerCallback.component(component);
@@ -1037,7 +1053,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     public void exitSimple_expression(VHDLParser.Simple_expressionContext ctx) {
 
         // DEBUG
-        System.out.println(ctx.getText());
+        // System.out.println(ctx.getText());
 
         try {
             processExpression();
@@ -1546,6 +1562,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
             actualParameter = null;
         }
+
+        astOutputListenerCallback.functionCall(lastFunctionCall);
         
         lastFunctionCall = null;
         functionCall = true;
@@ -1553,7 +1571,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitActual_part(VHDLParser.Actual_partContext ctx) {
-        System.out.println("Actual Parameter: \"" + ctx + "\"");
+        // System.out.println("Actual Parameter: \"" + ctx + "\"");
 
         /*
         // check simple_expression.vhd. Here, the actual_part is not part of a function
@@ -1668,7 +1686,15 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitAssociation_element(VHDLParser.Association_elementContext ctx) {
-        System.out.println("");
+
+        // System.out.println(ctx.getText());
+
+        AssociationElement associationElement = new AssociationElement();
+        associationElement.value = lastIdentifier;
+        associationElement.name = lastIdentifier;
+        associationElement.expr = stackPop();
+
+        stackPush(associationElement);
     }
 
     @Override

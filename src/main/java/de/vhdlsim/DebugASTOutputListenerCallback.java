@@ -9,6 +9,7 @@ import de.vhdlmodel.Component;
 import de.vhdlmodel.ComponentInstantiationStatement;
 import de.vhdlmodel.Configuration;
 import de.vhdlmodel.Entity;
+import de.vhdlmodel.FunctionCall;
 import de.vhdlmodel.FunctionImplementation;
 import de.vhdlmodel.FunctionSpecification;
 import de.vhdlmodel.ModelNode;
@@ -109,6 +110,13 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     public void functionImplementation(FunctionImplementation functionImplementation) {
         if (PERFORM_DEBUG_OUTPUT) {
             System.out.println(functionImplementation.toString(INDENT));
+        }
+    }
+
+    @Override
+    public void functionCall(FunctionCall lastFunctionCall) {
+        if (PERFORM_DEBUG_OUTPUT) {
+            System.out.println(lastFunctionCall.toString(INDENT));
         }
     }
 

@@ -6,6 +6,7 @@ import de.vhdlmodel.Component;
 import de.vhdlmodel.ComponentInstantiationStatement;
 import de.vhdlmodel.Configuration;
 import de.vhdlmodel.Entity;
+import de.vhdlmodel.FunctionCall;
 import de.vhdlmodel.FunctionImplementation;
 import de.vhdlmodel.FunctionSpecification;
 import de.vhdlmodel.ModelNode;
@@ -57,11 +58,15 @@ public class ASTOutputListenerCallbackAdapter implements ASTOutputListenerCallba
     }
 
     @Override
-    public void variableAssignment(AssignmentStmt assignmentStmt) {
+    public void functionImplementation(FunctionImplementation functionImplementation) {
     }
 
     @Override
-    public void functionImplementation(FunctionImplementation functionImplementation) {
+    public void functionCall(FunctionCall lastFunctionCall) {
+    }
+
+     @Override
+    public void variableAssignment(AssignmentStmt assignmentStmt) {
     }
 
     @Override
