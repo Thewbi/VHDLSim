@@ -1,6 +1,5 @@
 package de.vhdlsim;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import de.vhdlmodel.Architecture;
@@ -15,10 +14,10 @@ import de.vhdlmodel.FunctionSpecification;
 import de.vhdlmodel.ModelNode;
 import de.vhdlmodel.PhysicalUnit;
 import de.vhdlmodel.Record;
-import de.vhdlmodel.SelectedSignalAssignment;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
 import de.vhdlmodel.TypeDeclaration;
+import de.vhdlmodel.WaveFormElement;
 
 public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback {
 
@@ -171,6 +170,13 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     public void selectedSignalAssignment(Stmt stmt) {
         if (PERFORM_DEBUG_OUTPUT) {
             System.out.println(stmt.toString(INDENT));
+        }
+    }
+
+    @Override
+    public void waveFormElement(WaveFormElement waveFormElement) {
+        if (PERFORM_DEBUG_OUTPUT) {
+            System.out.println(waveFormElement.toString(INDENT));
         }
     }
 

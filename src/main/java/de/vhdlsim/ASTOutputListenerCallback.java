@@ -14,6 +14,7 @@ import de.vhdlmodel.Record;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
 import de.vhdlmodel.TypeDeclaration;
+import de.vhdlmodel.WaveFormElement;
 
 public interface ASTOutputListenerCallback {
 
@@ -54,5 +55,7 @@ public interface ASTOutputListenerCallback {
     void componentInstantiationStatement(ComponentInstantiationStatement componentInstantiationStatement);
 
     void selectedSignalAssignment(Stmt stmt);
+
+    void waveFormElement(WaveFormElement waveFormElement);
 
 }

@@ -39,6 +39,7 @@ import de.vhdl.grammar.VHDLParser.Subprogram_declarative_itemContext;
 import de.vhdl.grammar.VHDLParser.Type_declarationContext;
 import de.vhdl.grammar.VHDLParser.Type_definitionContext;
 import de.vhdl.grammar.VHDLParser.Wait_statementContext;
+import de.vhdl.grammar.VHDLParser.Waveform_elementContext;
 import de.vhdlmodel.PhysicalUnit;
 
 /**
@@ -51,7 +52,7 @@ import de.vhdlmodel.PhysicalUnit;
  */
 public class App {
 
-    final static String PATH = "src\\test\\resources\\vhdl_samples\\";
+    final static String PATH = "src/test/resources/vhdl_samples/";
 
     public static void main(String[] args) throws IOException {
 
@@ -76,8 +77,8 @@ public class App {
 
         // // TODO: finish the entity Declaration statement and port map processing here
         //testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture_testbench.vhd");
-        testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture_example_1.vhd");
-        //testPhysicalUnits(astOutputListener, print, convertToAST, PATH + "physical_units.vhd");
+        //testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture_example_1.vhd");
+    //    testPhysicalUnits(astOutputListener, print, convertToAST, PATH + "physical_units.vhd");
         //testExpression(astOutputListener, print, convertToAST, PATH + "expression.vhd");
         //testSimpleExpression(astOutputListener, print, convertToAST, PATH + "simple_expression.vhd");
         //testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration.vhd");
@@ -92,7 +93,11 @@ public class App {
         //testIf5(astOutputListener, print, convertToAST, PATH + "if_with_expression.vhd");
         //testCase(astOutputListener, print, convertToAST, PATH + "case.vhd");
         //testProcess(astOutputListener, print, convertToAST, PATH + "process.vhd");
-        testProcess(astOutputListener, print, convertToAST, PATH + "process_2.vhd");
+
+        // TODO continue here! once waveform element can be parsed
+        //testProcess(astOutputListener, print, convertToAST, PATH + "process_2.vhd");
+        
+        testWaveformElement(astOutputListener, print, convertToAST, PATH + "waveform_element.vhd");
         // // entity and architecture
         // //
         // https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
@@ -128,6 +133,15 @@ public class App {
         }
 
         // https://www.mikrocontroller.net/articles/VHDL_Testbench
+    }
+
+    private static ASTOutputListener testWaveformElement(ASTOutputListener astOutputListener, boolean print,
+            boolean convertToAST,
+            String testFile) throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Waveform_elementContext root = parser.waveform_element();
+
+        return traverseTree(astOutputListener, root, print, convertToAST, testFile);
     }
 
     private static ASTOutputListener testFunctionCall(ASTOutputListener astOutputListener, boolean print,

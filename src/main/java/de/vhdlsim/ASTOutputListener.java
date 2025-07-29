@@ -1,11 +1,7 @@
 package de.vhdlsim;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-
-import javax.management.RuntimeErrorException;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -13,11 +9,8 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import de.vhdl.grammar.VHDLLexer;
 import de.vhdl.grammar.VHDLParser;
 import de.vhdl.grammar.VHDLParser.Abstract_literalContext;
-import de.vhdl.grammar.VHDLParser.Association_elementContext;
-import de.vhdl.grammar.VHDLParser.Association_listContext;
 import de.vhdl.grammar.VHDLParser.DirectionContext;
 import de.vhdl.grammar.VHDLParser.Enumeration_literalContext;
-import de.vhdl.grammar.VHDLParser.ExpressionContext;
 import de.vhdl.grammar.VHDLParser.IdentifierContext;
 import de.vhdl.grammar.VHDLParser.Identifier_listContext;
 import de.vhdl.grammar.VHDLParser.Instantiated_unitContext;
@@ -66,6 +59,7 @@ import de.vhdlmodel.TypeDeclaration;
 import de.vhdlmodel.TypeDeclarationType;
 import de.vhdlmodel.Variable;
 import de.vhdlmodel.WaitStatement;
+import de.vhdlmodel.WaveFormElement;
 import de.vhdlmodel.Process;
 import de.vhdlmodel.Range;
 import de.vhdlmodel.RangeDirection;
@@ -141,7 +135,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitWait_statement(VHDLParser.Wait_statementContext ctx) {
-        //System.out.println(ctx.getText());
+        // System.out.println(ctx.getText());
 
         WaitStatement waitStatement = new WaitStatement();
 
@@ -153,6 +147,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         stmt.children.add(waitStatement);
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void enterComponent_instantiation_statement(VHDLParser.Component_instantiation_statementContext ctx) {
 
@@ -163,12 +158,10 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         Instantiated_unitContext instantiated_unitContext = ctx.instantiated_unit();
         NameContext nameContext = instantiated_unitContext.name();
+
         String name = nameContext.getText();
-
         String library = nameContext.getChild(0).getText();
-
         String entityType = nameContext.getChild(1).getText();
-
         String entityArchitecture = nameContext.getChild(2).getText();
 
         // TODO: insert component instantiation statement into the parent architecture
@@ -191,17 +184,18 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void enterPort_map_aspect(VHDLParser.Port_map_aspectContext ctx) {
 
-        String portmap = ctx.getText();
+        // String portmap = ctx.getText();
 
-        Association_listContext association_listContext = ctx.association_list();
+        // Association_listContext association_listContext = ctx.association_list();
 
-        for (Association_elementContext association_elementContext : association_listContext.association_element()) {
+        // for (Association_elementContext association_elementContext :
+        // association_listContext.association_element()) {
 
-            String assoc = association_elementContext.getText();
-            // System.out.println(assoc);
+        // String assoc = association_elementContext.getText();
+        // // System.out.println(assoc);
 
-            // TODO: insert the portmap into the current componentInstantiationStatement
-        }
+        // // TODO: insert the portmap into the current componentInstantiationStatement
+        // }
     }
 
     @Override
@@ -346,19 +340,21 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void enterPhysical_literal(VHDLParser.Physical_literalContext ctx) {
 
+        // System.out.println(ctx.getText());
+
+        final String value = ctx.abstract_literal().getText();
+        final String unit = ctx.identifier().getText();
+
+        setPhysicalUnitValue(new NumericLiteral());
+
+        physicalUnitValue.value = Integer.parseInt(value);
+        physicalUnitValue.unit = unit;
+
         // disinguish between type declaration and type usage.
         // type declaration is when there currently is a non-null typeDeclaration in
-        // place
-        // type usage is when the typeDeclaration field is null!
-        if (typeDeclaration == null) {
-
-            // System.out.println(ctx.getText());
-
-            final String value = ctx.abstract_literal().getText();
-            final String unit = ctx.identifier().getText();
-
-            physicalUnitValue = new NumericLiteral();
-            physicalUnitValue.value = Integer.parseInt(value);
+        // place. type usage is when the typeDeclaration field is null!
+        boolean isTypeUsage = typeDeclaration == null;
+        if (isTypeUsage) {
 
             // resolve the unit in string form into a physical unit type
             for (Map.Entry<String, PhysicalUnit> entry : units.entrySet()) {
@@ -366,6 +362,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
                 PhysicalUnit physicalUnit = entry.getValue();
 
                 if (physicalUnit.subPhysicalUnits.containsKey(unit)) {
+
                     physicalUnitValue.physicalUnit = physicalUnit;
                     break;
                 }
@@ -738,7 +735,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             } else {
 
                 range.end = modelNode;
-                
+
             }
 
         } else {
@@ -823,30 +820,31 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         // System.out.println(ctx.getText());
 
-        ParseTree child1 = ctx.getChild(0); // ARCHITECTURE (TOKEN)
+        // ParseTree child1 = ctx.getChild(0); // ARCHITECTURE (TOKEN)
         ParseTree child2 = ctx.getChild(1); // architecture identifier
         architectureName = child2.getText();
 
-        ParseTree child3 = ctx.getChild(2); // OF (TOKEN)
+        // ParseTree child3 = ctx.getChild(2); // OF (TOKEN)
         ParseTree child4 = ctx.getChild(3); // entitiy identifier
         entityName = child4.getText();
 
-        ParseTree child5 = ctx.getChild(4); // IS (TOKEN)
+        // ParseTree child5 = ctx.getChild(4); // IS (TOKEN)
 
-        ParseTree child6 = ctx.getChild(5); // architecture_declarative_part
+        // ParseTree child6 = ctx.getChild(5); // architecture_declarative_part
         // System.out.println(child6.getText());
 
-        ParseTree child7 = ctx.getChild(6); // BEGIN (TOKEN)
+        // ParseTree child7 = ctx.getChild(6); // BEGIN (TOKEN)
         // System.out.println(child7.getText());
 
-        ParseTree child8 = ctx.getChild(7); // inner source code inside the architecture
+        // ParseTree child8 = ctx.getChild(7); // inner source code inside the
+        // architecture
         // System.out.println(child8.getText());
 
-        ParseTree child9 = ctx.getChild(8); // END (TOKEN)
+        // ParseTree child9 = ctx.getChild(8); // END (TOKEN)
         // System.out.println(child9.getText());
-        ParseTree child10 = ctx.getChild(9); // architecture identifier (see child 2)
+        // ParseTree child10 = ctx.getChild(9); // architecture identifier (see child 2)
         // System.out.println(child10.getText());
-        ParseTree child11 = ctx.getChild(10); // semicolon (TOKEN)
+        // ParseTree child11 = ctx.getChild(10); // semicolon (TOKEN)
         // System.out.println(child11.getText());
 
         architecture = new Architecture();
@@ -896,7 +894,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterComponent_declaration(VHDLParser.Component_declarationContext ctx) {
-        
+
         component = new Component();
         if (stmt != null) {
             stmt.children.add(component);
@@ -1028,7 +1026,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     public void enterSimple_expression(VHDLParser.Simple_expressionContext ctx) {
 
         // DEBUG
-        //System.out.println(ctx.getText());
+        // System.out.println(ctx.getText());
 
         // a dummy node is entered to mark the bottom of the stack where
         // the current expression stops. Without marking the end of the expression stack
@@ -1144,7 +1142,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         } else {
 
             ModelNode<?> rhs = stackPop();
-            ModelNode<String> operator = (ModelNode<String>) stackPop();
+            // ModelNode<String> operator = (ModelNode<String>) stackPop();
+            ModelNode<?> operator = stackPop();
             ModelNode<?> lhs = stackPop();
 
             Relation localExpr = new Relation();
@@ -1260,16 +1259,12 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
                 NumericLiteral numericLiteral = new NumericLiteral();
 
-                // if (containsUnit(valueAsString)) {
                 if (physicalUnitValue != null) {
-
-                    // throw new RuntimeException("Look for the unit in the 'units' property. If it
-                    // does not exist throw exception, else insert it into the NumericLiteral");
 
                     numericLiteral.physicalUnit = physicalUnitValue.physicalUnit;
                     numericLiteral.value = physicalUnitValue.value;
 
-                    physicalUnitValue = null;
+                    setPhysicalUnitValue(null);
 
                 } else {
 
@@ -1290,24 +1285,24 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         }
     }
 
-    private boolean containsUnit(final String unit) {
+    // private boolean containsUnit(final String unit) {
 
-        if (units.isEmpty()) {
-            return false;
-        }
+    // if (units.isEmpty()) {
+    // return false;
+    // }
 
-        for (Map.Entry<String, PhysicalUnit> physicalUnitEntry : units.entrySet()) {
+    // for (Map.Entry<String, PhysicalUnit> physicalUnitEntry : units.entrySet()) {
 
-            final String physicalUnitName = physicalUnitEntry.getKey();
-            final PhysicalUnit physicalUnit = physicalUnitEntry.getValue();
+    // final String physicalUnitName = physicalUnitEntry.getKey();
+    // final PhysicalUnit physicalUnit = physicalUnitEntry.getValue();
 
-            if (physicalUnit.subPhysicalUnits.containsKey(unit)) {
-                return true;
-            }
-        }
+    // if (physicalUnit.subPhysicalUnits.containsKey(unit)) {
+    // return true;
+    // }
+    // }
 
-        return false;
-    }
+    // return false;
+    // }
 
     @Override
     public void exitTarget(VHDLParser.TargetContext ctx) {
@@ -1514,13 +1509,13 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     public void enterFunction_call_or_indexed_name_part(VHDLParser.Function_call_or_indexed_name_partContext ctx) {
 
         // Special case: an entity declaration contains the architecture to use inside
-        // brackets that Look like a function call. 
+        // brackets that Look like a function call.
         //
-        // The grammar parse tree actually contains a function call when 
-        // an entity is declared! 
+        // The grammar parse tree actually contains a function call when
+        // an entity is declared!
         //
         // The grammar is not very nice in that regard. It should
-        // not use a function call where there is none! 
+        // not use a function call where there is none!
         //
         // Therefore, disable the function call handling when there is
         // no function call!
@@ -1538,7 +1533,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitFunction_call_or_indexed_name_part(VHDLParser.Function_call_or_indexed_name_partContext ctx) {
-        
+
         if (lastFunctionCall == null) {
             throw new RuntimeException("no lastFunctionCall!");
         }
@@ -1564,7 +1559,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         }
 
         astOutputListenerCallback.functionCall(lastFunctionCall);
-        
+
         lastFunctionCall = null;
         functionCall = true;
     }
@@ -1574,24 +1569,27 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // System.out.println("Actual Parameter: \"" + ctx + "\"");
 
         /*
-        // check simple_expression.vhd. Here, the actual_part is not part of a function
-        // call but part of a actual_parameter_part
-        if (lastFunctionCall != null) {
-
-            // this code was tested with and written for a function call with several actual
-            // parameters
-
-            FunctionCallActualParameter localActualParameter = new FunctionCallActualParameter();
-            localActualParameter.name = lastIdentifier;
-            localActualParameter.value = lastIdentifier;
-
-            
-
-            ModelNode<?> actualParameterFromStack = stackPop();
-            lastFunctionCall.children.add(actualParameterFromStack);
-
-            actualParameter = null;
-        }
+         * // check simple_expression.vhd. Here, the actual_part is not part of a
+         * function
+         * // call but part of a actual_parameter_part
+         * if (lastFunctionCall != null) {
+         * 
+         * // this code was tested with and written for a function call with several
+         * actual
+         * // parameters
+         * 
+         * FunctionCallActualParameter localActualParameter = new
+         * FunctionCallActualParameter();
+         * localActualParameter.name = lastIdentifier;
+         * localActualParameter.value = lastIdentifier;
+         * 
+         * 
+         * 
+         * ModelNode<?> actualParameterFromStack = stackPop();
+         * lastFunctionCall.children.add(actualParameterFromStack);
+         * 
+         * actualParameter = null;
+         * }
          */
     }
 
@@ -1758,6 +1756,40 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         stmt = stmt.parent;
     }
 
+    @Override
+    public void enterWaveform_element(VHDLParser.Waveform_elementContext ctx) {
+    }
+
+    @Override
+    public void exitWaveform_element(VHDLParser.Waveform_elementContext ctx) {
+
+        System.out.println(ctx.getText());
+
+        String value = ctx.getChild(0).getText();
+        System.out.println("Value: " + value);
+
+        String separator = ctx.getChild(1).getText(); // I think there is no option other than 'AFTER'
+        System.out.println("Separator: " + separator);
+
+        String expression = ctx.getChild(2).getText();
+        System.out.println("Expression: " + expression);
+
+        ModelNode<?> timeNumericValue = stackPop();
+        System.out.println("TimeNumericValue: " + timeNumericValue.value);
+
+        String timeNumericUnit = lastIdentifier;
+        System.out.println("TimeNumericUnit: " + timeNumericUnit);
+
+        System.out.println("PhysicalUnitValue - Value: " + physicalUnitValue.value + " Unit: " + physicalUnitValue.unit);
+    
+        WaveFormElement waveFormElement = new WaveFormElement();
+        waveFormElement.value = value;
+        waveFormElement.separator = separator;
+        waveFormElement.numericLiteral = physicalUnitValue;
+
+        astOutputListenerCallback.waveFormElement(waveFormElement);
+    }
+
     private void processExpression() {
 
         // erase all dummy nodes that are not located below a real value
@@ -1774,14 +1806,14 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         }
 
         // // what is this here for? Which file requires this?
-        //FunctionCall functionCall = null;
+        // FunctionCall functionCall = null;
         boolean inFunctionCall = false;
         // for (int i = stack.size() - 1; i >= 0; i--) {
-        //     if (stack.elementAt(i) instanceof FunctionCall) {
-        //         inFunctionCall = true;
-        //         functionCall = (FunctionCall) stack.elementAt(i);
-        //         break;
-        //     }
+        // if (stack.elementAt(i) instanceof FunctionCall) {
+        // inFunctionCall = true;
+        // functionCall = (FunctionCall) stack.elementAt(i);
+        // break;
+        // }
         // }
 
         if (inFunctionCall) {
@@ -1815,7 +1847,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
                 }
 
                 // assumption: this contains the operator
-                ModelNode<String> operator = (ModelNode<String>) stackPop();
+                // ModelNode<String> operator = (ModelNode<String>) stackPop();
+                ModelNode<?> operator = stackPop();
 
                 // assumption: this contains the left hand side operand of an operator
                 ModelNode<?> lhs = stackPop();
@@ -1827,7 +1860,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
                     Expr localExpr = new Expr();
                     stackPush(localExpr);
 
-                    localExpr.operator = operator.value;
+                    localExpr.operator = (String) operator.value;
 
                     localExpr.children.add(rhs);
 
@@ -1840,7 +1873,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
                     Expr localExpr = new Expr();
                     stackPush(localExpr);
 
-                    localExpr.operator = operator.value;
+                    localExpr.operator = (String) operator.value;
 
                     lhs.parent = localExpr;
                     rhs.parent = localExpr;
@@ -1878,7 +1911,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
                 stmt = ifStmtBranch;
 
-                ifStmtBranch.exprRoot = new ModelNode("exprRoot");
+                ifStmtBranch.exprRoot = new ModelNode<String>("exprRoot");
                 expr = ifStmtBranch.exprRoot;
 
                 // the else branch has a condition of type true so it is always taken
@@ -1937,16 +1970,17 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     }
 
     private void outputStack() {
+        // System.out.println("STACK -----------------------------------------");
+        // for (int i = 0; i < stack.size(); i++) {
+        // System.out.println(stack.get(i).toString());
+        // }
+        // System.out.println("STACK -----------------------------------------");
+    }
 
-        if (true) {
+    private void setPhysicalUnitValue(NumericLiteral numericLiteral) {
+        if (numericLiteral == null) {
             return;
         }
-
-        System.out.println("STACK -----------------------------------------");
-        for (int i = 0; i < stack.size(); i++) {
-            System.out.println(stack.get(i).toString());
-        }
-        System.out.println("STACK -----------------------------------------");
-
+        this.physicalUnitValue = numericLiteral;
     }
 }

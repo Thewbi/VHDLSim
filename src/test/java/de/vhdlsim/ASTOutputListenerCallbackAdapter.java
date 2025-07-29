@@ -14,6 +14,7 @@ import de.vhdlmodel.Record;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
 import de.vhdlmodel.TypeDeclaration;
+import de.vhdlmodel.WaveFormElement;
 
 public class ASTOutputListenerCallbackAdapter implements ASTOutputListenerCallback {
 
@@ -91,6 +92,10 @@ public class ASTOutputListenerCallbackAdapter implements ASTOutputListenerCallba
 
     @Override
     public void selectedSignalAssignment(Stmt stmt) {
+    }
+
+    @Override
+    public void waveFormElement(WaveFormElement waveFormElement) {
     }
 
 }
