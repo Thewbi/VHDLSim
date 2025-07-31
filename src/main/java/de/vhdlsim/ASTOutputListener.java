@@ -1285,25 +1285,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         }
     }
 
-    // private boolean containsUnit(final String unit) {
-
-    // if (units.isEmpty()) {
-    // return false;
-    // }
-
-    // for (Map.Entry<String, PhysicalUnit> physicalUnitEntry : units.entrySet()) {
-
-    // final String physicalUnitName = physicalUnitEntry.getKey();
-    // final PhysicalUnit physicalUnit = physicalUnitEntry.getValue();
-
-    // if (physicalUnit.subPhysicalUnits.containsKey(unit)) {
-    // return true;
-    // }
-    // }
-
-    // return false;
-    // }
-
     @Override
     public void exitTarget(VHDLParser.TargetContext ctx) {
 
@@ -1788,6 +1769,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         waveFormElement.numericLiteral = physicalUnitValue;
 
         astOutputListenerCallback.waveFormElement(waveFormElement);
+
+        stackPush(waveFormElement);
     }
 
     private void processExpression() {
@@ -1984,3 +1967,24 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         this.physicalUnitValue = numericLiteral;
     }
 }
+
+
+
+    // private boolean containsUnit(final String unit) {
+
+    // if (units.isEmpty()) {
+    // return false;
+    // }
+
+    // for (Map.Entry<String, PhysicalUnit> physicalUnitEntry : units.entrySet()) {
+
+    // final String physicalUnitName = physicalUnitEntry.getKey();
+    // final PhysicalUnit physicalUnit = physicalUnitEntry.getValue();
+
+    // if (physicalUnit.subPhysicalUnits.containsKey(unit)) {
+    // return true;
+    // }
+    // }
+
+    // return false;
+    // }
