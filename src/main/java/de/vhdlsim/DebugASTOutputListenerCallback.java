@@ -23,14 +23,17 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
 
     private static final int INDENT = 0;
 
-    //private static final boolean PERFORM_DEBUG_OUTPUT = false;
     private static final boolean PERFORM_DEBUG_OUTPUT = true;
+    // private static final boolean PERFORM_DEBUG_OUTPUT = false;
+
+    private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = true;
+    //private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = false;
 
     public Map<String, PhysicalUnit> units;
 
     @Override
     public void architecture(final Architecture architecture) {
-        if (PERFORM_DEBUG_OUTPUT) {
+        if (PERFORM_DEBUG_OUTPUT && PERFORM_DEBUG_OUTPUT_ARCHITECTURE) {
             System.out.println(architecture.toString(INDENT));
         }
     }

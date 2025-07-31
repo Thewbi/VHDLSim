@@ -1,6 +1,6 @@
 package de.vhdlmodel;
 
-public class CharacterLiteral extends ModelNode<String> {
+public class BitStringLiteral extends ModelNode<String> {
 
     public String toString(int indent) {
 

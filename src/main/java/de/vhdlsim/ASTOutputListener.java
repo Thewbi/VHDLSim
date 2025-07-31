@@ -9,6 +9,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import de.vhdl.grammar.VHDLLexer;
 import de.vhdl.grammar.VHDLParser;
 import de.vhdl.grammar.VHDLParser.Abstract_literalContext;
+import de.vhdl.grammar.VHDLParser.Alias_designatorContext;
 import de.vhdl.grammar.VHDLParser.DirectionContext;
 import de.vhdl.grammar.VHDLParser.Enumeration_literalContext;
 import de.vhdl.grammar.VHDLParser.IdentifierContext;
@@ -26,6 +27,7 @@ import de.vhdlmodel.Architecture;
 import de.vhdlmodel.AssignmentStmt;
 import de.vhdlmodel.AssignmentType;
 import de.vhdlmodel.AssociationElement;
+import de.vhdlmodel.BitStringLiteral;
 import de.vhdlmodel.CaseStmt;
 import de.vhdlmodel.CaseStmtBranch;
 import de.vhdlmodel.CharacterLiteral;
@@ -41,6 +43,7 @@ import de.vhdlmodel.FunctionSpecification;
 import de.vhdlmodel.IfStmt;
 import de.vhdlmodel.IfStmtBranch;
 import de.vhdlmodel.ModelNode;
+import de.vhdlmodel.Name;
 import de.vhdlmodel.DummyNode;
 import de.vhdlmodel.NumericLiteral;
 import de.vhdlmodel.PhysicalUnit;
@@ -52,6 +55,7 @@ import de.vhdlmodel.ReturnStatement;
 import de.vhdlmodel.SelectedSignalAssignment;
 import de.vhdlmodel.SelectedSignalAssignmentDummyNode;
 import de.vhdlmodel.Signal;
+import de.vhdlmodel.SliceName;
 import de.vhdlmodel.Stmt;
 import de.vhdlmodel.StringLiteral;
 import de.vhdlmodel.SubPhysicalUnit;
@@ -277,7 +281,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void exitType_declaration(VHDLParser.Type_declarationContext ctx) {
 
-        typeDeclaration.range = this.range;
+        typeDeclaration.range = range;
 
         astOutputListenerCallback.typeDeclaration(typeDeclaration);
 
@@ -869,6 +873,70 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     }
 
     @Override
+    public void enterAlias_declaration(VHDLParser.Alias_declarationContext ctx) {
+    }
+
+    @Override
+    public void exitAlias_declaration(VHDLParser.Alias_declarationContext ctx) {
+        
+        // System.out.println(ctx.getText());
+
+        // the name of the alias
+        Alias_designatorContext aliasDesignator = ctx.alias_designator();
+        IdentifierContext identifierContext = aliasDesignator.identifier();
+        String aliasName = identifierContext.getText();
+        
+        // SOURCE: the alias is create as a redirection to this source object
+        Name source = (Name) stackPop();
+
+        // ALIAS: the alias created from the source
+        Name alias = (Name) stackPop();
+
+        // System.out.println("Alias Name: " + aliasName);
+        // System.out.println(alias.toString(0));
+        // System.out.println(source.toString(0));
+        
+        // System.out.println(ctx.getText());
+
+        AliasDeclaration aliasDeclaration = new AliasDeclaration();
+        aliasDeclaration.name = aliasName;
+        aliasDeclaration.alias = alias;
+        aliasDeclaration.source = source;
+
+        stackPush(aliasDeclaration);
+    }
+
+    @Override
+    public void enterName(VHDLParser.NameContext ctx) {
+    }
+
+    @Override
+    public void exitName(VHDLParser.NameContext ctx) {
+
+        Name name = new Name();
+        name.name = lastIdentifier;
+        name.children.add(stackPop());
+
+        stackPush(name);
+    }
+
+    @Override
+    public void enterSlice_name_part(VHDLParser.Slice_name_partContext ctx) {
+    }
+
+    @Override
+    public void exitSlice_name_part(VHDLParser.Slice_name_partContext ctx) {
+
+        Range currentRange = range;
+        range = null;
+
+        SliceName sliceName = new SliceName();
+        stackPush(sliceName);
+
+        sliceName.range = currentRange;
+    }
+
+    @Override
     public void enterEntity_declaration(VHDLParser.Entity_declarationContext ctx) {
 
         entity = new Entity();
@@ -1225,12 +1293,14 @@ public class ASTOutputListener extends VHDLParserBaseListener {
                 break;
 
             case VHDLParser.NULL_:
-                // System.out.println("NULL_: \"" + ctx.NULL_() + "\"");
-                break;
+                throw new RuntimeException("NULL_: \"" + ctx.getText() + "\"");
 
             case VHDLParser.BIT_STRING_LITERAL:
                 // System.out.println("BIT_STRING_LITERAL: \"" + ctx.BIT_STRING_LITERAL() +
                 // "\"");
+                BitStringLiteral bitStringLiteral = new BitStringLiteral();
+                bitStringLiteral.value = ctx.getText();
+                stackPush(bitStringLiteral);
                 break;
 
             case VHDLParser.STRING_LITERAL:
@@ -1744,29 +1814,39 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void exitWaveform_element(VHDLParser.Waveform_elementContext ctx) {
 
-        System.out.println(ctx.getText());
+        // System.out.println(ctx.getText());
+
+        // ignore if it contains no real value
+        if (ctx.getChildCount() == 1) {
+            return;
+        }
 
         String value = ctx.getChild(0).getText();
-        System.out.println("Value: " + value);
+        // System.out.println("Value: " + value);
 
         String separator = ctx.getChild(1).getText(); // I think there is no option other than 'AFTER'
-        System.out.println("Separator: " + separator);
+        // System.out.println("Separator: " + separator);
 
-        String expression = ctx.getChild(2).getText();
-        System.out.println("Expression: " + expression);
+        // String expression = ctx.getChild(2).getText();
+        // System.out.println("Expression: " + expression);
 
-        ModelNode<?> timeNumericValue = stackPop();
-        System.out.println("TimeNumericValue: " + timeNumericValue.value);
+        // ModelNode<?> timeNumericValue = stackPop();
+        // System.out.println("TimeNumericValue: " + timeNumericValue.value);
 
-        String timeNumericUnit = lastIdentifier;
-        System.out.println("TimeNumericUnit: " + timeNumericUnit);
+        // String timeNumericUnit = lastIdentifier;
+        // System.out.println("TimeNumericUnit: " + timeNumericUnit);
 
-        System.out.println("PhysicalUnitValue - Value: " + physicalUnitValue.value + " Unit: " + physicalUnitValue.unit);
-    
+        // System.out.println("PhysicalUnitValue - Value: " + physicalUnitValue.value +
+        // " Unit: " + physicalUnitValue.unit);
+
+        // This was inserted because the stack contains an unconsumed item!
+        ModelNode<?> pyhsicalUnit = stackPop();
+
         WaveFormElement waveFormElement = new WaveFormElement();
         waveFormElement.value = value;
         waveFormElement.separator = separator;
-        waveFormElement.numericLiteral = physicalUnitValue;
+        // waveFormElement.numericLiteral = physicalUnitValue;
+        waveFormElement.numericLiteral = (NumericLiteral) pyhsicalUnit;
 
         astOutputListenerCallback.waveFormElement(waveFormElement);
 
@@ -1968,23 +2048,21 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     }
 }
 
+// private boolean containsUnit(final String unit) {
 
+// if (units.isEmpty()) {
+// return false;
+// }
 
-    // private boolean containsUnit(final String unit) {
+// for (Map.Entry<String, PhysicalUnit> physicalUnitEntry : units.entrySet()) {
 
-    // if (units.isEmpty()) {
-    // return false;
-    // }
+// final String physicalUnitName = physicalUnitEntry.getKey();
+// final PhysicalUnit physicalUnit = physicalUnitEntry.getValue();
 
-    // for (Map.Entry<String, PhysicalUnit> physicalUnitEntry : units.entrySet()) {
+// if (physicalUnit.subPhysicalUnits.containsKey(unit)) {
+// return true;
+// }
+// }
 
-    // final String physicalUnitName = physicalUnitEntry.getKey();
-    // final PhysicalUnit physicalUnit = physicalUnitEntry.getValue();
-
-    // if (physicalUnit.subPhysicalUnits.containsKey(unit)) {
-    // return true;
-    // }
-    // }
-
-    // return false;
-    // }
+// return false;
+// }

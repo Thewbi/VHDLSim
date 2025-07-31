@@ -14,6 +14,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import de.vhdl.grammar.VHDLLexer;
 import de.vhdl.grammar.VHDLParser;
+import de.vhdl.grammar.VHDLParser.Alias_declarationContext;
 import de.vhdl.grammar.VHDLParser.Architecture_bodyContext;
 import de.vhdl.grammar.VHDLParser.Case_statementContext;
 import de.vhdl.grammar.VHDLParser.Component_declarationContext;
@@ -40,6 +41,7 @@ import de.vhdl.grammar.VHDLParser.Type_declarationContext;
 import de.vhdl.grammar.VHDLParser.Type_definitionContext;
 import de.vhdl.grammar.VHDLParser.Wait_statementContext;
 import de.vhdl.grammar.VHDLParser.Waveform_elementContext;
+import de.vhdlmodel.ModelNode;
 import de.vhdlmodel.PhysicalUnit;
 
 /**
@@ -52,7 +54,8 @@ import de.vhdlmodel.PhysicalUnit;
  */
 public class App {
 
-    private static final boolean OUTPUT_AST = false;
+    private static final boolean OUTPUT_AST = true;
+    // private static final boolean OUTPUT_AST = false;
 
     private final static String PATH = "src/test/resources/vhdl_samples/";
 
@@ -80,6 +83,7 @@ public class App {
         // // TODO: finish the entity Declaration statement and port map processing here
         //testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture_testbench.vhd");
         //testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture_example_1.vhd");
+        testAliasDeclaration(astOutputListener, print, convertToAST, PATH + "alias.vhd");
         //testPhysicalUnits(astOutputListener, print, convertToAST, PATH + "physical_units.vhd");
         //testExpression(astOutputListener, print, convertToAST, PATH + "expression.vhd");
         //testSimpleExpression(astOutputListener, print, convertToAST, PATH + "simple_expression.vhd");
@@ -91,6 +95,7 @@ public class App {
         //testIf2(astOutputListener, print, convertToAST, PATH + "if_complex_expression.vhd");
         //testIf3(astOutputListener, print, convertToAST, PATH + "elsif.vhd");
         //testIf4(astOutputListener, print, convertToAST, PATH + "if_with_function_predicate.vhd");
+        //testIf5(astOutputListener, print, convertToAST, PATH + "if_2.vhd");
         //testFunctionCall(astOutputListener, print, convertToAST, PATH + "function_call.vhd");
         //testIf5(astOutputListener, print, convertToAST, PATH + "if_with_expression.vhd");
         //testCase(astOutputListener, print, convertToAST, PATH + "case.vhd");
@@ -127,7 +132,15 @@ public class App {
         if (OUTPUT_AST) {
             // DEBUG output the AST from the stmt inside the astOutputListener
             int indent = 0;
-            System.out.println(astOutputListener.stmt.toString(indent));
+
+            if (astOutputListener.stmt != null) {
+                System.out.println(astOutputListener.stmt.toString(indent));
+            }
+
+            if (!astOutputListener.stack.empty()) {
+                ModelNode<?> modelNode = astOutputListener.stack.pop();
+                System.out.println(modelNode.toString(indent));
+            }
         }
 
         if (astOutputListener.stmt != null) {
@@ -135,6 +148,14 @@ public class App {
         }
 
         // https://www.mikrocontroller.net/articles/VHDL_Testbench
+    }
+
+    private static ASTOutputListener testAliasDeclaration(ASTOutputListener astOutputListener, boolean print, boolean convertToAST,
+            String testFile) throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Alias_declarationContext root = parser.alias_declaration();
+
+        return traverseTree(astOutputListener, root, print, convertToAST, testFile);
     }
 
     private static ASTOutputListener testWaveformElement(ASTOutputListener astOutputListener, boolean print,
