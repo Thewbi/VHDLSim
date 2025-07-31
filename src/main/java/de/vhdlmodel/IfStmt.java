@@ -22,8 +22,16 @@ public class IfStmt extends Stmt {
         stringBuffer.append("branches:\n");
 
         indent++;
+
+        int branchCount = branches.size();
+        int i = 1;
         for (IfStmtBranch branch : branches) {
             stringBuffer.append(branch.toString(indent));
+            // do not output a newline after the last branch
+            if (i < branchCount) {
+                stringBuffer.append("\n");
+            }
+            i++;
         }
 
         return stringBuffer.toString();

@@ -30,7 +30,7 @@ public class Architecture extends Stmt {
 
         if (signals.size() > 0) {
 
-            stringBuffer.append("signals:\n");
+            stringBuffer.append("Signals:\n");
 
             indent++;
         
@@ -49,7 +49,7 @@ public class Architecture extends Stmt {
 
         }
 
-        stringBuffer.append("\n");
+        //stringBuffer.append("\n");
 
         index = 0;
         for (ModelNode<?> stmt : children) {

@@ -168,7 +168,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         String entityType = nameContext.getChild(1).getText();
         String entityArchitecture = nameContext.getChild(2).getText();
 
-        // TODO: insert component instantiation statement into the parent architecture
+        // insert component instantiation statement into the parent architecture
         if (architecture != null) {
             architecture.children.add(componentInstantiationStatement);
             componentInstantiationStatement.parent = architecture;
@@ -903,7 +903,15 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         aliasDeclaration.alias = alias;
         aliasDeclaration.source = source;
 
-        stackPush(aliasDeclaration);
+        //stackPush(aliasDeclaration);
+
+        // insert component instantiation statement into the parent architecture
+        if (architecture != null) {
+            
+            architecture.children.add(aliasDeclaration);
+            aliasDeclaration.parent = architecture;
+            //stmt = componentInstantiationStatement;
+        }
     }
 
     @Override

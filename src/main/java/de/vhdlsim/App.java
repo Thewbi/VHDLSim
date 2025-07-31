@@ -36,6 +36,7 @@ import de.vhdl.grammar.VHDLParser.Record_type_definitionContext;
 import de.vhdl.grammar.VHDLParser.Signal_assignment_statementContext;
 import de.vhdl.grammar.VHDLParser.Signal_declarationContext;
 import de.vhdl.grammar.VHDLParser.Simple_expressionContext;
+import de.vhdl.grammar.VHDLParser.Subprogram_bodyContext;
 import de.vhdl.grammar.VHDLParser.Subprogram_declarative_itemContext;
 import de.vhdl.grammar.VHDLParser.Type_declarationContext;
 import de.vhdl.grammar.VHDLParser.Type_definitionContext;
@@ -83,7 +84,13 @@ public class App {
         // // TODO: finish the entity Declaration statement and port map processing here
         //testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture_testbench.vhd");
         //testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture_example_1.vhd");
-        testAliasDeclaration(astOutputListener, print, convertToAST, PATH + "alias.vhd");
+
+        // TODO: formal parameter is not parsed!
+        //testFunctionSpecification(astOutputListener, print, convertToAST, PATH + "function.vhd");
+        
+        // TODO:
+        testSubprogramBody(astOutputListener, print, convertToAST, PATH + "function.vhd");
+        //testAliasDeclaration(astOutputListener, print, convertToAST, PATH + "alias.vhd");
         //testPhysicalUnits(astOutputListener, print, convertToAST, PATH + "physical_units.vhd");
         //testExpression(astOutputListener, print, convertToAST, PATH + "expression.vhd");
         //testSimpleExpression(astOutputListener, print, convertToAST, PATH + "simple_expression.vhd");
@@ -148,6 +155,14 @@ public class App {
         }
 
         // https://www.mikrocontroller.net/articles/VHDL_Testbench
+    }
+
+    private static ASTOutputListener testSubprogramBody(ASTOutputListener astOutputListener, boolean print, boolean convertToAST,
+            String testFile) throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Subprogram_bodyContext subprogram_body = parser.subprogram_body();
+
+        return traverseTree(astOutputListener, subprogram_body, print, convertToAST, testFile);
     }
 
     private static ASTOutputListener testAliasDeclaration(ASTOutputListener astOutputListener, boolean print, boolean convertToAST,

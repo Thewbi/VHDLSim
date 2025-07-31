@@ -5,6 +5,9 @@ architecture Alias_beh of Alias_Nty is
     --signal Bus_s : bit_vector(31 downto 0);
 
     alias OpCode_s : bit_vector(7 downto 0) is Bus_s(31 downto 24);
+    alias Source_s : bit_vector(3 downto 0) is Bus_s(23 downto 20);
+    alias Dest_s : bit_vector(3 downto 0) is Bus_s(19 downto 16);
+    alias Data16_s : bit_vector(15 downto 0) is Bus_s(15 downto 0);
 begin
     Test_Lbl : process(Bus_s)
     begin

@@ -2,7 +2,6 @@ package de.vhdlsim;
 
 import de.vhdlmodel.ModelNode;
 import de.vhdlmodel.Name;
-import de.vhdlmodel.RecordField;
 
 public class AliasDeclaration extends ModelNode<String> {
 
@@ -20,8 +19,15 @@ public class AliasDeclaration extends ModelNode<String> {
 
         indent++;
 
-        stringBuffer.append("Alias Typeifier: ").append(alias).append("\n");
-        stringBuffer.append("Source Typeifier: ").append(source).append("\n");
+        for (int i = 0; i < indent; i++) {
+            stringBuffer.append("  ");
+        }
+        stringBuffer.append("Alias Typeifier: ").append(alias.toString(indent)); //.append("\n");
+
+        for (int i = 0; i < indent; i++) {
+            stringBuffer.append("  ");
+        }
+        stringBuffer.append("Source Typeifier: ").append(source.toString(indent)); //.append("\n");
 
         // for (ModelNode<?> child : children) {
         //     RecordField recordField = (RecordField) child;
