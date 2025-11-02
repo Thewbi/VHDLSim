@@ -13,7 +13,9 @@ public class IfStmtBranch extends Stmt {
         stringBuffer.append("if-stmt-branch\n");
 
         indent++;
-        stringBuffer.append(exprRoot.toString(indent)).append("\n");
+        if (exprRoot != null) {
+            stringBuffer.append(exprRoot.toString(indent)).append("\n");
+        }
 
         // statements
         int index = 0;

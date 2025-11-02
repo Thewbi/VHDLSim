@@ -1,6 +1,6 @@
 package de.vhdlmodel;
 
-public class Expr extends ModelNode<Object> {
+public class Expr extends Stmt {
 
     public boolean constantValue;
 
@@ -32,10 +32,11 @@ public class Expr extends ModelNode<Object> {
         }
 
         if (operator == null) {
-            stringBuffer.append("Expr: ").append(constantValue).append("\n");
+            stringBuffer.append("Expr: ")/*.append(constantValue) */.append(value);
         } else {
-            stringBuffer.append("Expr: ").append(operator).append("\n");
+            stringBuffer.append("Expr: ").append(operator);
         }
+        stringBuffer.append("\n");
 
         indent++;
 

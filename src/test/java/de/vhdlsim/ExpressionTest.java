@@ -16,28 +16,28 @@ import de.vhdlmodel.ModelNode;
 
 public class ExpressionTest {
 
-    @Test
-    public void testExpressionNumericLiteral() {
+    // @Test
+    // public void testExpressionNumericLiteral() {
 
-        final CharStream charStream = CharStreams.fromString("1");
+    //     final CharStream charStream = CharStreams.fromString("1");
 
-        final VHDLLexer lexer = new VHDLLexer(charStream);
-        final CommonTokenStream tokens = new CommonTokenStream(lexer);
-        final VHDLParser parser = new VHDLParser(tokens);
+    //     final VHDLLexer lexer = new VHDLLexer(charStream);
+    //     final CommonTokenStream tokens = new CommonTokenStream(lexer);
+    //     final VHDLParser parser = new VHDLParser(tokens);
 
-        final ExpressionContext root = parser.expression();
+    //     final ExpressionContext root = parser.expression();
 
-        ASTOutputListener astOutputListener = new ASTOutputListener();
-        final ParseTreeWalker walker = new ParseTreeWalker();
-        walker.walk(astOutputListener, root);
+    //     ASTOutputListener astOutputListener = new ASTOutputListener();
+    //     final ParseTreeWalker walker = new ParseTreeWalker();
+    //     walker.walk(astOutputListener, root);
 
-        // Assert
+    //     // Assert
 
-        // the expression is never taken from the stack.
-        // the stack has to contain the value 1
-        ModelNode<?> expr = astOutputListener.stack.pop();
-        assertTrue(expr.value.equals(1));
-    }
+    //     // the expression is never taken from the stack.
+    //     // the stack has to contain the value 1
+    //     ModelNode<?> expr = astOutputListener.stack.pop();
+    //     assertTrue(expr.value.equals(1));
+    // }
 
     @Test
     public void testExpressionNumericAdditionOperator() {

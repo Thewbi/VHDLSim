@@ -55,8 +55,8 @@ import de.vhdlmodel.PhysicalUnit;
  */
 public class App {
 
-    private static final boolean OUTPUT_AST = true;
-    // private static final boolean OUTPUT_AST = false;
+    // private static final boolean OUTPUT_AST = true;
+    private static final boolean OUTPUT_AST = false;
 
     private final static String PATH = "src/test/resources/vhdl_samples/";
 
@@ -73,91 +73,163 @@ public class App {
         DebugASTOutputListenerCallback astOutputListenerCallback = new DebugASTOutputListenerCallback();
         astOutputListenerCallback.units = units;
 
+        // ASTOutputListener astOutputListener = new ASTOutputListener();
         ASTOutputListener astOutputListener = new ASTOutputListener();
         astOutputListener.units = units;
         astOutputListener.astOutputListenerCallback = astOutputListenerCallback;
 
         // top level element of the grammar is design_file
 
-        // @formatter:off 
+        // @formatter:off
+        
+        // testAliasDeclaration(astOutputListener, print, convertToAST, PATH + "alias.vhd");
+        // testPhysicalUnits(astOutputListener, print, convertToAST, PATH + "physical_units.vhd");
+        // testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration.vhd");
+        // testRangeConstraint(astOutputListener, print, convertToAST, PATH + "range_constraint.vhd");
+        
+        //
+        // Expression
+        //
 
-        // // TODO: finish the entity Declaration statement and port map processing here
-        //testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture_testbench.vhd");
-        //testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture_example_1.vhd");
+        // testExpression(astOutputListener, print, convertToAST, PATH + "expression.vhd");
+        testSimpleExpression(astOutputListener, print, convertToAST, PATH + "expression_with_function_call.vhd");
+
+        //
+        // Assignment
+        //
+        
+        // testAssignment(astOutputListener, print, convertToAST, PATH + "signal_assignment.vhd");
+        // testAssignment(astOutputListener, print, convertToAST, PATH + "signal_assignment_logical.vhd");
+        
+        //
+        // If statements
+        //
+
+        // testIf(astOutputListener, print, convertToAST, PATH + "if.vhd");
+        // testIf(astOutputListener, print, convertToAST, PATH + "if_complex_expression.vhd");
+        // testIf(astOutputListener, print, convertToAST, PATH + "elsif.vhd");
+        // testIf(astOutputListener, print, convertToAST, PATH + "if_with_function_predicate.vhd");
+        // testIf(astOutputListener, print, convertToAST, PATH + "if_2.vhd");
+        // testIf(astOutputListener, print, convertToAST, PATH + "if_with_expression.vhd");
+        
+        //
+        // Enum
+        //
+
+        // testEnum(astOutputListener, print, convertToAST, PATH + "enum.vhd");
+
+        //
+        // Configuration
+        //
+
+        // testConfiguration(astOutputListener, print, convertToAST, PATH + "configuration.vhd");
+
+        //
+        // Function Specification, Implementation and Function Call
+        //
 
         // TODO: formal parameter is not parsed!
-        //testFunctionSpecification(astOutputListener, print, convertToAST, PATH + "function.vhd");
-        
-        // TODO:
-        testSubprogramBody(astOutputListener, print, convertToAST, PATH + "function.vhd");
-        //testAliasDeclaration(astOutputListener, print, convertToAST, PATH + "alias.vhd");
-        //testPhysicalUnits(astOutputListener, print, convertToAST, PATH + "physical_units.vhd");
-        //testExpression(astOutputListener, print, convertToAST, PATH + "expression.vhd");
-        //testSimpleExpression(astOutputListener, print, convertToAST, PATH + "simple_expression.vhd");
-        //testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration.vhd");
-        //testRangeConstraint(astOutputListener, print, convertToAST, PATH + "range_constraint.vhd");
-        //testAssignment(astOutputListener, print, convertToAST, PATH + "signal_assignment.vhd");
-        //testAssignment(astOutputListener, print, convertToAST, PATH + "signal_assignment_logical.vhd");
-        //testIf1(astOutputListener, print, convertToAST, PATH + "if.vhd");
-        //testIf2(astOutputListener, print, convertToAST, PATH + "if_complex_expression.vhd");
-        //testIf3(astOutputListener, print, convertToAST, PATH + "elsif.vhd");
-        //testIf4(astOutputListener, print, convertToAST, PATH + "if_with_function_predicate.vhd");
-        //testIf5(astOutputListener, print, convertToAST, PATH + "if_2.vhd");
-        //testFunctionCall(astOutputListener, print, convertToAST, PATH + "function_call.vhd");
-        //testIf5(astOutputListener, print, convertToAST, PATH + "if_with_expression.vhd");
-        //testCase(astOutputListener, print, convertToAST, PATH + "case.vhd");
-        //testProcess(astOutputListener, print, convertToAST, PATH + "process.vhd");
-        //testProcess(astOutputListener, print, convertToAST, PATH + "process_2.vhd");
-        //testWaveformElement(astOutputListener, print, convertToAST, PATH + "waveform_element.vhd");
-        // // entity and architecture
-        // //
-        // https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
-        // testEntity(astOutputListener, print, convertToAST, PATH + "entity.vhd");
-        // testEntityInstantiation(astOutputListener, print, convertToAST, PATH + "entity_instantiation.vhd");
-        // testPortMap(astOutputListener, print, convertToAST, PATH + "port_map.vhd");
-        // testInstantiatedUnit(astOutputListener, print, convertToAST, PATH + "instantiated_unit.vhd");
-        // testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture.vhd");
-        // // TODO: implement port map
-        // testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture_with_signal.vhd");
-        // testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture_with_process_with_if.vhd");
-        // testComponent(astOutputListener, print, convertToAST, PATH + "component.vhd");
-        // testRecord(astOutputListener, print, convertToAST, PATH + "record.vhd");
+        // testFunctionSpecification(astOutputListener, print, convertToAST, PATH + "function.vhd");
+        // testFunctionCall(astOutputListener, print, convertToAST, PATH + "function_call.vhd");
         // testFunctionSpecification(astOutputListener, print, convertToAST, PATH + "function_specification.vhd");
         // TODO unit test
         // testFunctionImplementation(astOutputListener, print, convertToAST, PATH + "function_implementation.vhd");
+        
+        //
+        // Subprogram
+        //
+
+        // testSubprogramBody(astOutputListener, print, convertToAST, PATH + "function.vhd");
+        // testSubprogramBody(astOutputListener, print, convertToAST, PATH + "function.vhd");
+        
+        //
+        // Case
+        //
+        
+        // testCase(astOutputListener, print, convertToAST, PATH + "case.vhd");
+        
+        //
+        // Process
+        //
+
+        // testProcess(astOutputListener, print, convertToAST, PATH + "process.vhd");
+        // testProcess(astOutputListener, print, convertToAST, PATH + "process_2.vhd");
+        // testProcess(astOutputListener, print, convertToAST, PATH + "process_3.vhd");
+        
+        // testWaveformElement(astOutputListener, print, convertToAST, PATH + "waveform_element.vhd");
+        
+        // 
+        // Component
+        //
+
+        // testComponent(astOutputListener, print, convertToAST, PATH + "component.vhd");
+
+        //
+        // Record
+        //
+
+        // testRecord(astOutputListener, print, convertToAST, PATH + "record.vhd");
+        
+        //
+        // WaitStatement
+        //
+
+        // testWaitStatement(astOutputListener, print, convertToAST, PATH + "wait_for_time_unit_statement.vhd");
+
+        //
+        // entity and architecture
+        //
+
         // // and-gate
         // //https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
         // testEntityAndArchitecture(astOutputListener, print, convertToAST, PATH + "and_gate.vhd");
         // testEntityAndArchitecture(astOutputListener, print, convertToAST, PATH + "multiplexer.vhd");
         // testEntityAndArchitecture(astOutputListener, print, convertToAST, PATH + "thermostat_example.vhd");
-        // testEnum(astOutputListener, print, convertToAST, PATH + "enum.vhd");
-        // testConfiguration(astOutputListener, print, convertToAST, PATH + "configuration.vhd");
-        // testWaitStatement(astOutputListener, print, convertToAST, PATH + "wait_for_time_unit_statement.vhd");
+        // https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
+        // testEntity(astOutputListener, print, convertToAST, PATH + "entity.vhd");
+        // testEntityInstantiation(astOutputListener, print, convertToAST, PATH + "entity_instantiation.vhd");
+        // testPortMap(astOutputListener, print, convertToAST, PATH + "port_map.vhd");
+        // testInstantiatedUnit(astOutputListener, print, convertToAST, PATH + "instantiated_unit.vhd");
+        
+        // testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture.vhd");
+        // // TODO: implement port map
+        // testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture_with_signal.vhd");
+        // testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture_with_process_with_if.vhd");
+        // // TODO: finish the entity Declaration statement and port map processing here
+        // testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture_testbench.vhd");
+        // testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture_example_1.vhd");
+
+        // 
+        // Design File
+        //
+        
+        // testDesignFile(astOutputListener, print, convertToAST, PATH + "neorv32_boot_rom.vhd");
 
         // @formatter:on
 
-        if (OUTPUT_AST) {
-            // DEBUG output the AST from the stmt inside the astOutputListener
-            int indent = 0;
+        // if (OUTPUT_AST) {
+        //     // DEBUG output the AST from the stmt inside the astOutputListener
+        //     int indent = 0;
 
-            if (astOutputListener.stmt != null) {
-                System.out.println(astOutputListener.stmt.toString(indent));
-            }
+        //     if (astOutputListener.stmt != null) {
+        //         System.out.println(astOutputListener.stmt.toString(indent));
+        //     }
 
-            if (!astOutputListener.stack.empty()) {
-                ModelNode<?> modelNode = astOutputListener.stack.pop();
-                System.out.println(modelNode.toString(indent));
-            }
-        }
+        //     if (!astOutputListener.stack.empty()) {
+        //         ModelNode<?> modelNode = astOutputListener.stack.pop();
+        //         System.out.println(modelNode.toString(indent));
+        //     }
+        // }
 
-        if (astOutputListener.stmt != null) {
-            throw new RuntimeException("listener is not keeping house correctly!");
-        }
+        // if (astOutputListener.stmt != null) {
+        //     throw new RuntimeException("listener is not keeping house correctly!");
+        // }
 
         // https://www.mikrocontroller.net/articles/VHDL_Testbench
     }
 
-    private static ASTOutputListener testSubprogramBody(ASTOutputListener astOutputListener, boolean print, boolean convertToAST,
+    private static ASTOutputListener testSubprogramBody(ASTOutputListener astOutputListener, boolean print,
+            boolean convertToAST,
             String testFile) throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Subprogram_bodyContext subprogram_body = parser.subprogram_body();
@@ -165,7 +237,8 @@ public class App {
         return traverseTree(astOutputListener, subprogram_body, print, convertToAST, testFile);
     }
 
-    private static ASTOutputListener testAliasDeclaration(ASTOutputListener astOutputListener, boolean print, boolean convertToAST,
+    private static ASTOutputListener testAliasDeclaration(ASTOutputListener astOutputListener, boolean print,
+            boolean convertToAST,
             String testFile) throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Alias_declarationContext root = parser.alias_declaration();
@@ -245,42 +318,7 @@ public class App {
         return traverseTree(astOutputListener, root, print, convertToAST, testFile);
     }
 
-    private static ASTOutputListener testIf1(final ASTOutputListener astOutputListener, final boolean print,
-            final boolean convertToAST, final String testFile) throws IOException {
-        final VHDLParser parser = processFile(testFile);
-        final If_statementContext root = parser.if_statement();
-
-        return traverseTree(astOutputListener, root, print, convertToAST, testFile);
-    }
-
-    private static ASTOutputListener testIf2(final ASTOutputListener astOutputListener, final boolean print,
-            final boolean convertToAST, final String testFile) throws IOException {
-        final VHDLParser parser = processFile(testFile);
-        final If_statementContext root = parser.if_statement();
-
-        return traverseTree(astOutputListener, root, print, convertToAST, testFile);
-    }
-
-    private static ASTOutputListener testIf3(final ASTOutputListener astOutputListener, final boolean print,
-            final boolean convertToAST, final String testFile) throws IOException {
-        final VHDLParser parser = processFile(testFile);
-        final If_statementContext root = parser.if_statement();
-
-        return traverseTree(astOutputListener, root, print, convertToAST, testFile);
-    }
-
-    private static ASTOutputListener testIf4(final ASTOutputListener astOutputListener, final boolean print,
-            final boolean convertToAST, final String testFile) throws IOException {
-
-        // https://www2.cs.sfu.ca/~ggbaker/reference/std_logic/1164/rising_edge.html
-
-        final VHDLParser parser = processFile(testFile);
-        final If_statementContext root = parser.if_statement();
-
-        return traverseTree(astOutputListener, root, print, convertToAST, testFile);
-    }
-
-    private static ASTOutputListener testIf5(final ASTOutputListener astOutputListener, final boolean print,
+    private static ASTOutputListener testIf(final ASTOutputListener astOutputListener, final boolean print,
             final boolean convertToAST, final String testFile) throws IOException {
         final VHDLParser parser = processFile(testFile);
         final If_statementContext root = parser.if_statement();
@@ -296,8 +334,8 @@ public class App {
         return traverseTree(astOutputListener, root, print, convertToAST, testFile);
     }
 
-    private static ASTOutputListener testProcess(final ASTOutputListener astOutputListener, final boolean print,
-            final boolean convertToAST, final String testFile)
+    private static ASTOutputListener testProcess(final ASTOutputListener astOutputListener,
+            final boolean print, final boolean convertToAST, final String testFile)
             throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Process_statementContext root = parser.process_statement();
@@ -438,15 +476,16 @@ public class App {
         return traverseTree(astOutputListener, root, print, convertToAST, testFile);
     }
 
-    private static ASTOutputListener traverseTree(final ASTOutputListener astOutputListener, final ParseTree root,
-            final boolean print, final boolean convertToAST, final String originalFilename)
+    private static ASTOutputListener traverseTree(final ASTOutputListener astOutputListener,
+            final ParseTree root, final boolean print, final boolean convertToAST,
+            final String originalFilename)
             throws FileNotFoundException {
 
         if (print) {
 
             VHDLRawOutputListener printListener = new VHDLRawOutputListener();
 
-            // Create a generic parse tree walker that can trigger callbacks
+            // create a generic parse tree walker that can trigger callbacks
             final ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(printListener, root);
 

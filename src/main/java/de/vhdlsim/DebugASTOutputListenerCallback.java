@@ -29,18 +29,24 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = true;
     //private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = false;
 
+    private static final boolean PERFORM_DEBUG_OUTPUT_ENTITY = true;
+    //private static final boolean PERFORM_DEBUG_OUTPUT_ENTITY = false;
+
+    private static final boolean PERFORM_DEBUG_OUTPUT_PROCESS_STATEMENT = true;
+    //private static final boolean PERFORM_DEBUG_OUTPUT_PROCESS_STATEMENT = false;
+
     public Map<String, PhysicalUnit> units;
 
     @Override
     public void architecture(final Architecture architecture) {
-        if (PERFORM_DEBUG_OUTPUT && PERFORM_DEBUG_OUTPUT_ARCHITECTURE) {
+        if (PERFORM_DEBUG_OUTPUT || PERFORM_DEBUG_OUTPUT_ARCHITECTURE) {
             System.out.println(architecture.toString(INDENT));
         }
     }
 
     @Override
     public void entity(final Entity entity) {
-        if (PERFORM_DEBUG_OUTPUT) {
+        if (PERFORM_DEBUG_OUTPUT || PERFORM_DEBUG_OUTPUT_ENTITY) {
             System.out.println(entity.toString(INDENT));
         }
     }
@@ -54,7 +60,7 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
 
     @Override
     public void process(final Stmt stmt) {
-        if (PERFORM_DEBUG_OUTPUT) {
+        if (PERFORM_DEBUG_OUTPUT || PERFORM_DEBUG_OUTPUT_PROCESS_STATEMENT) {
             System.out.println(stmt.toString(INDENT));
         }
     }
