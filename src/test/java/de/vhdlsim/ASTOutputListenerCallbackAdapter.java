@@ -10,6 +10,8 @@ import de.vhdlmodel.FunctionCall;
 import de.vhdlmodel.FunctionImplementation;
 import de.vhdlmodel.FunctionSpecification;
 import de.vhdlmodel.ModelNode;
+import de.vhdlmodel.Name;
+import de.vhdlmodel.Range;
 import de.vhdlmodel.Record;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
@@ -96,6 +98,14 @@ public class ASTOutputListenerCallbackAdapter implements ASTOutputListenerCallba
 
     @Override
     public void waveFormElement(WaveFormElement waveFormElement) {
+    }
+
+    @Override
+    public void range(Range range) {
+    }
+
+    @Override
+    public void name(Name name) {
     }
 
 }

@@ -12,7 +12,9 @@ import de.vhdlmodel.FunctionCall;
 import de.vhdlmodel.FunctionImplementation;
 import de.vhdlmodel.FunctionSpecification;
 import de.vhdlmodel.ModelNode;
+import de.vhdlmodel.Name;
 import de.vhdlmodel.PhysicalUnit;
+import de.vhdlmodel.Range;
 import de.vhdlmodel.Record;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
@@ -23,17 +25,20 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
 
     private static final int INDENT = 0;
 
-    private static final boolean PERFORM_DEBUG_OUTPUT = true;
-    // private static final boolean PERFORM_DEBUG_OUTPUT = false;
+    // private static final boolean PERFORM_DEBUG_OUTPUT = true;
+    private static final boolean PERFORM_DEBUG_OUTPUT = false;
 
     private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = true;
-    //private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = false;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = false;
 
     private static final boolean PERFORM_DEBUG_OUTPUT_ENTITY = true;
-    //private static final boolean PERFORM_DEBUG_OUTPUT_ENTITY = false;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_ENTITY = false;
 
-    private static final boolean PERFORM_DEBUG_OUTPUT_PROCESS_STATEMENT = true;
-    //private static final boolean PERFORM_DEBUG_OUTPUT_PROCESS_STATEMENT = false;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_PROCESS_STATEMENT = true;
+    private static final boolean PERFORM_DEBUG_OUTPUT_PROCESS_STATEMENT = false;
+
+    // private static final boolean PERFORM_DEBUG_OUTPUT_SIGNAL = true;
+    private static final boolean PERFORM_DEBUG_OUTPUT_SIGNAL = false;
 
     public Map<String, PhysicalUnit> units;
 
@@ -74,7 +79,7 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
 
     @Override
     public void signal(final Signal signal) {
-        if (PERFORM_DEBUG_OUTPUT) {
+        if (PERFORM_DEBUG_OUTPUT || PERFORM_DEBUG_OUTPUT_SIGNAL) {
             System.out.println(signal.toString(INDENT));
         }
     }
@@ -186,6 +191,20 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     public void waveFormElement(WaveFormElement waveFormElement) {
         if (PERFORM_DEBUG_OUTPUT) {
             System.out.println(waveFormElement.toString(INDENT));
+        }
+    }
+
+    @Override
+    public void range(Range range) {
+        if (PERFORM_DEBUG_OUTPUT) {
+            System.out.println(range.toString(INDENT));
+        }
+    }
+
+    @Override
+    public void name(Name name) {
+        if (PERFORM_DEBUG_OUTPUT) {
+            System.out.println(name.toString(INDENT));
         }
     }
 

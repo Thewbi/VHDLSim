@@ -1,6 +1,6 @@
 package de.vhdlmodel;
 
-public class Range {
+public class Range extends ModelNode<String> {
 
     public ModelNode<?> start;
 
@@ -15,9 +15,19 @@ public class Range {
             stringBuffer.append("  ");
         }
 
-        stringBuffer.append("Range [").append(start.toString(0)).append(" ").append(rangeDirection).append(" ").append(end.toString(0)).append("]");
+        stringBuffer.append("Range [\n").append(start.toString(indent + 1));
+        for (int i = 0; i < indent + 1; i++) {
+            stringBuffer.append("  ");
+        }
+        stringBuffer.append(rangeDirection).append("\n");
+        
+        stringBuffer.append(end.toString(indent + 1));
+        for (int i = 0; i < indent ; i++) {
+            stringBuffer.append("  ");
+        }
+        stringBuffer.append("]");
 
         return stringBuffer.toString();
     }
-    
+
 }

@@ -1,0 +1,1 @@
+signal Counter : integer range 0 to 1;

@@ -26,11 +26,13 @@ public class ModelNode<T> {
     public String toString(int indent) {
 
         StringBuffer stringBuffer = new StringBuffer();
+
+        // indent
         for (int i = 0; i < indent; i++) {
             stringBuffer.append("  ");
         }
 
-        stringBuffer.append("ModelNode ").append(name).append("\n");
+        stringBuffer.append("Name: ").append(name).append("\n");
 
         indent++;
         for (ModelNode<?> child : children) {

@@ -10,6 +10,8 @@ import de.vhdlmodel.FunctionCall;
 import de.vhdlmodel.FunctionImplementation;
 import de.vhdlmodel.FunctionSpecification;
 import de.vhdlmodel.ModelNode;
+import de.vhdlmodel.Name;
+import de.vhdlmodel.Range;
 import de.vhdlmodel.Record;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
@@ -30,7 +32,15 @@ public interface ASTOutputListenerCallback {
 
     void signal(Signal signal);
 
+    void range(Range range);
+
+    void name(Name name);
+
+    void variableAssignment(AssignmentStmt assignmentStmt);
+
     void signalAssignment(AssignmentStmt assignmentStmt);
+
+    void selectedSignalAssignment(Stmt stmt);
 
     void caseStmt(Stmt stmt);
 
@@ -42,8 +52,6 @@ public interface ASTOutputListenerCallback {
     
     void functionCall(FunctionCall lastFunctionCall);
 
-    void variableAssignment(AssignmentStmt assignmentStmt);
-
     void expression(ModelNode<?> expr);
 
     void typeDeclaration(TypeDeclaration typeDeclaration);
@@ -53,8 +61,6 @@ public interface ASTOutputListenerCallback {
     void configuration(Configuration configuration);
 
     void componentInstantiationStatement(ComponentInstantiationStatement componentInstantiationStatement);
-
-    void selectedSignalAssignment(Stmt stmt);
 
     void waveFormElement(WaveFormElement waveFormElement);
 

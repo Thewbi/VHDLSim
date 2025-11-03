@@ -5,7 +5,6 @@ entity MUX4X1 is
         E: in bit_vector(3 downto 0);
         Y: out bit
     );
-
 end MUX4X1;
 
 architecture VERHALTEN of MUX4X1 is

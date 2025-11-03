@@ -803,7 +803,7 @@ public class ASTOutputListenerOld extends VHDLParserBaseListener {
             }
 
             signal.name = identifier;
-            signal.type = type;
+            // signal.type = type;
 
         }
     }

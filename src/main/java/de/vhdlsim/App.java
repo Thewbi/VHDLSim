@@ -84,15 +84,22 @@ public class App {
         
         // testAliasDeclaration(astOutputListener, print, convertToAST, PATH + "alias.vhd");
         // testPhysicalUnits(astOutputListener, print, convertToAST, PATH + "physical_units.vhd");
-        // testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration.vhd");
         // testRangeConstraint(astOutputListener, print, convertToAST, PATH + "range_constraint.vhd");
+
+        //
+        // Signal Declaration
+        //
+
+        // testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration_1.vhd");
+        // testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration_2.vhd");
+        // testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration_3.vhd");
         
         //
         // Expression
         //
 
         // testExpression(astOutputListener, print, convertToAST, PATH + "expression.vhd");
-        testSimpleExpression(astOutputListener, print, convertToAST, PATH + "expression_with_function_call.vhd");
+        // testSimpleExpression(astOutputListener, print, convertToAST, PATH + "expression_with_function_call.vhd");
 
         //
         // Assignment
@@ -146,12 +153,13 @@ public class App {
         // Case
         //
         
-        // testCase(astOutputListener, print, convertToAST, PATH + "case.vhd");
+        testCase(astOutputListener, print, convertToAST, PATH + "case.vhd");
         
         //
         // Process
         //
 
+        // TODO: continue here. Need to process case first!
         // testProcess(astOutputListener, print, convertToAST, PATH + "process.vhd");
         // testProcess(astOutputListener, print, convertToAST, PATH + "process_2.vhd");
         // testProcess(astOutputListener, print, convertToAST, PATH + "process_3.vhd");
@@ -186,7 +194,7 @@ public class App {
         // testEntityAndArchitecture(astOutputListener, print, convertToAST, PATH + "multiplexer.vhd");
         // testEntityAndArchitecture(astOutputListener, print, convertToAST, PATH + "thermostat_example.vhd");
         // https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
-        // testEntity(astOutputListener, print, convertToAST, PATH + "entity.vhd");
+        // testEntityDeclaration(astOutputListener, print, convertToAST, PATH + "entity.vhd");
         // testEntityInstantiation(astOutputListener, print, convertToAST, PATH + "entity_instantiation.vhd");
         // testPortMap(astOutputListener, print, convertToAST, PATH + "port_map.vhd");
         // testInstantiatedUnit(astOutputListener, print, convertToAST, PATH + "instantiated_unit.vhd");
@@ -343,7 +351,7 @@ public class App {
         return traverseTree(astOutputListener, root, print, convertToAST, testFile);
     }
 
-    private static ASTOutputListener testEntity(final ASTOutputListener astOutputListener, final boolean print,
+    private static ASTOutputListener testEntityDeclaration(final ASTOutputListener astOutputListener, final boolean print,
             final boolean convertToAST, final String testFile)
             throws IOException {
         final VHDLParser parser = processFile(testFile);

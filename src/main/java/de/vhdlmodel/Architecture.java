@@ -49,8 +49,6 @@ public class Architecture extends Stmt {
 
         }
 
-        //stringBuffer.append("\n");
-
         index = 0;
         for (ModelNode<?> stmt : children) {
 

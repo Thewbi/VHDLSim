@@ -2,9 +2,7 @@ package de.vhdlmodel;
 
 public class Signal extends ModelNode<String> {
 
-    public String name;
-
-    public String type;
+    public SubtypeIndication type;
 
     public Range range;
 
@@ -15,18 +13,23 @@ public class Signal extends ModelNode<String> {
             stringBuffer.append("  ");
         }
 
-        stringBuffer.append("Signal ").append(name).append(" ").append(type).append("\n");
+        stringBuffer.append("Signal ").append(name)/*.append(" ").append(type) */.append("\n");
 
         indent++;
-        for (ModelNode<?> child : children) {
-            stringBuffer.append(child.toString(indent));
+
+        if (type != null) {
+            stringBuffer.append(type.toString(indent));
         }
 
         if (range != null) {
             stringBuffer.append(range.toString(indent));
         }
 
+        for (ModelNode<?> child : children) {
+            stringBuffer.append(child.toString(indent));
+        }
+
         return stringBuffer.toString();
     }
-    
+
 }
