@@ -181,7 +181,7 @@ public class ASTOutputListenerOld extends VHDLParserBaseListener {
 
         astOutputListenerCallback.componentInstantiationStatement(componentInstantiationStatement);
 
-        stmt = componentInstantiationStatement.parent;
+        stmt = (Stmt) componentInstantiationStatement.parent;
         componentInstantiationStatement = null;
     }
 
@@ -196,9 +196,9 @@ public class ASTOutputListenerOld extends VHDLParserBaseListener {
         // association_listContext.association_element()) {
 
         // String assoc = association_elementContext.getText();
-        // // System.out.println(assoc);
+        // System.out.println(assoc);
 
-        // // TODO: insert the portmap into the current componentInstantiationStatement
+        // TODO: insert the portmap into the current componentInstantiationStatement
         // }
     }
 
@@ -868,7 +868,7 @@ public class ASTOutputListenerOld extends VHDLParserBaseListener {
         astOutputListenerCallback.architecture(architecture);
 
         // Commenting out this line will leave the stmt alive for printing
-        stmt = architecture.parent;
+        stmt = (Stmt) architecture.parent;
         architecture = null;
     }
 
@@ -966,7 +966,7 @@ public class ASTOutputListenerOld extends VHDLParserBaseListener {
 
         astOutputListenerCallback.entity(entity);
 
-        stmt = entity.parent;
+        stmt = (Stmt) entity.parent;
         entity = null;
         portTarget = null;
     }
@@ -988,7 +988,7 @@ public class ASTOutputListenerOld extends VHDLParserBaseListener {
     @Override
     public void exitComponent_declaration(VHDLParser.Component_declarationContext ctx) {
 
-        stmt = component.parent;
+        stmt = (Stmt) component.parent;
 
         astOutputListenerCallback.component(component);
 
@@ -1464,8 +1464,10 @@ public class ASTOutputListenerOld extends VHDLParserBaseListener {
         // reset on exit
         expr = null;
 
+        IfStmt ifStmt = (IfStmt) stmt;
+
         // emit the statement
-        astOutputListenerCallback.ifStmt(stmt);
+        astOutputListenerCallback.ifStmt(ifStmt);
 
         ascend();
     }
@@ -1509,7 +1511,7 @@ public class ASTOutputListenerOld extends VHDLParserBaseListener {
         // reset on exit
         expr = null;
 
-        astOutputListenerCallback.caseStmt(stmt);
+        astOutputListenerCallback.caseStmt((CaseStmt) stmt);
 
         ascend();
     }
@@ -1534,7 +1536,7 @@ public class ASTOutputListenerOld extends VHDLParserBaseListener {
         // reset on exit
         expr = null;
 
-        stmt = stmt.parent == null ? stmt : stmt.parent;
+        stmt = stmt.parent == null ? stmt : (Stmt) stmt.parent;
     }
 
     @Override
@@ -1544,12 +1546,12 @@ public class ASTOutputListenerOld extends VHDLParserBaseListener {
     @Override
     public void exitChoice(VHDLParser.ChoiceContext ctx) {
 
-        // only if this is not the others case, retrieve the expression from the stack
-        // The others case has no expression! It is like the else branch of an
-        // if-statement which also has no expression
-        if (!case_statement_alternative_others) {
-            stmt.addChoice(stackPop().value);
-        }
+        // // only if this is not the others case, retrieve the expression from the stack
+        // // The others case has no expression! It is like the else branch of an
+        // // if-statement which also has no expression
+        // if (!case_statement_alternative_others) {
+        //     stmt.addChoice(stackPop().value);
+        // }
 
         case_statement_alternative_others = false;
     }
@@ -2071,6 +2073,6 @@ public class ASTOutputListenerOld extends VHDLParserBaseListener {
     }
 
     private void ascend() {
-        stmt = stmt.parent;
+        stmt = (Stmt) stmt.parent;
     }
 }

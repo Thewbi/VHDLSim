@@ -2,6 +2,7 @@ package de.vhdlsim;
 
 import de.vhdlmodel.Architecture;
 import de.vhdlmodel.AssignmentStmt;
+import de.vhdlmodel.CaseStmt;
 import de.vhdlmodel.Component;
 import de.vhdlmodel.ComponentInstantiationStatement;
 import de.vhdlmodel.Configuration;
@@ -9,6 +10,7 @@ import de.vhdlmodel.Entity;
 import de.vhdlmodel.FunctionCall;
 import de.vhdlmodel.FunctionImplementation;
 import de.vhdlmodel.FunctionSpecification;
+import de.vhdlmodel.IfStmt;
 import de.vhdlmodel.ModelNode;
 import de.vhdlmodel.Name;
 import de.vhdlmodel.Range;
@@ -28,7 +30,7 @@ public interface ASTOutputListenerCallback {
 
     void process(Stmt stmt);
 
-    void ifStmt(Stmt stmt);
+    void ifStmt(IfStmt stmt);
 
     void signal(Signal signal);
 
@@ -42,7 +44,7 @@ public interface ASTOutputListenerCallback {
 
     void selectedSignalAssignment(Stmt stmt);
 
-    void caseStmt(Stmt stmt);
+    void caseStmt(CaseStmt stmt);
 
     void record(Record record);
 

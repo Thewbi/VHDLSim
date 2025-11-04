@@ -1,10 +1,15 @@
 package de.vhdlmodel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Signal extends ModelNode<String> {
 
     public SubtypeIndication type;
 
     public Range range;
+
+    public List<Identifier> identifierList = new ArrayList<>();
 
     public String toString(int indent) {
 
@@ -13,7 +18,17 @@ public class Signal extends ModelNode<String> {
             stringBuffer.append("  ");
         }
 
-        stringBuffer.append("Signal ").append(name)/*.append(" ").append(type) */.append("\n");
+        stringBuffer.append("Signal: ");
+        
+        int identifierCount = 0;
+        for (Identifier identifier : identifierList) {
+            if (identifierCount > 0) {
+                stringBuffer.append(", ");
+            }
+            stringBuffer.append(identifier.value);
+            identifierCount++;
+        }
+        stringBuffer.append("\n");
 
         indent++;
 

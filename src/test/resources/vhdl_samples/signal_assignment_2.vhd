@@ -1,0 +1,1 @@
+rden <= bus_req_i.stb and (not bus_req_i.rw);

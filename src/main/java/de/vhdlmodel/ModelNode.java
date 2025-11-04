@@ -32,7 +32,11 @@ public class ModelNode<T> {
             stringBuffer.append("  ");
         }
 
-        stringBuffer.append("Name: ").append(name).append("\n");
+        stringBuffer.append("Name: ");
+        if (name != null) {
+            stringBuffer.append(name);
+        }
+        stringBuffer.append("\n");
 
         indent++;
         for (ModelNode<?> child : children) {

@@ -13,7 +13,7 @@ public class CaseStmtBranch extends Stmt {
         if (null == value) {
             stringBuffer.append("<others>");
         } else {
-            stringBuffer.append(value.toString());
+            stringBuffer.append(((ModelNode) value).toString(indent + 1));
         }
         stringBuffer.append("\n");
 

@@ -48,7 +48,7 @@ public class Expr extends Stmt {
             index++;
 
             if (index < children.size()) {
-                stringBuffer.append("\n");
+                // stringBuffer.append("\n");
             }
         }
 

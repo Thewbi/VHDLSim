@@ -19,6 +19,7 @@ import de.vhdl.grammar.VHDLParser.Architecture_bodyContext;
 import de.vhdl.grammar.VHDLParser.Case_statementContext;
 import de.vhdl.grammar.VHDLParser.Component_declarationContext;
 import de.vhdl.grammar.VHDLParser.Component_instantiation_statementContext;
+import de.vhdl.grammar.VHDLParser.Conditional_signal_assignmentContext;
 import de.vhdl.grammar.VHDLParser.Configuration_declarationContext;
 import de.vhdl.grammar.VHDLParser.Design_fileContext;
 import de.vhdl.grammar.VHDLParser.Entity_declarationContext;
@@ -33,6 +34,7 @@ import de.vhdl.grammar.VHDLParser.Port_map_aspectContext;
 import de.vhdl.grammar.VHDLParser.Process_statementContext;
 import de.vhdl.grammar.VHDLParser.Range_constraintContext;
 import de.vhdl.grammar.VHDLParser.Record_type_definitionContext;
+import de.vhdl.grammar.VHDLParser.Selected_signal_assignmentContext;
 import de.vhdl.grammar.VHDLParser.Signal_assignment_statementContext;
 import de.vhdl.grammar.VHDLParser.Signal_declarationContext;
 import de.vhdl.grammar.VHDLParser.Simple_expressionContext;
@@ -82,9 +84,16 @@ public class App {
 
         // @formatter:off
         
+        // TODO:
         // testAliasDeclaration(astOutputListener, print, convertToAST, PATH + "alias.vhd");
         // testPhysicalUnits(astOutputListener, print, convertToAST, PATH + "physical_units.vhd");
         // testRangeConstraint(astOutputListener, print, convertToAST, PATH + "range_constraint.vhd");
+
+        //
+        // type declaration
+        //
+
+        // testTypeDeclaration(astOutputListener, print, convertToAST, PATH + "type_declaration_1.vhd");
 
         //
         // Signal Declaration
@@ -93,6 +102,7 @@ public class App {
         // testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration_1.vhd");
         // testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration_2.vhd");
         // testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration_3.vhd");
+        // testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration_vector.vhd");
         
         //
         // Expression
@@ -102,21 +112,41 @@ public class App {
         // testSimpleExpression(astOutputListener, print, convertToAST, PATH + "expression_with_function_call.vhd");
 
         //
-        // Assignment
+        // Signal Assignment Statement (signal_assignment_statement)
         //
         
-        // testAssignment(astOutputListener, print, convertToAST, PATH + "signal_assignment.vhd");
+        // testAssignment(astOutputListener, print, convertToAST, PATH + "signal_assignment_1.vhd");
+        // testAssignment(astOutputListener, print, convertToAST, PATH + "signal_assignment_2.vhd");
+        // TODO: next
+        // testAssignment(astOutputListener, print, convertToAST, PATH + "signal_assignment_4.vhd");
         // testAssignment(astOutputListener, print, convertToAST, PATH + "signal_assignment_logical.vhd");
         
+        //
+        // Selected Signal Assignment
+        //
+
+        // TODO
+        // testSelectedSignalAssignment(astOutputListener, print, convertToAST, PATH + "selected_signal_assignment_1.vhd");
+
+        //
+        // Conditional Signal Assignment
+        //
+        // https://www.sigasi.com/tech/signal-assignments-vhdl-withselect-whenelse-and-case/
+        //
+
+        // testConditionalSignalAssignment(astOutputListener, print, convertToAST, PATH + "signal_assignment_when_else.vhd");
+        // testConditionalSignalAssignment(astOutputListener, print, convertToAST, PATH + "signal_assignment_3.vhd");
+
         //
         // If statements
         //
 
         // testIf(astOutputListener, print, convertToAST, PATH + "if.vhd");
-        // testIf(astOutputListener, print, convertToAST, PATH + "if_complex_expression.vhd");
-        // testIf(astOutputListener, print, convertToAST, PATH + "elsif.vhd");
-        // testIf(astOutputListener, print, convertToAST, PATH + "if_with_function_predicate.vhd");
         // testIf(astOutputListener, print, convertToAST, PATH + "if_2.vhd");
+        // testIf(astOutputListener, print, convertToAST, PATH + "elsif.vhd");
+        // testIf(astOutputListener, print, convertToAST, PATH + "if_with_element_access.vhd");
+        // testIf(astOutputListener, print, convertToAST, PATH + "if_complex_expression.vhd");
+        // testIf(astOutputListener, print, convertToAST, PATH + "if_with_function_predicate.vhd");
         // testIf(astOutputListener, print, convertToAST, PATH + "if_with_expression.vhd");
         
         //
@@ -153,16 +183,17 @@ public class App {
         // Case
         //
         
-        testCase(astOutputListener, print, convertToAST, PATH + "case.vhd");
+        // testCase(astOutputListener, print, convertToAST, PATH + "case.vhd");
         
         //
         // Process
         //
 
         // TODO: continue here. Need to process case first!
-        // testProcess(astOutputListener, print, convertToAST, PATH + "process.vhd");
+        // testProcess(astOutputListener, print, convertToAST, PATH + "process_1.vhd");
         // testProcess(astOutputListener, print, convertToAST, PATH + "process_2.vhd");
         // testProcess(astOutputListener, print, convertToAST, PATH + "process_3.vhd");
+        testProcess(astOutputListener, print, convertToAST, PATH + "process_4.vhd");
         
         // testWaveformElement(astOutputListener, print, convertToAST, PATH + "waveform_element.vhd");
         
@@ -188,15 +219,20 @@ public class App {
         // entity and architecture
         //
 
+        // testEntityDeclaration(astOutputListener, print, convertToAST, PATH + "entity.vhd");
+        testEntityDeclaration(astOutputListener, print, convertToAST, PATH + "entity_generic.vhd");
+
         // // and-gate
         // //https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
         // testEntityAndArchitecture(astOutputListener, print, convertToAST, PATH + "and_gate.vhd");
         // testEntityAndArchitecture(astOutputListener, print, convertToAST, PATH + "multiplexer.vhd");
         // testEntityAndArchitecture(astOutputListener, print, convertToAST, PATH + "thermostat_example.vhd");
         // https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
-        // testEntityDeclaration(astOutputListener, print, convertToAST, PATH + "entity.vhd");
+        
         // testEntityInstantiation(astOutputListener, print, convertToAST, PATH + "entity_instantiation.vhd");
+        
         // testPortMap(astOutputListener, print, convertToAST, PATH + "port_map.vhd");
+        
         // testInstantiatedUnit(astOutputListener, print, convertToAST, PATH + "instantiated_unit.vhd");
         
         // testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture.vhd");
@@ -234,6 +270,15 @@ public class App {
         // }
 
         // https://www.mikrocontroller.net/articles/VHDL_Testbench
+    }
+
+    private static ASTOutputListener testTypeDeclaration(ASTOutputListener astOutputListener, boolean print,
+            boolean convertToAST,
+            String testFile) throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Type_declarationContext type_declarationContext = parser.type_declaration();
+
+        return traverseTree(astOutputListener, type_declarationContext, print, convertToAST, testFile);
     }
 
     private static ASTOutputListener testSubprogramBody(ASTOutputListener astOutputListener, boolean print,
@@ -322,6 +367,24 @@ public class App {
             throws IOException {
         final VHDLParser parser = processFile(testFile);
         final Signal_assignment_statementContext root = parser.signal_assignment_statement();
+
+        return traverseTree(astOutputListener, root, print, convertToAST, testFile);
+    }
+
+    private static ASTOutputListener testSelectedSignalAssignment(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile)
+            throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Selected_signal_assignmentContext root = parser.selected_signal_assignment();
+
+        return traverseTree(astOutputListener, root, print, convertToAST, testFile);
+    }
+
+    private static ASTOutputListener testConditionalSignalAssignment(final ASTOutputListener astOutputListener, final boolean print,
+            final boolean convertToAST, final String testFile)
+            throws IOException {
+        final VHDLParser parser = processFile(testFile);
+        final Conditional_signal_assignmentContext root = parser.conditional_signal_assignment();
 
         return traverseTree(astOutputListener, root, print, convertToAST, testFile);
     }

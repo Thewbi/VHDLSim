@@ -4,6 +4,7 @@ import java.util.Map;
 
 import de.vhdlmodel.Architecture;
 import de.vhdlmodel.AssignmentStmt;
+import de.vhdlmodel.CaseStmt;
 import de.vhdlmodel.Component;
 import de.vhdlmodel.ComponentInstantiationStatement;
 import de.vhdlmodel.Configuration;
@@ -11,6 +12,7 @@ import de.vhdlmodel.Entity;
 import de.vhdlmodel.FunctionCall;
 import de.vhdlmodel.FunctionImplementation;
 import de.vhdlmodel.FunctionSpecification;
+import de.vhdlmodel.IfStmt;
 import de.vhdlmodel.ModelNode;
 import de.vhdlmodel.Name;
 import de.vhdlmodel.PhysicalUnit;
@@ -28,17 +30,29 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     // private static final boolean PERFORM_DEBUG_OUTPUT = true;
     private static final boolean PERFORM_DEBUG_OUTPUT = false;
 
-    private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = true;
-    // private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = false;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = true;
+    private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = false;
 
-    private static final boolean PERFORM_DEBUG_OUTPUT_ENTITY = true;
-    // private static final boolean PERFORM_DEBUG_OUTPUT_ENTITY = false;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_ENTITY = true;
+    private static final boolean PERFORM_DEBUG_OUTPUT_ENTITY = false;
 
-    // private static final boolean PERFORM_DEBUG_OUTPUT_PROCESS_STATEMENT = true;
-    private static final boolean PERFORM_DEBUG_OUTPUT_PROCESS_STATEMENT = false;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_SIGNAL_ASSIGNMENT_STATEMENT = true;
+    private static final boolean PERFORM_DEBUG_OUTPUT_SIGNAL_ASSIGNMENT_STATEMENT = false;
+
+    private static final boolean PERFORM_DEBUG_OUTPUT_PROCESS_STATEMENT = true;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_PROCESS_STATEMENT = false;
 
     // private static final boolean PERFORM_DEBUG_OUTPUT_SIGNAL = true;
     private static final boolean PERFORM_DEBUG_OUTPUT_SIGNAL = false;
+
+    // private static final boolean PERFORM_DEBUG_OUTPUT_CASE_STATEMENT = true;
+    private static final boolean PERFORM_DEBUG_OUTPUT_CASE_STATEMENT = false;
+
+    // private static final boolean PERFORM_DEBUG_OUTPUT_IF_STATEMENT = true;
+    private static final boolean PERFORM_DEBUG_OUTPUT_IF_STATEMENT = false;
+
+    // private static final boolean PERFORM_DEBUG_OUTPUT_ENUM_TYPE_DECLARATION = true;
+    private static final boolean PERFORM_DEBUG_OUTPUT_ENUM_TYPE_DECLARATION = false;
 
     public Map<String, PhysicalUnit> units;
 
@@ -71,8 +85,8 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     }
 
     @Override
-    public void ifStmt(final Stmt stmt) {
-        if (PERFORM_DEBUG_OUTPUT) {
+    public void ifStmt(final IfStmt stmt) {
+        if (PERFORM_DEBUG_OUTPUT || PERFORM_DEBUG_OUTPUT_IF_STATEMENT) {
             System.out.println(stmt.toString(INDENT));
         }
     }
@@ -86,7 +100,7 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
 
     @Override
     public void signalAssignment(final AssignmentStmt assignmentStmt) {
-        if (PERFORM_DEBUG_OUTPUT) {
+        if (PERFORM_DEBUG_OUTPUT || PERFORM_DEBUG_OUTPUT_SIGNAL_ASSIGNMENT_STATEMENT) {
             System.out.println(assignmentStmt.toString(INDENT));
         }
     }
@@ -99,8 +113,8 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     }
 
     @Override
-    public void caseStmt(final Stmt stmt) {
-        if (PERFORM_DEBUG_OUTPUT) {
+    public void caseStmt(final CaseStmt stmt) {
+        if (PERFORM_DEBUG_OUTPUT || PERFORM_DEBUG_OUTPUT_CASE_STATEMENT) {
             System.out.println(stmt.toString(INDENT));
         }
     }
@@ -161,7 +175,7 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
 
     @Override
     public void enumDataTypeDeclaration(TypeDeclaration typeDeclaration) {
-        if (PERFORM_DEBUG_OUTPUT) {
+        if (PERFORM_DEBUG_OUTPUT || PERFORM_DEBUG_OUTPUT_ENUM_TYPE_DECLARATION) {
             System.out.println(typeDeclaration.toString(INDENT));
         }
     }

@@ -1,4 +1,4 @@
-// Generated from de\vhdl\grammar\VHDLParser.g4 by ANTLR 4.9.1
+// Generated from de/vhdl/grammar/VHDLParser.g4 by ANTLR 4.13.2
 package de.vhdl.grammar;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -10,6 +10,7 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
  * @param <T> The return type of the visit operation. Use {@link Void} for
  * operations with no return type.
  */
+@SuppressWarnings("CheckReturnValue")
 public class VHDLParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements VHDLParserVisitor<T> {
 	/**
 	 * {@inheritDoc}

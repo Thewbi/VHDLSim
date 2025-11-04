@@ -39,6 +39,10 @@ public class AssignmentStmt extends Stmt {
 
         stringBuffer.append("\n");
 
+        for (ModelNode<?> child : children) {
+            stringBuffer.append(child.toString(indent + 1));
+        }
+
         return stringBuffer.toString();
     }
 

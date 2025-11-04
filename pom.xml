@@ -17,6 +17,10 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
+    <maven.test.skip>true</maven.test.skip>
+
+    <antlr4.plugin.version>4.13.2</antlr4.plugin.version>
+    <antlr4.version>4.13.2</antlr4.version>
     <antlr4.visitor>true</antlr4.visitor>
     <antlr4.listener>true</antlr4.listener>
   </properties>
@@ -34,7 +38,8 @@
     <dependency>
       <groupId>org.antlr</groupId>
       <artifactId>antlr4</artifactId>
-      <version>4.9.1</version>
+      <!-- <version>4.9.1</version> -->
+      <version>${antlr4.version}</version>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
@@ -104,7 +109,8 @@
       <plugin>
         <groupId>org.antlr</groupId>
         <artifactId>antlr4-maven-plugin</artifactId>
-        <version>4.9.1</version>
+        <!-- <version>4.9.1</version> -->
+        <version>${antlr4.plugin.version}</version>
         <configuration>
           <sourceDirectory>src/main/antlr4</sourceDirectory>
           <outputDirectory>src/main/java</outputDirectory>

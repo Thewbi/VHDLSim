@@ -1,0 +1,1 @@
+type state_t is (S_IDLE, S_BUSY_A, S_BUSY_B);

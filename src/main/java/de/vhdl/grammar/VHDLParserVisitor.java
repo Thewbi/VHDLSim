@@ -1,4 +1,4 @@
-// Generated from de\vhdl\grammar\VHDLParser.g4 by ANTLR 4.9.1
+// Generated from de/vhdl/grammar/VHDLParser.g4 by ANTLR 4.13.2
 package de.vhdl.grammar;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 

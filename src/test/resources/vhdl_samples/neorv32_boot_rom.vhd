@@ -35,18 +35,18 @@ architecture neorv32_boot_rom_rtl of neorv32_boot_rom is
    signal rden  : std_ulogic;
    signal rdata : std_ulogic_vector(31 downto 0);
 
--- begin
+begin
 
   -- ROM Access -----------------------------------------------------------------------------
   -- -------------------------------------------------------------------------------------------
---  rom_access: process(clk_i)
---  begin
-  --  if rising_edge(clk_i) then
-  --    if (bus_req_i.stb = '1') then
+  rom_access: process(clk_i)
+  begin
+    if rising_edge(clk_i) then
+      if (bus_req_i.stb = '1') then
   --      rdata <= bootloader_image_data_c(to_integer(unsigned(bus_req_i.addr(awidth_c+1 downto 2))));
-  --    end if;
-  --  end if;
---  end process rom_access;
+      end if;
+    end if;
+  end process rom_access;
 
 --  -- size notifier --
 --  assert false report
@@ -58,20 +58,20 @@ architecture neorv32_boot_rom_rtl of neorv32_boot_rom is
 --    "overflows processor-internal BOOTROM (" & natural'image(iodev_size_c) & " bytes)!" severity error;
 --
 --
---  -- Bus Handshake --------------------------------------------------------------------------
---  -- -------------------------------------------------------------------------------------------
---  bus_handshake: process(rstn_i, clk_i)
---  begin
---    if (rstn_i = '0') then
---      rden <= '0';
---    elsif rising_edge(clk_i) then
---      rden <= bus_req_i.stb and (not bus_req_i.rw); -- read-only
---    end if;
---  end process bus_handshake;
---
---  -- output gate --
---  bus_rsp_o.data <= rdata when (rden = '1') else (others => '0');
---  bus_rsp_o.ack  <= rden;
---  bus_rsp_o.err  <= '0';
---
+-- Bus Handshake --------------------------------------------------------------------------
+-- -------------------------------------------------------------------------------------------
+bus_handshake: process(rstn_i, clk_i)
+begin
+    if (rstn_i = '0') then
+      rden <= '0';
+    elsif rising_edge(clk_i) then
+      rden <= bus_req_i.stb and (not bus_req_i.rw); -- read-only
+    end if;
+end process bus_handshake;
+
+  -- output gate --
+  bus_rsp_o.data <= rdata when (rden = '1') else (others => '0');
+  bus_rsp_o.ack  <= rden;
+  bus_rsp_o.err  <= '0';
+
 end neorv32_boot_rom_rtl;

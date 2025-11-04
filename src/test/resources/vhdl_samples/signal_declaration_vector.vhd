@@ -1,0 +1,1 @@
+signal locked, locked_nxt : std_ulogic_vector(1 downto 0);
