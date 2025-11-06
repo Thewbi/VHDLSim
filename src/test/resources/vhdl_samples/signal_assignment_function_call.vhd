@@ -1,0 +1,1 @@
+immediate <= replicate_f(exe_engine.ir(31), 21)

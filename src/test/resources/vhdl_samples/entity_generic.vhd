@@ -1,7 +1,7 @@
 entity neorv32_bus_switch is
   generic (
     ROUND_ROBIN_EN : boolean := false; -- enable round-robin arbitration
-    A_READ_ONLY    : boolean := false; -- set if port A is read-only
+    A_READ_ONLY    : boolean := true; -- set if port A is read-only
     B_READ_ONLY    : boolean := false  -- set if port B is read-only
   );
   port (

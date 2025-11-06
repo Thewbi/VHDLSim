@@ -26,9 +26,10 @@ public class Range extends ModelNode<String> {
         
         if (end != null) {
             stringBuffer.append(end.toString(indent + 1));
-            for (int i = 0; i < indent ; i++) {
-                stringBuffer.append("  ");
-            }
+        }
+
+        for (int i = 0; i < indent ; i++) {
+            stringBuffer.append("  ");
         }
         stringBuffer.append("]\n");
 

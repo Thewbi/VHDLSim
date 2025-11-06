@@ -1,8 +1,7 @@
--- bit0 : entity work.d_ff(basic)
---         port map (d0, int_clk, q0);
+bit0 : entity work.d_ff(basic)
+         port map (d0, int_clk, q0);
 
-bit0 : entity flip.flap.flup.d_ff(basic)
-        port map (d0, int_clk, q0);
+
 
 
 -- entity d_ff is
@@ -21,6 +20,7 @@ bit0 : entity flip.flap.flup.d_ff(basic)
 -- entity and2 is
 --     port ( a, b : in bit; y : out bit );
 -- end and2;
+
 -- architecture basic of and2 is
 -- begin
 --     and2_behavior : process is

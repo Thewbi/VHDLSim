@@ -7,4 +7,6 @@ public abstract class PortTarget extends Stmt {
 
     public List<Port> ports = new ArrayList<>();
     
+    public List<InterfaceConstant> interfaceConstants = new ArrayList<>();
+    
 }

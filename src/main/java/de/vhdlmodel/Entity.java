@@ -12,6 +12,13 @@ public class Entity extends PortTarget {
         stringBuffer.append("Entity ").append(name).append("\n");
 
         indent++;
+
+        // generics
+        for (InterfaceConstant interfaceConstant : interfaceConstants) {
+            stringBuffer.append(interfaceConstant.toString(indent));
+        }
+
+        // ports
         for (Port port : ports) {
             stringBuffer.append(port.toString(indent));
         }

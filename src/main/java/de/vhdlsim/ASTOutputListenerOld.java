@@ -151,7 +151,6 @@ public class ASTOutputListenerOld extends VHDLParserBaseListener {
         stmt.children.add(waitStatement);
     }
 
-    @SuppressWarnings("unused")
     @Override
     public void enterComponent_instantiation_statement(VHDLParser.Component_instantiation_statementContext ctx) {
 
@@ -163,9 +162,13 @@ public class ASTOutputListenerOld extends VHDLParserBaseListener {
         Instantiated_unitContext instantiated_unitContext = ctx.instantiated_unit();
         NameContext nameContext = instantiated_unitContext.name();
 
+        @SuppressWarnings("unused")
         String name = nameContext.getText();
+        @SuppressWarnings("unused")
         String library = nameContext.getChild(0).getText();
+        @SuppressWarnings("unused")
         String entityType = nameContext.getChild(1).getText();
+        @SuppressWarnings("unused")
         String entityArchitecture = nameContext.getChild(2).getText();
 
         // insert component instantiation statement into the parent architecture

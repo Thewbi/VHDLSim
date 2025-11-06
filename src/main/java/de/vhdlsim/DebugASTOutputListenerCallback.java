@@ -27,8 +27,8 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
 
     private static final int INDENT = 0;
 
-    // private static final boolean PERFORM_DEBUG_OUTPUT = true;
-    private static final boolean PERFORM_DEBUG_OUTPUT = false;
+    private static final boolean PERFORM_DEBUG_OUTPUT = true;
+    // private static final boolean PERFORM_DEBUG_OUTPUT = false;
 
     // private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = true;
     private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = false;
@@ -39,8 +39,8 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     // private static final boolean PERFORM_DEBUG_OUTPUT_SIGNAL_ASSIGNMENT_STATEMENT = true;
     private static final boolean PERFORM_DEBUG_OUTPUT_SIGNAL_ASSIGNMENT_STATEMENT = false;
 
-    private static final boolean PERFORM_DEBUG_OUTPUT_PROCESS_STATEMENT = true;
-    // private static final boolean PERFORM_DEBUG_OUTPUT_PROCESS_STATEMENT = false;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_PROCESS_STATEMENT = true;
+    private static final boolean PERFORM_DEBUG_OUTPUT_PROCESS_STATEMENT = false;
 
     // private static final boolean PERFORM_DEBUG_OUTPUT_SIGNAL = true;
     private static final boolean PERFORM_DEBUG_OUTPUT_SIGNAL = false;
@@ -51,8 +51,14 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     // private static final boolean PERFORM_DEBUG_OUTPUT_IF_STATEMENT = true;
     private static final boolean PERFORM_DEBUG_OUTPUT_IF_STATEMENT = false;
 
-    // private static final boolean PERFORM_DEBUG_OUTPUT_ENUM_TYPE_DECLARATION = true;
-    private static final boolean PERFORM_DEBUG_OUTPUT_ENUM_TYPE_DECLARATION = false;
+    private static final boolean PERFORM_DEBUG_OUTPUT_ENUM_TYPE_DECLARATION = true;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_ENUM_TYPE_DECLARATION = false;
+
+    private static final boolean PERFORM_DEBUG_OUTPUT_TYPE_DECLARATION = true;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_TYPE_DECLARATION = false;
+
+    private static final boolean PERFORM_DEBUG_OUTPUT_COMPONENT_INSTANTIATION = true;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_COMPONENT_INSTANTIATION = false;
 
     public Map<String, PhysicalUnit> units;
 
@@ -156,21 +162,22 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
 
     @Override
     public void typeDeclaration(TypeDeclaration typeDeclaration) {
-        if (PERFORM_DEBUG_OUTPUT) {
+        if (PERFORM_DEBUG_OUTPUT || PERFORM_DEBUG_OUTPUT_TYPE_DECLARATION) {
             System.out.println(typeDeclaration.toString(INDENT));
-        }
 
-        // check if a physical unit has been declared
-        PhysicalUnit physicalUnit = typeDeclaration.physicalUnit;
-        if (physicalUnit != null) {
+            // check if a physical unit has been declared
+            PhysicalUnit physicalUnit = typeDeclaration.physicalUnit;
+            if (physicalUnit != null) {
 
-            if (units.containsKey(physicalUnit.name)) {
-                throw new RuntimeException("Duplicate entry of physical unit: '" + physicalUnit.name + "'");
+                if (units.containsKey(physicalUnit.name)) {
+                    throw new RuntimeException("Duplicate entry of physical unit: '" + physicalUnit.name + "'");
+                }
+
+                // insert the unit into the external storage of all physcial units
+                units.put(physicalUnit.name, physicalUnit);
             }
-
-            // insert the unit into the external storage of all physcial units
-            units.put(physicalUnit.name, physicalUnit);
         }
+        
     }
 
     @Override
@@ -189,7 +196,7 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
 
     @Override
     public void componentInstantiationStatement(ComponentInstantiationStatement componentInstantiationStatement) {
-        if (PERFORM_DEBUG_OUTPUT) {
+        if (PERFORM_DEBUG_OUTPUT || PERFORM_DEBUG_OUTPUT_COMPONENT_INSTANTIATION) {
             System.out.println(componentInstantiationStatement.toString(INDENT));
         }
     }
