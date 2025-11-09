@@ -38,19 +38,24 @@ public class Expr extends Stmt {
         }
         stringBuffer.append("\n");
 
+        /**/
+        //
+        // Children
+        //
+
         indent++;
 
-        int index = 0;
+        // int index = 0;
         for (ModelNode<?> child : children) {
-
-            stringBuffer.append(child.toString(indent));
-
-            index++;
-
-            if (index < children.size()) {
-                // stringBuffer.append("\n");
+            if (child instanceof Expr) {
+                stringBuffer.append(child.toString(indent));
             }
+            // index++;
+            // if (index < children.size()) {
+                // stringBuffer.append("\n");
+            // }
         }
+        
 
         return stringBuffer.toString();
     }

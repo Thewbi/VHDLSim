@@ -533,8 +533,8 @@ entity_specification
   ;
 
 entity_statement
-  :  concurrent_assertion_statement
-  |  process_statement
+  : concurrent_assertion_statement
+  | process_statement
   | concurrent_procedure_call_statement
   ;
 

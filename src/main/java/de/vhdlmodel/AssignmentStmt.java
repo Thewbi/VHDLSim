@@ -11,6 +11,7 @@ public class AssignmentStmt extends Stmt {
     public String toString(int indent) {
 
         StringBuffer stringBuffer = new StringBuffer();
+
         for (int i = 0; i < indent; i++) {
             stringBuffer.append("  ");
         }
@@ -26,12 +27,14 @@ public class AssignmentStmt extends Stmt {
         stringBuffer.append(lhs.toString(indent));
         indent--;
 
-        stringBuffer.append("\n");
+        // stringBuffer.append("\n");
 
         for (int i = 0; i < indent; i++) {
             stringBuffer.append("  ");
         }
-        stringBuffer.append("rhs: ").append("\n");
+        stringBuffer.append("rhs: ");
+
+        stringBuffer.append("\n");
 
         indent++;
         stringBuffer.append(rhs.toString(indent));

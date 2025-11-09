@@ -1,0 +1,1 @@
+signal sinus_u     : unsigned(3 downto 0);

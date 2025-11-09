@@ -26,7 +26,7 @@ public class ConditionalWaveforms extends Stmt {
         // int index = 0;
         for (ModelNode<?> child : children) {
 
-            stringBuffer.append(child.toString(indent + 1));
+            stringBuffer.append(child.toString(indent));
 
             // if (index < children.size() - 1) {
             //     stringBuffer.append("\n");
@@ -34,6 +34,8 @@ public class ConditionalWaveforms extends Stmt {
 
             // index++;
         }
+
+        indent--;
 
         return stringBuffer.toString();
     }

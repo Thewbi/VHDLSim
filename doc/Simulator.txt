@@ -23,7 +23,7 @@ Everything starts with a Initialization Phase
 
 1. Initialization Phase
 
-Initialization phase followed by a cycle of the following to phases:
+Initialization phase followed by a cycle of the following two phases:
 
 2. Signal and Time Update
 3. Process Execution & Signal Evaluations
@@ -43,23 +43,53 @@ are suspended, 1. Initialization Phase is over.
 
 "2. Signal and Time Update" will update all nets.
 
-"3. Process Execution & Signal Evaluations" will execute all processes that are activated by changes to signals on their sensitivity list
-After all Processes are suspended again, Signals are evaluated.
-Maybe for each "real" signal change (when the signal actually changes it's value to a new value that differs from it's current value)
+"3. Process Execution & Signal Evaluations" will execute all processes that are activated 
+by changes to signals on their sensitivity list
+After all Processes are suspended again, Signals/Nets are evaluated.
+Maybe for each "real" signal change (when the signal actually changes it's value to a new value 
+that differs from it's current value)
 a transaction is inserted into the "Signal Update Queue" but the signal is not immediately changed!
 I am not sure if this is correct. I think it is correct.
-I think that to determine if a process is triggered and has to go onto the "Process Execution Queue", the simulator has to 
-check all transactions in the "Signal Update Queue" and look for changed signals that are in the processe's sensitivity list.
+
+I think that to determine if a process is triggered and has to go onto the "Process Execution Queue", 
+the simulator has to check all transactions in the "Signal Update Queue" and look for changed signals 
+that are in the processe's sensitivity list.
+
 After all processes have been checked, the transactions in the "Signal Update Queue" are executed and deleted.
 Source: https://surf-vhdl.com/vhdl-syntax-web-course-surf-vhdl/vhdl-process-statement/ 
 "In fact the process is evaluated any time a transaction is scheduled on the signal a,b,d,e."
-
 
 There is a "Signal Update Queue" which contains transactions. A transaction performs an update of a signal.
 A signal is not updated immediately when a process changes it! Instead a change is modeled by a transaction and a transaction
 is inserted into the "Signal Update Queue" which is only processed once Phase "2. Signal and Time Update" executes.
 
 There is a "Process Execution Queue" which contains all processes that have to be executed since a signal on their sensitiviy list has changed.
+
+
+
+== Processes ==
+
+When the time is advanced by the simulator and signals are evaluated, time actually
+stops. This means the time is not advanced by the simulation until processes are 
+executed and nets are update.
+
+The simulation now starts to execute processes. A process is actually executed 
+forever unless it has a wait-statement in it. A processes having a sensitivity list
+of signals, implicitly has wait statements because it will wait on the signals
+in the sensitivity list befor it executes again.
+
+A process without a wait statement and without a sensitivity list will execute
+indefinitely. It will start over at the first statement after finishing the 
+last statement!
+
+Signals are assigned new values only after the process has stopped. This means
+a signal has no intermediate values but get assigned only a single new value
+per timestep.
+
+When all processes are stopped on a wait statement and all nets are updated,
+the simulation evaulates and assigns signals and then advances time to the
+next timestep.
+
 
 
 == Example ==

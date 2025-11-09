@@ -8,6 +8,7 @@ import de.vhdlmodel.CaseStmt;
 import de.vhdlmodel.Component;
 import de.vhdlmodel.ComponentInstantiationStatement;
 import de.vhdlmodel.Configuration;
+import de.vhdlmodel.ConstantDeclaration;
 import de.vhdlmodel.Entity;
 import de.vhdlmodel.FunctionCall;
 import de.vhdlmodel.FunctionImplementation;
@@ -27,14 +28,14 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
 
     private static final int INDENT = 0;
 
-    private static final boolean PERFORM_DEBUG_OUTPUT = true;
-    // private static final boolean PERFORM_DEBUG_OUTPUT = false;
+    // private static final boolean PERFORM_DEBUG_OUTPUT = true;
+    private static final boolean PERFORM_DEBUG_OUTPUT = false;
 
-    // private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = true;
-    private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = false;
+    private static final boolean PERFORM_DEBUG_OUTPUT_ENTITY = true;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_ENTITY = false;
 
-    // private static final boolean PERFORM_DEBUG_OUTPUT_ENTITY = true;
-    private static final boolean PERFORM_DEBUG_OUTPUT_ENTITY = false;
+    private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = true;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = false;
 
     // private static final boolean PERFORM_DEBUG_OUTPUT_SIGNAL_ASSIGNMENT_STATEMENT = true;
     private static final boolean PERFORM_DEBUG_OUTPUT_SIGNAL_ASSIGNMENT_STATEMENT = false;
@@ -51,14 +52,17 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     // private static final boolean PERFORM_DEBUG_OUTPUT_IF_STATEMENT = true;
     private static final boolean PERFORM_DEBUG_OUTPUT_IF_STATEMENT = false;
 
-    private static final boolean PERFORM_DEBUG_OUTPUT_ENUM_TYPE_DECLARATION = true;
-    // private static final boolean PERFORM_DEBUG_OUTPUT_ENUM_TYPE_DECLARATION = false;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_ENUM_TYPE_DECLARATION = true;
+    private static final boolean PERFORM_DEBUG_OUTPUT_ENUM_TYPE_DECLARATION = false;
 
-    private static final boolean PERFORM_DEBUG_OUTPUT_TYPE_DECLARATION = true;
-    // private static final boolean PERFORM_DEBUG_OUTPUT_TYPE_DECLARATION = false;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_TYPE_DECLARATION = true;
+    private static final boolean PERFORM_DEBUG_OUTPUT_TYPE_DECLARATION = false;
 
-    private static final boolean PERFORM_DEBUG_OUTPUT_COMPONENT_INSTANTIATION = true;
-    // private static final boolean PERFORM_DEBUG_OUTPUT_COMPONENT_INSTANTIATION = false;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_CONSTANT_DECLARATION = true;
+    private static final boolean PERFORM_DEBUG_OUTPUT_CONSTANT_DECLARATION = false;
+
+    // private static final boolean PERFORM_DEBUG_OUTPUT_COMPONENT_INSTANTIATION = true;
+    private static final boolean PERFORM_DEBUG_OUTPUT_COMPONENT_INSTANTIATION = false;
 
     public Map<String, PhysicalUnit> units;
 
@@ -178,6 +182,13 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
             }
         }
         
+    }
+
+    @Override
+    public void constantDeclaration(ConstantDeclaration constantDeclaration) {
+        if (PERFORM_DEBUG_OUTPUT || PERFORM_DEBUG_OUTPUT_CONSTANT_DECLARATION) {
+            System.out.println(constantDeclaration.toString(INDENT));
+        }
     }
 
     @Override

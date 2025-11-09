@@ -21,7 +21,8 @@ public class TypeDeclaration extends ModelNode<Object> {
             stringBuffer.append("  ");
         }
 
-        stringBuffer.append("TypeDeclaration ").append(name).append(" ");
+        stringBuffer.append("TypeDeclaration ").append(name);//.append(" ");
+        stringBuffer.append("\n");
         
         if (typeDeclarationType != TypeDeclarationType.UNKNOWN) {
 
@@ -64,16 +65,8 @@ public class TypeDeclaration extends ModelNode<Object> {
 
         indent++;
 
-        // int index = 0;
         for (ModelNode<?> child : children) {
-
             stringBuffer.append(child.toString(indent + 1));
-
-            // if (index < children.size() - 1) {
-            //     stringBuffer.append("\n");
-            // }
-
-            // index++;
         }
 
         return stringBuffer.toString();

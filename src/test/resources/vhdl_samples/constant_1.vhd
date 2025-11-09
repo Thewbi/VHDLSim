@@ -1,0 +1,1 @@
+constant sinus_array_c : sinus_array_t := (8, 10, 13, 14, 15, 14, 13, 10, 8, 5, 2, 1, 0, 1, 2, 5);

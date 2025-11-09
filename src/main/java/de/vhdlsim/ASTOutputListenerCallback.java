@@ -6,6 +6,7 @@ import de.vhdlmodel.CaseStmt;
 import de.vhdlmodel.Component;
 import de.vhdlmodel.ComponentInstantiationStatement;
 import de.vhdlmodel.Configuration;
+import de.vhdlmodel.ConstantDeclaration;
 import de.vhdlmodel.Entity;
 import de.vhdlmodel.FunctionCall;
 import de.vhdlmodel.FunctionImplementation;
@@ -57,6 +58,8 @@ public interface ASTOutputListenerCallback {
     void expression(ModelNode<?> expr);
 
     void typeDeclaration(TypeDeclaration typeDeclaration);
+
+    void constantDeclaration(ConstantDeclaration constantDeclaration);
 
     void enumDataTypeDeclaration(TypeDeclaration typeDeclaration);
 

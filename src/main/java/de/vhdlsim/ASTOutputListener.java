@@ -12,8 +12,10 @@ import de.vhdl.grammar.VHDLParser.Enumeration_literalContext;
 import de.vhdl.grammar.VHDLParser.IdentifierContext;
 import de.vhdl.grammar.VHDLParser.Identifier_listContext;
 import de.vhdl.grammar.VHDLParser.Instantiated_unitContext;
+import de.vhdl.grammar.VHDLParser.Label_colonContext;
 import de.vhdl.grammar.VHDLParser.NameContext;
 import de.vhdl.grammar.VHDLParserBaseListener;
+import de.vhdlmodel.Aggregate;
 import de.vhdlmodel.Architecture;
 import de.vhdlmodel.AssignmentStmt;
 import de.vhdlmodel.AssignmentType;
@@ -22,6 +24,7 @@ import de.vhdlmodel.CaseStmt;
 import de.vhdlmodel.CaseStmtBranch;
 import de.vhdlmodel.ComponentInstantiationStatement;
 import de.vhdlmodel.ConditionalWaveforms;
+import de.vhdlmodel.ConstantDeclaration;
 import de.vhdlmodel.Entity;
 import de.vhdlmodel.Expr;
 import de.vhdlmodel.FunctionCall;
@@ -103,6 +106,45 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         ascend();
     }
 
+    @Override 
+    public void enterConstant_declaration(VHDLParser.Constant_declarationContext ctx) {
+
+        ConstantDeclaration constantDeclaration = new ConstantDeclaration();
+
+        connectParentAndChild(constantDeclaration);
+        descend(constantDeclaration);
+    }
+	
+	@Override 
+    public void exitConstant_declaration(VHDLParser.Constant_declarationContext ctx) {
+
+        ConstantDeclaration constantDeclaration = (ConstantDeclaration) stmt;
+
+        constantDeclaration.name = constantDeclaration.children.get(0).toString(0);
+        constantDeclaration.type = (SubtypeIndication) constantDeclaration.children.get(1);
+
+        constantDeclaration.children.remove(0);
+        constantDeclaration.children.remove(0);
+
+        astOutputListenerCallback.constantDeclaration(constantDeclaration);
+
+        ascend();
+    }
+
+    @Override 
+    public void enterAggregate(VHDLParser.AggregateContext ctx) { 
+
+        Aggregate aggregate = new Aggregate();
+
+        connectParentAndChild(aggregate);
+        descend(aggregate);
+    }
+	
+	@Override 
+    public void exitAggregate(VHDLParser.AggregateContext ctx) { 
+        ascend();
+    }
+
     @Override
     public void enterEnumeration_type_definition(VHDLParser.Enumeration_type_definitionContext ctx) {
 
@@ -124,6 +166,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override 
     public void enterConstrained_array_definition(VHDLParser.Constrained_array_definitionContext ctx) { 
+        
         TypeDeclaration typeDeclaration = new TypeDeclaration();
         // typeDeclaration.name = ctx.identifier().getText();
         // typeDeclaration.physicalUnit.name = ctx.identifier().getText();
@@ -204,8 +247,9 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     public void exitConditional_signal_assignment(VHDLParser.Conditional_signal_assignmentContext ctx) {
 
         AssignmentStmt assignmentStmt = (AssignmentStmt) stmt;
-        assignmentStmt.rhs = assignmentStmt.children.get(0);
-        assignmentStmt.children.remove(0);
+        assignmentStmt.rhs = assignmentStmt.children.get(1);
+        // assignmentStmt.children.remove(0);
+        assignmentStmt.children.clear();
 
         // cannot clear because the assignment might contain conditional_waveform
         // children from a Conditional Signal Assignment (when / else)
@@ -274,11 +318,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void exitSignal_declaration(VHDLParser.Signal_declarationContext ctx) {
 
-        // for (IdentifierContext identifierContext :
-        // ctx.identifier_list().identifier()) {
-
-        // }
-
         Signal signal = (Signal) stmt;
 
         for (ModelNode<?> child : signal.children) {
@@ -305,6 +344,10 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void enterExplicit_range(VHDLParser.Explicit_rangeContext ctx) {
 
+        // if (stmt instanceof Range) {
+        //     return;
+        // }
+
         Range range = new Range();
 
         connectParentAndChild(range);
@@ -313,6 +356,10 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitExplicit_range(VHDLParser.Explicit_rangeContext ctx) {
+
+        // if (stmt instanceof Range) {
+        //     return;
+        // }
 
         Range range = (Range) stmt;
 
@@ -329,7 +376,11 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     }
 
     @Override 
-    public void enterDiscrete_range(VHDLParser.Discrete_rangeContext ctx) { 
+    public void enterDiscrete_range(VHDLParser.Discrete_rangeContext ctx) {
+
+        if (ctx.children.size() == 1) {
+            return;
+        }
 
         Range range = new Range();
 
@@ -338,7 +389,11 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     }
 	
     @Override 
-    public void exitDiscrete_range(VHDLParser.Discrete_rangeContext ctx) { 
+    public void exitDiscrete_range(VHDLParser.Discrete_rangeContext ctx) {
+
+        if (ctx.children.size() == 1) {
+            return;
+        }
 
         Range range = (Range) stmt;
 
@@ -450,6 +505,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void enterSubtype_indication(VHDLParser.Subtype_indicationContext ctx) {
+
         SubtypeIndication subtypeIndication = new SubtypeIndication();
         subtypeIndication.name = ctx.getChild(0).getText();
 
@@ -459,6 +515,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitSubtype_indication(VHDLParser.Subtype_indicationContext ctx) {
+        // stmt.children.clear();
         ascend();
     }
 
@@ -586,9 +643,17 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         Port port = new Port();
         portTarget.ports.add(port);
 
-        port.name = identifier;
-        port.type = type;
-        port.portDirection = PortDirection.fromString(mode);
+        // port.name = identifier;
+        // port.type = type;
+        // port.portDirection = PortDirection.fromString(mode);
+
+        connectParentAndChild(port);
+        descend(port);
+    }
+
+    @Override
+    public void exitInterface_port_declaration(VHDLParser.Interface_port_declarationContext ctx) {
+        ascend();
     }
 
     @Override
@@ -901,9 +966,15 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     public void enterProcess_statement(VHDLParser.Process_statementContext ctx) {
 
         Process process = new Process();
+
+        Label_colonContext label_colonContext = ctx.label_colon();
+        if (label_colonContext != null) {
+            process.name = label_colonContext.identifier().getText();
+        }
+
         IdentifierContext identifierContext = ctx.identifier();
         if (identifierContext != null) {
-            process.name = ctx.identifier().getText();
+            process.name = identifierContext.getText();
         }
 
         connectParentAndChild(process);

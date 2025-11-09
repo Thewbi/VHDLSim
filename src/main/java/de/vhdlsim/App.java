@@ -22,6 +22,7 @@ import de.vhdl.grammar.VHDLParser.Component_instantiation_statementContext;
 import de.vhdl.grammar.VHDLParser.Concurrent_signal_assignment_statementContext;
 import de.vhdl.grammar.VHDLParser.Conditional_signal_assignmentContext;
 import de.vhdl.grammar.VHDLParser.Configuration_declarationContext;
+import de.vhdl.grammar.VHDLParser.Constant_declarationContext;
 import de.vhdl.grammar.VHDLParser.Design_fileContext;
 import de.vhdl.grammar.VHDLParser.Entity_declarationContext;
 import de.vhdl.grammar.VHDLParser.Enumeration_type_definitionContext;
@@ -91,11 +92,17 @@ public class App {
         // testRangeConstraint(astOutputListener, print, convertToAST, PATH + "range_constraint.vhd");
 
         //
-        // type declaration
+        // Type Declaration
         //
 
         // testTypeDeclaration(astOutputListener, print, convertToAST, PATH + "type_declaration_1.vhd");
         // testTypeDeclaration(astOutputListener, print, convertToAST, PATH + "type_declaration_array.vhd");
+
+        //
+        // Constant
+        //
+
+        // testConstantDeclaration(astOutputListener, print, convertToAST, PATH + "constant_1.vhd");
 
         //
         // Signal Declaration
@@ -104,6 +111,7 @@ public class App {
         // testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration_1.vhd");
         // testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration_2.vhd");
         // testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration_3.vhd");
+        // testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration_4.vhd");
         // testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration_vector.vhd");
         
         //
@@ -227,7 +235,7 @@ public class App {
         // testWaitStatement(astOutputListener, print, convertToAST, PATH + "wait_for_time_unit_statement.vhd");
 
         //
-        // entity and architecture (entity_declaration)
+        // Entity and Architecture (entity_declaration)
         //
 
         // testEntityDeclaration(astOutputListener, print, convertToAST, PATH + "entity.vhd");
@@ -269,7 +277,14 @@ public class App {
         
         // testDesignFile(astOutputListener, print, convertToAST, PATH + "neorv32_boot_rom.vhd");
         // testDesignFile(astOutputListener, print, convertToAST, "C:\Users\lapto\dev\VHDL\neorv32\rtl\core\neorv32_cpu_cp_shifter.vhd");
-        testDesignFile(astOutputListener, print, convertToAST, "C:/Users/lapto/dev/VHDL/neorv32/rtl/core/neorv32_cpu_control.vhd");
+        // testDesignFile(astOutputListener, print, convertToAST, "C:/Users/lapto/dev/VHDL/neorv32/rtl/core/neorv32_cpu_control.vhd");
+        // testDesignFile(astOutputListener, print, convertToAST, "C:/Users/lapto/dev/VHDL/neorv32/rtl/core/neorv32_cpu_cp_cfu.vhd");
+        
+        //
+        // Testbench
+        //
+
+        testDesignFile(astOutputListener, print, convertToAST, PATH + "/testbench_tutorial/mini_dds.vhd");
         
         // @formatter:on
 
@@ -292,6 +307,15 @@ public class App {
         // }
 
         // https://www.mikrocontroller.net/articles/VHDL_Testbench
+    }
+
+    private static ASTOutputListener testConstantDeclaration(ASTOutputListener astOutputListener, boolean print,
+            boolean convertToAST, String testFile) throws IOException {
+        
+        final VHDLParser parser = processFile(testFile);
+        final Constant_declarationContext constant_declarationContext = parser.constant_declaration();
+
+        return traverseTree(astOutputListener, constant_declarationContext, print, convertToAST, testFile);
     }
 
     private static ASTOutputListener testTypeDeclaration(ASTOutputListener astOutputListener, boolean print,

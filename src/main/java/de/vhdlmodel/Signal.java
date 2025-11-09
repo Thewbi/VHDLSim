@@ -19,7 +19,7 @@ public class Signal extends ModelNode<String> {
         }
 
         stringBuffer.append("Signal: ");
-        
+
         int identifierCount = 0;
         for (Identifier identifier : identifierList) {
             if (identifierCount > 0) {
