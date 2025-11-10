@@ -21,6 +21,7 @@ import de.vhdlmodel.Range;
 import de.vhdlmodel.Record;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
+import de.vhdlmodel.Subprogram;
 import de.vhdlmodel.TypeDeclaration;
 import de.vhdlmodel.WaveFormElement;
 
@@ -63,6 +64,9 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
 
     // private static final boolean PERFORM_DEBUG_OUTPUT_COMPONENT_INSTANTIATION = true;
     private static final boolean PERFORM_DEBUG_OUTPUT_COMPONENT_INSTANTIATION = false;
+
+    private static final boolean PERFORM_DEBUG_OUTPUT_SUBPROGRAM = true;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_SUBPROGRAM = false;
 
     public Map<String, PhysicalUnit> units;
 
@@ -237,6 +241,13 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     public void name(Name name) {
         if (PERFORM_DEBUG_OUTPUT) {
             System.out.println(name.toString(INDENT));
+        }
+    }
+
+    @Override
+    public void subprogram(Subprogram subprogram) {
+        if (PERFORM_DEBUG_OUTPUT || PERFORM_DEBUG_OUTPUT_SUBPROGRAM) {
+            System.out.println(subprogram.toString(INDENT));
         }
     }
 

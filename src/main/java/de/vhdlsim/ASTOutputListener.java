@@ -44,6 +44,9 @@ import de.vhdlmodel.Range;
 import de.vhdlmodel.RangeDirection;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
+import de.vhdlmodel.Subprogram;
+import de.vhdlmodel.SubprogramSpecification;
+import de.vhdlmodel.SubprogramType;
 import de.vhdlmodel.SubtypeIndication;
 import de.vhdlmodel.TypeDeclaration;
 import de.vhdlmodel.TypeDeclarationType;
@@ -437,8 +440,14 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void exitName(VHDLParser.NameContext ctx) {
 
+        // System.out.println(ctx.getText());
+
+        Name name = (Name) stmt;
+
         // emit
-        astOutputListenerCallback.name((Name) stmt);
+        astOutputListenerCallback.name(name);
+
+        // System.out.println(name.toString(0));
 
         ascend();
     }
@@ -603,6 +612,74 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     }
 
     //
+    // Subprogram (Function and Procedure)
+    //
+
+    @Override 
+    public void enterSubprogram_body(VHDLParser.Subprogram_bodyContext ctx) {
+
+        Subprogram subProgram = new Subprogram();
+
+        connectParentAndChild(subProgram);
+        descend(subProgram);
+    }
+	
+    @Override 
+    public void exitSubprogram_body(VHDLParser.Subprogram_bodyContext ctx) {
+
+        Subprogram subprogram = (Subprogram) stmt;
+        subprogram.subprogramSpecification = (SubprogramSpecification) subprogram.children.get(0);
+        subprogram.children.remove(0);
+
+        // last child is the function name again
+        int size = subprogram.children.size();
+        subprogram.children.remove(size - 1);
+
+        astOutputListenerCallback.subprogram(subprogram);
+
+        ascend();
+    }
+
+    @Override 
+    public void enterSubprogram_specification(VHDLParser.Subprogram_specificationContext ctx) { 
+        
+    }
+	
+    @Override 
+    public void exitSubprogram_specification(VHDLParser.Subprogram_specificationContext ctx) { 
+        
+    }
+
+    @Override 
+    public void enterFunction_specification(VHDLParser.Function_specificationContext ctx) { 
+
+        SubprogramSpecification subprogramSpecification = new SubprogramSpecification();
+        subprogramSpecification.subprogramType = SubprogramType.FUNCTION;
+
+        connectParentAndChild(subprogramSpecification);
+        descend(subprogramSpecification);
+    }
+
+	@Override 
+    public void exitFunction_specification(VHDLParser.Function_specificationContext ctx) { 
+
+        SubprogramSpecification subprogramSpecification = (SubprogramSpecification) stmt;
+
+        // name
+        subprogramSpecification.subprogramName = subprogramSpecification.children.get(0);
+        subprogramSpecification.children.remove(0);
+
+        // return value
+        int size = subprogramSpecification.children.size();
+        subprogramSpecification.returnType = subprogramSpecification.children.get(size - 1);
+        subprogramSpecification.children.remove(size - 1);
+
+        // astOutputListenerCallback.subprogram(subprogram);
+
+        ascend();
+    }
+
+    //
     // Entity (Declaration and Architecture)
     //
 
@@ -633,19 +710,18 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     @Override
     public void enterInterface_port_declaration(VHDLParser.Interface_port_declarationContext ctx) {
 
-        String identifier = ctx.identifier_list().getChild(0).getText();
-
-        String type = ctx.subtype_indication().getText();
-
-        // port direction (in, out, inout)
-        String mode = ctx.signal_mode().getText();
-
         Port port = new Port();
         portTarget.ports.add(port);
 
-        // port.name = identifier;
-        // port.type = type;
-        // port.portDirection = PortDirection.fromString(mode);
+        String identifier = ctx.identifier_list().getChild(0).getText();
+        port.name = identifier;
+
+        String type = ctx.subtype_indication().getText();
+        port.type = type;
+
+        // port direction (in, out, inout)
+        String mode = ctx.signal_mode().getText();
+        port.portDirection = PortDirection.fromString(mode);
 
         connectParentAndChild(port);
         descend(port);
@@ -660,7 +736,10 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     public void enterInterface_constant_declaration(VHDLParser.Interface_constant_declarationContext ctx) {
 
         InterfaceConstant interfaceConstant = new InterfaceConstant();
-        portTarget.interfaceConstants.add(interfaceConstant);
+
+        if (portTarget != null) {
+            portTarget.interfaceConstants.add(interfaceConstant);
+        }
 
         // String identifier = ctx.identifier_list().getChild(0).getText();
         // interfaceConstant.name = identifier;
@@ -785,16 +864,16 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         connectParentAndChild(componentInstantiationStatement);
         descend(componentInstantiationStatement);
 
-        Instantiated_unitContext instantiated_unitContext = ctx.instantiated_unit();
-        NameContext nameContext = instantiated_unitContext.name();
-        @SuppressWarnings("unused")
-        String name = nameContext.getText();
-        @SuppressWarnings("unused")
-        String library = nameContext.getChild(0).getText();
-        @SuppressWarnings("unused")
-        String entityType = nameContext.getChild(1).getText();
-        @SuppressWarnings("unused")
-        String entityArchitecture = nameContext.getChild(2).getText();
+        // Instantiated_unitContext instantiated_unitContext = ctx.instantiated_unit();
+        // NameContext nameContext = instantiated_unitContext.name();
+        // @SuppressWarnings("unused")
+        // String name = nameContext.getText();
+        // @SuppressWarnings("unused")
+        // String library = nameContext.getChild(0).getText();
+        // @SuppressWarnings("unused")
+        // String entityType = nameContext.getChild(1).getText();
+        // @SuppressWarnings("unused")
+        // String entityArchitecture = nameContext.getChild(2).getText();
 
         // // insert component instantiation statement into the parent architecture
         // if (architecture != null) {
@@ -841,8 +920,10 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // System.out.println(ctx.getText());
 
         if (ctx.getChildCount() >= 3) {
+
             Expr expr = new Expr();
             expr.operator = ctx.getChild(1).getText();
+
             connectParentAndChild(expr);
             descend(expr);
         }
@@ -850,7 +931,14 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitExpression(VHDLParser.ExpressionContext ctx) {
+
+        // System.out.println(ctx.getText());
+
         if (ctx.getChildCount() > 1) {
+        // if (ctx.getChildCount() > 3) {
+
+            Expr expr = (Expr) stmt;
+
             ascend();
         }
     }
@@ -1037,8 +1125,11 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         if (node.getText().toLowerCase().equals("if")) {
 
             if ("end".equalsIgnoreCase(lastTerminal)) {
+
                 ascend();
+
             } else {
+
                 IfStmtBranch ifStmtBranch = new IfStmtBranch();
 
                 // connect parent and child
@@ -1099,7 +1190,9 @@ public class ASTOutputListener extends VHDLParserBaseListener {
                 // descend
                 descend(ifStmtBranch);
             }
+
         } else if (node.getText().toLowerCase().equals("generate")) {
+
             if (stmt instanceof IfStmtBranch) {
                 ascend();
             }

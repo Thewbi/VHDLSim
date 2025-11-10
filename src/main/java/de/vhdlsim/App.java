@@ -160,6 +160,7 @@ public class App {
 
         // testIf(astOutputListener, print, convertToAST, PATH + "if.vhd");
         // testIf(astOutputListener, print, convertToAST, PATH + "if_2.vhd");
+        // testIf(astOutputListener, print, convertToAST, PATH + "if_3.vhd");
         // testIf(astOutputListener, print, convertToAST, PATH + "elsif.vhd");
         // testIf(astOutputListener, print, convertToAST, PATH + "if_with_element_access.vhd");
         // testIf(astOutputListener, print, convertToAST, PATH + "if_complex_expression.vhd");
@@ -196,6 +197,7 @@ public class App {
 
         // testSubprogramBody(astOutputListener, print, convertToAST, PATH + "function.vhd");
         // testSubprogramBody(astOutputListener, print, convertToAST, PATH + "function.vhd");
+        testSubprogramBody(astOutputListener, print, convertToAST, PATH + "function_definition_1.vhd");
         
         //
         // Case
@@ -276,15 +278,16 @@ public class App {
         //
         
         // testDesignFile(astOutputListener, print, convertToAST, PATH + "neorv32_boot_rom.vhd");
-        // testDesignFile(astOutputListener, print, convertToAST, "C:\Users\lapto\dev\VHDL\neorv32\rtl\core\neorv32_cpu_cp_shifter.vhd");
+        // testDesignFile(astOutputListener, print, convertToAST, "C:/Users/lapto/dev/VHDL/neorv32/rtl/core/neorv32_cpu_cp_shifter.vhd");
         // testDesignFile(astOutputListener, print, convertToAST, "C:/Users/lapto/dev/VHDL/neorv32/rtl/core/neorv32_cpu_control.vhd");
         // testDesignFile(astOutputListener, print, convertToAST, "C:/Users/lapto/dev/VHDL/neorv32/rtl/core/neorv32_cpu_cp_cfu.vhd");
+        // testDesignFile(astOutputListener, print, convertToAST, "C:/Users/lapto/dev/VHDL/neorv32/rtl/core/neorv32_cpu_cp_muldiv.vhd");
         
         //
         // Testbench
         //
 
-        testDesignFile(astOutputListener, print, convertToAST, PATH + "/testbench_tutorial/mini_dds.vhd");
+        // testDesignFile(astOutputListener, print, convertToAST, PATH + "/testbench_tutorial/mini_dds.vhd");
         
         // @formatter:on
 

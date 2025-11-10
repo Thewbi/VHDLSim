@@ -1,5 +1,19 @@
 # VHDLSim
+
 VHDL Simulator
+
+# Building Errors
+
+## Lombok can't parse this source code
+
+Try: In VSCode: "Clean Workspace Cache" did not fix the issue
+
+Solition: Enter the antlr lexer and grammar file, make a temporary change 
+save, revert the change immediately and save again. Saving the file will
+trigger code generation. The newly generated code will not cause the 
+Lombok error any more!
+
+## VHDL Versions
 
 Following versions of VHDL exist:
 
@@ -23,10 +37,12 @@ VHDL allows the user to hierachically combine entities to form more complex enti
 The way in which entities are nested into each other is very, very elaborate.
 
 ## Nesting via Entity Instantiation
+
 The simplest way to achieve nesting is to directly instantiate entities within other entities.
 This is called entitiy instantiation. Entity instantiation is only available in later versions of VHDL.
 
 ## Nesting via Component Instantiation
+
 The more complex version of nesting is done via components.
 
 Components are top-level objects in their own right. Components do not have architectures like entities do. 
@@ -36,6 +52,7 @@ Components are used by placing
 1. a component instantiation into the body (= between begin end) of an entitie's architecture.
 
 ## Component Declaration
+
 The declaration part of an architecture is everything before the begin - end block.
 
 ```
@@ -54,6 +71,7 @@ exactly like entities do. The idea is that when an entity has the same interface
 entity can be plugged into a component to complete the architecture.
 
 ## Component Instantiation
+
 The second part to a component is the component instantiations. The component instantiation is placed
 into the entitie's architectures body (between begin and end)
 
@@ -76,6 +94,7 @@ the component, this entity will receive the same ports and signals that where pu
 according to the port map.
 
 ## Binding and Configurations
+
 Plugging entities into components is called binding. Binding is done at compile time by the VHDL compiler.
 The VHDL compiler has to solve the following tasks in order to resolve entities for components.
 
@@ -83,6 +102,7 @@ The VHDL compiler has to solve the following tasks in order to resolve entities 
 1. select an architecture for the entity that is plugged into the component
 
 ### Late Binding
+
 The way to explicitly tell the compiler which entity and which architecture to use for
 the component is to use configurations. Configurations again are their own top-level
 element in VHDL. 
@@ -105,11 +125,13 @@ end MUX2_specified_CFG;
 ```
 
 ## Semi/Automatic Binding
+
 Configurations are optional! When no configuration is defined, then there are strategies
 defined by the VHDL specification, which the compiler will then use to automatically resolve
 entities and architectures.
 
 ### Default Binding
+
 If no configuration is specified at all, then the default binding strategy is used.
 Default binding will select the entity for a component instance by 
 

@@ -1,3 +1,5 @@
+-- symbol: entity_declaration
+
 entity neorv32_bus_switch is
   generic (
     ROUND_ROBIN_EN : boolean := false; -- enable round-robin arbitration

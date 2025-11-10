@@ -211,6 +211,10 @@ COMMENT
   -> skip
   ;
 
+BLOCK_COMMENT
+    : '/*' ( BLOCK_COMMENT | . )*? '*/' -> skip
+    ;
+
 TAB
   : ( '\t' )+ -> skip
   ;
@@ -251,7 +255,6 @@ OTHER_SPECIAL_CHARACTER
   | 'ш' | 'щ' | 'ъ' | 'ы' | 'ь' | 'э' | 'ю' | 'я'
   ;
 
-
 DOUBLESTAR    : '**'  ;
 ASSIGN        : '=='  ;
 LE            : '<='  ;
@@ -280,16 +283,13 @@ BAR           : '|'   ;
 DOT           : '.'   ;
 BACKSLASH     : '\\'  ;
 
-
 EXPONENT
   :  ('E'|'e') ( '+' | '-' )? INTEGER
   ;
 
-
 HEXDIGIT
     :	('A'..'F'|'a'..'f')
     ;
-
 
 INTEGER
   :  DIGIT ( '_' | DIGIT )*

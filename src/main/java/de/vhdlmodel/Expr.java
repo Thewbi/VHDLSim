@@ -49,7 +49,10 @@ public class Expr extends Stmt {
         for (ModelNode<?> child : children) {
             if (child instanceof Expr) {
                 stringBuffer.append(child.toString(indent));
+            } else if (child instanceof Name) {
+                stringBuffer.append(child.toString(indent));
             }
+           
             // index++;
             // if (index < children.size()) {
                 // stringBuffer.append("\n");

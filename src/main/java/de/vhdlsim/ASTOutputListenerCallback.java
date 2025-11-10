@@ -18,6 +18,7 @@ import de.vhdlmodel.Range;
 import de.vhdlmodel.Record;
 import de.vhdlmodel.Signal;
 import de.vhdlmodel.Stmt;
+import de.vhdlmodel.Subprogram;
 import de.vhdlmodel.TypeDeclaration;
 import de.vhdlmodel.WaveFormElement;
 
@@ -68,5 +69,7 @@ public interface ASTOutputListenerCallback {
     void componentInstantiationStatement(ComponentInstantiationStatement componentInstantiationStatement);
 
     void waveFormElement(WaveFormElement waveFormElement);
+
+    void subprogram(Subprogram subprogram);
 
 }
