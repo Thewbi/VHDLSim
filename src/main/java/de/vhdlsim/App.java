@@ -197,7 +197,7 @@ public class App {
 
         // testSubprogramBody(astOutputListener, print, convertToAST, PATH + "function.vhd");
         // testSubprogramBody(astOutputListener, print, convertToAST, PATH + "function.vhd");
-        testSubprogramBody(astOutputListener, print, convertToAST, PATH + "function_definition_1.vhd");
+        // testSubprogramBody(astOutputListener, print, convertToAST, PATH + "function_definition_1.vhd");
         
         //
         // Case
@@ -242,6 +242,7 @@ public class App {
 
         // testEntityDeclaration(astOutputListener, print, convertToAST, PATH + "entity.vhd");
         // testEntityDeclaration(astOutputListener, print, convertToAST, PATH + "entity_generic.vhd");
+        // testEntityDeclaration(astOutputListener, print, convertToAST, PATH + "P6502/ALU.vhd");
 
         // // and-gate
         // //https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
@@ -282,6 +283,9 @@ public class App {
         // testDesignFile(astOutputListener, print, convertToAST, "C:/Users/lapto/dev/VHDL/neorv32/rtl/core/neorv32_cpu_control.vhd");
         // testDesignFile(astOutputListener, print, convertToAST, "C:/Users/lapto/dev/VHDL/neorv32/rtl/core/neorv32_cpu_cp_cfu.vhd");
         // testDesignFile(astOutputListener, print, convertToAST, "C:/Users/lapto/dev/VHDL/neorv32/rtl/core/neorv32_cpu_cp_muldiv.vhd");
+        // testDesignFile(astOutputListener, print, convertToAST, PATH + "P6502/ALU.vhd");
+        // testDesignFile(astOutputListener, print, convertToAST, PATH + "P6502/P6502_pkg.vhd");
+        testDesignFile(astOutputListener, print, convertToAST, PATH + "P6502/FlipFlopD_sr.vhd");
         
         //
         // Testbench

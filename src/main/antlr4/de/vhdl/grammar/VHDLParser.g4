@@ -26,9 +26,6 @@ options {
 	tokenVocab = VHDLLexer;
 }
 
-
-
-
 //------------------------------------------Parser----------------------------------------
 
 abstract_literal
