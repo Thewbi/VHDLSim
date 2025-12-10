@@ -1,8 +1,11 @@
 package de.vhdlmodel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Port extends ModelNode<String> {
 
-    public String name;
+    public List<String> identifierList = new ArrayList<>();
 
     public PortDirection portDirection = PortDirection.UNKNOWN;
 
@@ -10,16 +13,40 @@ public class Port extends ModelNode<String> {
 
     public String toString(int indent) {
 
-        StringBuffer stringBuffer = new StringBuffer();
+        String indentString = "";
         for (int i = 0; i < indent; i++) {
-            stringBuffer.append("  ");
+            indentString += "  ";
         }
 
-        stringBuffer.append("Port ").append(name).append(" ").append(portDirection).append(" ").append(type).append("\n");
+        StringBuffer stringBuffer = new StringBuffer();
 
-        indent++;
-        for (ModelNode<?> child : children) {
-            stringBuffer.append(child.toString(indent));
+        // stringBuffer
+        //             .append(indentString)
+        //             .append("Port ")
+        //             .append("test").append(" ")
+        //             .append(portDirection).append(" ")
+        //             .append(type).append("\n");
+
+        //     indent++;
+        //     for (ModelNode<?> child : children) {
+        //         stringBuffer.append(child.toString(indent));
+        //     }
+        //     indent--;
+
+        for (String identifier : identifierList) {
+
+            stringBuffer
+                    .append(indentString)
+                    .append("Port ")
+                    .append(identifier).append(" ")
+                    .append(portDirection).append(" ")
+                    .append(type).append("\n");
+
+            indent++;
+            for (ModelNode<?> child : children) {
+                stringBuffer.append(child.toString(indent));
+            }
+            indent--;
         }
 
         return stringBuffer.toString();

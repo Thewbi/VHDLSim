@@ -113,7 +113,7 @@ public class App {
         // testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration_3.vhd");
         // testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration_4.vhd");
         // testSignalDeclaration(astOutputListener, print, convertToAST, PATH + "signal_declaration_vector.vhd");
-        
+
         //
         // Expression
         //
@@ -124,7 +124,7 @@ public class App {
         //
         // Signal Assignment Statement (signal_assignment_statement)
         //
-        
+
         // testAssignment(astOutputListener, print, convertToAST, PATH + "signal_assignment_1.vhd");
         // testAssignment(astOutputListener, print, convertToAST, PATH + "signal_assignment_2.vhd");
         // TODO: next
@@ -136,7 +136,7 @@ public class App {
         //
 
         // testConcurrentSignalAssignment(astOutputListener, print, convertToAST, PATH + "signal_assignment_function_call.vhd");
-        
+
         //
         // Selected Signal Assignment
         //
@@ -167,7 +167,7 @@ public class App {
         // testIf(astOutputListener, print, convertToAST, PATH + "if_with_function_predicate.vhd");
         // testIf(astOutputListener, print, convertToAST, PATH + "if_with_expression.vhd");
         // testIf(astOutputListener, print, convertToAST, PATH + "if_with_nested_function_call.vhd");
-        
+
         //
         // Enum
         //
@@ -190,7 +190,7 @@ public class App {
         // testFunctionSpecification(astOutputListener, print, convertToAST, PATH + "function_specification.vhd");
         // TODO unit test
         // testFunctionImplementation(astOutputListener, print, convertToAST, PATH + "function_implementation.vhd");
-        
+
         //
         // Subprogram
         //
@@ -198,14 +198,14 @@ public class App {
         // testSubprogramBody(astOutputListener, print, convertToAST, PATH + "function.vhd");
         // testSubprogramBody(astOutputListener, print, convertToAST, PATH + "function.vhd");
         // testSubprogramBody(astOutputListener, print, convertToAST, PATH + "function_definition_1.vhd");
-        
+
         //
         // Case
         //
-        
+
         // testCase(astOutputListener, print, convertToAST, PATH + "case_1.vhd");
         // testCase(astOutputListener, print, convertToAST, PATH + "case_2.vhd");
-        
+
         //
         // Process
         //
@@ -215,10 +215,10 @@ public class App {
         // testProcess(astOutputListener, print, convertToAST, PATH + "process_2.vhd");
         // testProcess(astOutputListener, print, convertToAST, PATH + "process_3.vhd");
         // testProcess(astOutputListener, print, convertToAST, PATH + "process_4.vhd");
-        
+
         // testWaveformElement(astOutputListener, print, convertToAST, PATH + "waveform_element.vhd");
-        
-        // 
+
+        //
         // Component
         //
 
@@ -229,7 +229,7 @@ public class App {
         //
 
         // testRecord(astOutputListener, print, convertToAST, PATH + "record.vhd");
-        
+
         //
         // WaitStatement
         //
@@ -250,7 +250,7 @@ public class App {
         // testEntityAndArchitecture(astOutputListener, print, convertToAST, PATH + "multiplexer.vhd");
         // testEntityAndArchitecture(astOutputListener, print, convertToAST, PATH + "thermostat_example.vhd");
         // https://circuitdigest.com/microcontroller-projects/implementation-of-basic-logic-gates-using-vhdl-in-modelsim
-        
+
         // testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture.vhd");
         // // TODO: implement port map
         // testArchitecture(astOutputListener, print, convertToAST, PATH + "architecture_with_signal.vhd");
@@ -271,13 +271,13 @@ public class App {
         // testEntityInstantiation(astOutputListener, print, convertToAST, PATH + "entity_instantiation_4.vhd");
 
         // testPortMap(astOutputListener, print, convertToAST, PATH + "port_map.vhd");
-        
+
         // testInstantiatedUnit(astOutputListener, print, convertToAST, PATH + "instantiated_unit.vhd");
-        
-        // 
+
+        //
         // Design File
         //
-        
+
         // testDesignFile(astOutputListener, print, convertToAST, PATH + "neorv32_boot_rom.vhd");
         // testDesignFile(astOutputListener, print, convertToAST, "C:/Users/lapto/dev/VHDL/neorv32/rtl/core/neorv32_cpu_cp_shifter.vhd");
         // testDesignFile(astOutputListener, print, convertToAST, "C:/Users/lapto/dev/VHDL/neorv32/rtl/core/neorv32_cpu_control.vhd");
@@ -285,14 +285,15 @@ public class App {
         // testDesignFile(astOutputListener, print, convertToAST, "C:/Users/lapto/dev/VHDL/neorv32/rtl/core/neorv32_cpu_cp_muldiv.vhd");
         // testDesignFile(astOutputListener, print, convertToAST, PATH + "P6502/ALU.vhd");
         // testDesignFile(astOutputListener, print, convertToAST, PATH + "P6502/P6502_pkg.vhd");
-        testDesignFile(astOutputListener, print, convertToAST, PATH + "P6502/FlipFlopD_sr.vhd");
-        
+        // testDesignFile(astOutputListener, print, convertToAST, PATH + "P6502/FlipFlopD_sr.vhd");
+        testDesignFile(astOutputListener, print, convertToAST, PATH + "matrix_mult/fpga4student/matrix_multiplier.vhd");
+
         //
         // Testbench
         //
 
         // testDesignFile(astOutputListener, print, convertToAST, PATH + "/testbench_tutorial/mini_dds.vhd");
-        
+
         // @formatter:on
 
         // if (OUTPUT_AST) {
@@ -318,7 +319,7 @@ public class App {
 
     private static ASTOutputListener testConstantDeclaration(ASTOutputListener astOutputListener, boolean print,
             boolean convertToAST, String testFile) throws IOException {
-        
+
         final VHDLParser parser = processFile(testFile);
         final Constant_declarationContext constant_declarationContext = parser.constant_declaration();
 
@@ -590,6 +591,7 @@ public class App {
         return traverseTree(astOutputListener, root, print, convertToAST, testFile);
     }
 
+    @SuppressWarnings("unused")
     private static ASTOutputListener testWaitStatement(final ASTOutputListener astOutputListener, final boolean print,
             final boolean convertToAST, final String testFile)
             throws IOException {
