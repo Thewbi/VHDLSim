@@ -10,7 +10,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import de.vhdl.grammar.VHDLParser;
 import de.vhdl.grammar.VHDLParser.Enumeration_literalContext;
 import de.vhdl.grammar.VHDLParser.IdentifierContext;
-import de.vhdl.grammar.VHDLParser.Identifier_listContext;
 import de.vhdl.grammar.VHDLParser.Label_colonContext;
 import de.vhdl.grammar.VHDLParserBaseListener;
 import de.vhdlmodel.Aggregate;
@@ -20,6 +19,7 @@ import de.vhdlmodel.AssignmentType;
 import de.vhdlmodel.AssociationElement;
 import de.vhdlmodel.CaseStmt;
 import de.vhdlmodel.CaseStmtBranch;
+import de.vhdlmodel.Component;
 import de.vhdlmodel.ComponentInstantiationStatement;
 import de.vhdlmodel.ConditionalWaveforms;
 import de.vhdlmodel.ConstantDeclaration;
@@ -83,8 +83,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         TypeDeclaration typeDeclaration = (TypeDeclaration) stmt;
 
-        // typeDeclaration.range = range;
-
+        // emit
         astOutputListenerCallback.typeDeclaration(typeDeclaration);
 
         ascend();
@@ -110,6 +109,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         constantDeclaration.children.remove(0);
         constantDeclaration.children.remove(0);
 
+        // emit
         astOutputListenerCallback.constantDeclaration(constantDeclaration);
 
         ascend();
@@ -140,8 +140,8 @@ public class ASTOutputListener extends VHDLParserBaseListener {
             typeDeclaration.enumValues.add(enumeration_literalContext.getText());
         }
 
+        // emit
         astOutputListenerCallback.enumDataTypeDeclaration(typeDeclaration);
-        // typeDeclaration = null;
     }
 
     @Override
@@ -161,8 +161,10 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
     @Override
     public void exitConstrained_array_definition(VHDLParser.Constrained_array_definitionContext ctx) {
+
         TypeDeclaration typeDeclaration = new TypeDeclaration();
 
+        // emit
         astOutputListenerCallback.typeDeclaration(typeDeclaration);
 
         ascend();
@@ -420,8 +422,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         // emit
         astOutputListenerCallback.name(name);
 
-        // System.out.println(name.toString(0));
-
         ascend();
     }
 
@@ -548,6 +548,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         caseStmt.addChoice(caseStmt.children.get(0));
         caseStmt.children.remove(0);
 
+        // emit
         astOutputListenerCallback.caseStmt((CaseStmt) stmt);
 
         ascend();
@@ -601,6 +602,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         int size = subprogram.children.size();
         subprogram.children.remove(size - 1);
 
+        // emit
         astOutputListenerCallback.subprogram(subprogram);
 
         ascend();
@@ -640,8 +642,6 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         subprogramSpecification.returnType = subprogramSpecification.children.get(size - 1);
         subprogramSpecification.children.remove(size - 1);
 
-        // astOutputListenerCallback.subprogram(subprogram);
-
         ascend();
     }
 
@@ -676,9 +676,9 @@ public class ASTOutputListener extends VHDLParserBaseListener {
 
         // System.out.println(ctx.getText());
 
-        if (portTarget == null) {
-            System.out.println(ctx.getText());
-        }
+        // if (portTarget == null) {
+        //     System.out.println(ctx.getText());
+        // }
 
         Port port = new Port();
         portTarget.ports.add(port);
@@ -821,6 +821,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         moveSignals(architecture);
         removeIdentifiers(architecture);
 
+        // emit
         astOutputListenerCallback.architecture(architecture);
 
         // Commenting out this line will leave the stmt alive for printing
@@ -864,6 +865,36 @@ public class ASTOutputListener extends VHDLParserBaseListener {
     }
 
     // Entity Instantiation
+
+    @Override
+    public void enterComponent_declaration(VHDLParser.Component_declarationContext ctx) {
+
+        Component component = new Component();
+        if (stmt != null) {
+            stmt.children.add(component);
+            component.parent = stmt;
+        }
+        // stmt = component;
+        portTarget = component;
+
+        component.name = ctx.identifier().get(0).getText();
+
+        connectParentAndChild(component);
+        descend(component);
+    }
+
+    @Override
+    public void exitComponent_declaration(VHDLParser.Component_declarationContext ctx) {
+
+        // emit
+        astOutputListenerCallback.component((Component) stmt);
+
+        // component = null;
+        portTarget = null;
+
+        ascend();
+    }
+
 
     @Override
     public void enterComponent_instantiation_statement(VHDLParser.Component_instantiation_statementContext ctx) {
@@ -961,6 +992,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         } else if (ctx.getChildCount() >= 3) {
             Expr expr = new Expr();
             expr.operator = ctx.getChild(1).getText();
+
             connectParentAndChild(expr);
             descend(expr);
         } else {
@@ -987,6 +1019,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         if (ctx.getChildCount() == 3) {
             Expr expr = new Expr();
             expr.operator = ctx.getChild(1).getText();
+
             connectParentAndChild(expr);
             descend(expr);
         }
@@ -1007,6 +1040,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         if (ctx.getChildCount() == 3) {
             Expr expr = new Expr();
             expr.operator = ctx.getChild(1).getText();
+
             connectParentAndChild(expr);
             descend(expr);
         }
@@ -1079,6 +1113,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         Process process = (Process) stmt;
         removeIdentifiers(process);
 
+        // emit
         astOutputListenerCallback.process(process);
 
         ascend();
@@ -1239,6 +1274,7 @@ public class ASTOutputListener extends VHDLParserBaseListener {
         node.children.removeAll(identifiers);
     }
 
+    @SuppressWarnings("unused")
     private void keepAssociationElementsOnly(ModelNode<?> node) {
         List<Object> deleteList = new ArrayList<>();
         for (ModelNode<?> child : node.children) {

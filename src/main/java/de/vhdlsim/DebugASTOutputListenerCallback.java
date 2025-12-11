@@ -32,8 +32,8 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     // private static final boolean PERFORM_DEBUG_OUTPUT = true;
     private static final boolean PERFORM_DEBUG_OUTPUT = false;
 
-    private static final boolean PERFORM_DEBUG_OUTPUT_ENTITY = true;
-    // private static final boolean PERFORM_DEBUG_OUTPUT_ENTITY = false;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_ENTITY = true;
+    private static final boolean PERFORM_DEBUG_OUTPUT_ENTITY = false;
 
     private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = true;
     // private static final boolean PERFORM_DEBUG_OUTPUT_ARCHITECTURE = false;
@@ -65,8 +65,8 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
     // private static final boolean PERFORM_DEBUG_OUTPUT_COMPONENT_INSTANTIATION = true;
     private static final boolean PERFORM_DEBUG_OUTPUT_COMPONENT_INSTANTIATION = false;
 
-    private static final boolean PERFORM_DEBUG_OUTPUT_SUBPROGRAM = true;
-    // private static final boolean PERFORM_DEBUG_OUTPUT_SUBPROGRAM = false;
+    // private static final boolean PERFORM_DEBUG_OUTPUT_SUBPROGRAM = true;
+    private static final boolean PERFORM_DEBUG_OUTPUT_SUBPROGRAM = false;
 
     public Map<String, PhysicalUnit> units;
 
@@ -170,6 +170,7 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
 
     @Override
     public void typeDeclaration(TypeDeclaration typeDeclaration) {
+
         if (PERFORM_DEBUG_OUTPUT || PERFORM_DEBUG_OUTPUT_TYPE_DECLARATION) {
             System.out.println(typeDeclaration.toString(INDENT));
 
@@ -185,7 +186,7 @@ public class DebugASTOutputListenerCallback implements ASTOutputListenerCallback
                 units.put(physicalUnit.name, physicalUnit);
             }
         }
-        
+
     }
 
     @Override
